@@ -11811,14 +11811,16 @@ background: linear-gradient(90deg, rgba(23,61,255,1) 0%, rgba(20,53,221,1) 25%, 
  /*width: 20rem!important;*/
  width: 52%!important;
  height: 30%;
- background: red;
+ background: #180215;
+ border: white 2px solid;
 }
 
 .player-profile img
 {
-  width: 50%!important;
-  height:100% !important;
+  width: 50%;
+  height:100% ;
   min-width: 100px; 
+  border: white 2px solid;
 }
 
 .score-board
