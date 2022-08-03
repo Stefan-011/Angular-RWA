@@ -20,17 +20,27 @@
         <nav class="navbar navbar-expand-lg navbar-dark hdr-ftr" id="mainNav">
             <div class="container">
                 <a class="navbar-brand"><img src="/assets/img/navbar-logo.png" alt="..." /></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="OpenCollapse()">
                     Menu
                     <i class="fas fa-bars ms-1"></i>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                         <li class="nav-item"><a class="nav-link" href="#dev">Developer</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#route1" (click) ="switchR('sim')">Simuliraj</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#route2"(click) ="switchR('shop')">Shop</a></li>
                     </ul>
                 </div>
             </div>
+            <div *ngIf="MenuState == true" class="navbar-collapse"> <!---->
+                <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="#dev">Developer</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#route1" (click) ="switchR('sim')">Simuliraj</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#route2"(click) = "switchR('shop')">Shop</a></li>
+                </ul>
+              </div>
         </nav>
+
         <!-- Masthead-->
         <header class="masthead">
             <div class="container">
@@ -38,8 +48,10 @@
             </div>
         </header>
         
-        <app-polje></app-polje>
-       
+        <app-polje *ngIf="ruta == 0"></app-polje>
+        <app-shop *ngIf="ruta == 1"></app-shop>
+        <div style="width: 100%;height:100px; background-color: red;"></div>
+
         <!-- Team-->
     <section class="page-section bg-light" id="dev">
     <div class="container">

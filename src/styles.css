@@ -11809,18 +11809,19 @@ background: linear-gradient(90deg, rgba(23,61,255,1) 0%, rgba(20,53,221,1) 25%, 
 .player-profile
 {
  /*width: 20rem!important;*/
- width: 52%!important;
+ width: 30rem !important;
  height: 30%;
  background: #180215;
- border: white 2px solid;
+ border: white 1px solid;
 }
 
 .player-profile img
 {
-  width: 50%;
-  height:100% ;
+  width: 45%;
+  height: 40% ;
   min-width: 100px; 
   border: white 2px solid;
+  margin-left: 27% !important;
 }
 
 .score-board
@@ -11836,7 +11837,7 @@ background: linear-gradient(90deg, rgba(23,61,255,1) 0%, rgba(20,53,221,1) 25%, 
 {
  background-color: #03BDFF !important;
  box-shadow: 0 0 0 0.1rem black;
- 
+ margin-left: 45%;
 }
 
 .btn-sim:hover
@@ -11852,7 +11853,6 @@ background: linear-gradient(90deg, rgba(23,61,255,1) 0%, rgba(20,53,221,1) 25%, 
   {
     width: 16.5rem!important;
     height: 6rem !important;
-    background: black;
   }
   .masthead-heading
   {
@@ -11865,4 +11865,5 @@ background: linear-gradient(90deg, rgba(23,61,255,1) 0%, rgba(20,53,221,1) 25%, 
 {
   width: 100%;
 }
+
 }
