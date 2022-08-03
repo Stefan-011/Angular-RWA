@@ -11785,7 +11785,9 @@ section#contact form#contactForm :-ms-input-placeholder {
 
 .hdr-ftr
 {
-  background:#4813A0 !important;
+  /*background:#4813A0 !important;*/
+  background: rgb(23,61,255);
+background: linear-gradient(90deg, rgba(23,61,255,1) 0%, rgba(20,53,221,1) 25%, rgba(17,44,184,1) 50%, rgba(14,33,134,1) 75%, rgba(8,20,79,1) 100%);
   color: white;
   font-family: 'Lexend', sans-serif !important;
 }
@@ -11797,21 +11799,24 @@ section#contact form#contactForm :-ms-input-placeholder {
 
 .content-region
 {
-  background:#4813A0;
+ /* background:#4813A0;*/
+  background: rgb(23,61,255);
+  background: linear-gradient(90deg, rgba(23,61,255,1) 0%, rgba(20,53,221,1) 25%, rgba(17,44,184,1) 50%, rgba(14,33,134,1) 75%, rgba(8,20,79,1) 100%);
   min-width: 25ch;
   flex-direction: column !important;
 }
 
 .player-profile
 {
- width: 20rem!important;
- height: 9rem !important;
+ /*width: 20rem!important;*/
+ width: 52%!important;
+ height: 30%;
  background: red;
 }
 
 .player-profile img
 {
-  width: 80%!important;
+  width: 50%!important;
   height:100% !important;
   min-width: 100px; 
 }
