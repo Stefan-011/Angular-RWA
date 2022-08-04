@@ -194,3 +194,12 @@ background-color: none;
     } 
 }
 
+@media screen and (max-width: 280px) {
+   .stat-div
+   {
+       font-size: 9px;
+       height: 2.22rem;
+       padding-top: 0;
+   }
+}
+

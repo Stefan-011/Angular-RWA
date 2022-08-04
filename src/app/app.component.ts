@@ -13,7 +13,7 @@ export class AppComponent {
 
   constructor()
   {
-    this.ruta = 0;
+    this.ruta = 1;
     this.MenuState = false;
   }
 
@@ -29,8 +29,11 @@ export class AppComponent {
       case "sim":
         this.ruta = 0;
         break;
-        case "shop":
+        case "myteam":
         this.ruta = 1;
+        break;
+        case "shop":
+        this.ruta = 2;
         break;
         default :
         this.ruta = -1;

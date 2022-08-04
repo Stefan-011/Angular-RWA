@@ -6,13 +6,15 @@ import { AppComponent } from './app.component';
 import { PoljeComponent } from './polje/polje.component';
 import { RezultatComponent } from './rezultat/rezultat.component';
 import { ShopComponent } from './shop/shop.component';
+import { MyTeamComponent } from './my-team/my-team.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PoljeComponent,
     RezultatComponent,
-    ShopComponent
+    ShopComponent,
+    MyTeamComponent
   ],
   imports: [
     BrowserModule,
