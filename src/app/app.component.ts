@@ -13,7 +13,7 @@ export class AppComponent {
 
   constructor()
   {
-    this.ruta = 1;
+    this.ruta = 2;
     this.MenuState = false;
   }
 

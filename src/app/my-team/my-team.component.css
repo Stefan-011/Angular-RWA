@@ -47,3 +47,34 @@
   margin-left: 0% !important;
 }
 
+.team-btns
+{
+    background-color: #7F1D2F;
+    border: white 2px solid;
+    color: white;
+    font-weight: bold;
+}
+
+.team-btns:hover
+{
+    background-color: #581723;
+    border: white 2px solid;
+    color: white;
+}
+
+@media screen and (max-width: 335px) {
+    .player-profile
+    {
+        padding-bottom: 260px;
+    }
+    .player-profile img
+    {
+    width: 90px;
+    height: 90px ;
+    min-width: 100px; 
+    border: white 2px solid;
+    margin-left: 0% !important;
+    }
+ }
+
+ 
