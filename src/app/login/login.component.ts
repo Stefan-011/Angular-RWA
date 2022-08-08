@@ -1,7 +1,10 @@
 import { Component, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { user } from '../models/user';
+
 import { UserService } from '../services/user.service';
+import * as UserActions from '../store/user.action';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +17,7 @@ export class LoginComponent implements OnInit {
   Mode:boolean; // 0 - login | 1 - register
   errorMsg:number; // -1 - default | 0 - inputi prazni | 1 - losa lozinka | 2 - vec koriscen mail | 3 - vec koriscen username | 4 - losi podaci za login
 
-  constructor(private userservice:UserService,private router:Router) 
+  constructor(private userservice:UserService,private router:Router,private store:Store) 
   { 
   this.Mode = false;
   this.errorMsg = -1;
@@ -43,6 +46,7 @@ export class LoginComponent implements OnInit {
   login(email:string,password:string):void
   {
     this.userservice.Login(email,password).subscribe((data)=>{console.log(data);if(data.toString() != "")this.router.navigate(["home"]);else this.errorMsg = 4;})
+   // this.store.dispatch(UserActions.loginUser({email,password}));
   }
 
   register(username:string,email:string,password:string,passwordcheck:string)
