@@ -1,0 +1,71 @@
+.video-container video
+{
+    position: absolute;
+    margin-top: 15vh;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 80vh;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.video-container p
+{
+    position:absolute;
+    z-index: 2;
+    font-size: 7vh;
+}
+
+.overlay
+{
+    position: absolute;
+    margin-top: 15vh;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 80vh;
+    object-fit: cover;
+    z-index: 0;
+    background-color: blue;
+    opacity: 0.2;
+}
+
+.navbar 
+{
+    cursor:pointer;
+}
+
+.spacer
+{
+    height: 35vh;
+}
+
+@media screen and (max-width: 991px) {
+ .video-container video
+{
+    position: absolute;
+    margin-top: 8vh;
+}
+.overlay
+{
+    position: absolute;
+    margin-top: 8vh;
+}
+ }
+
+ @media screen and (max-width: 768px) {
+    #dev
+    {
+        margin-top: 20vh;
+    }
+ }
+
+ @media screen and (max-width: 414px) {
+    .video-container p
+    {
+        font-size: 5vh;
+    }
+    
+ }
+

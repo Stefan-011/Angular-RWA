@@ -2,13 +2,13 @@ import { player } from "./player";
 
 export class user
 {
-    name:string;
+    username:string;
     money:number;
     Team:player[];
     
     constructor() 
     {
-        this.name = "";
+        this.username = "";
         this.money = 50000;
         this.Team = [];
     }

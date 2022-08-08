@@ -40,7 +40,7 @@ background-color: none;
 {
  width: 80%;
  height: 30%;
- background: #180215; 
+ background: #212529; 
  border: white 1px solid;
  
 }
@@ -64,7 +64,7 @@ background-color: none;
 
 .Team-cmbox
 {
-    background-color: #180215;
+    background-color: #212529;
     font-weight: bold;
     font-style: italic;
     color: white;
