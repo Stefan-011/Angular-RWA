@@ -8,31 +8,45 @@ import * as UserSelectors from 'src/app/store/user.selector'
 import { TeamNamesEnum } from '../Enums/TeamNamesEnum';
 import { player } from '../models/player';
 
+
 @Component({
-  selector: 'app-polje',
-  templateUrl: './polje.component.html',
-  styleUrls: ['./polje.component.css']
+  selector: 'app-team-view',
+  templateUrl: './team-view.component.html',
+  styleUrls: ['./team-view.component.css']
 })
-export class PoljeComponent implements OnInit {
+export class TeamViewComponent implements OnInit {
 
   $ComponentType:Observable<string>;
-  $ActiveTeam:Observable<player[]>;
+  $UsersMoney:Observable<number>;
   compType:string;
   TeamNames:string[];
-  
+  $ActiveTeam:Observable<player[]>;
 
-  constructor(private store:Store<AppState>) {
+  constructor(private store:Store<AppState>) { 
     this.compType = "";
     this.$ComponentType = store.select(UserSelectors.SelectComponent);
+    this.$UsersMoney = store.select(UserSelectors.selectUsersMoney);
     this.TeamNames = []
     this.$ActiveTeam = this.store.select(OtherTeamSelect.selectCurrentOtherTeams);
-   }
+  }
 
   ngOnInit(): void {
     this.InitilizeTeamNames();
-    this.store.dispatch(OtherTeamAction.GetAllPlayers({name:TeamNamesEnum.Astralis}));
-   // this.store.select(OtherTeamSelect.selectName).subscribe((data)=>console.log(data));
+    this.$ComponentType.subscribe((type)=>{
+      if(this.compType != type)
+     {
+      this.compType = type;
+      if(type == "shop")
+      {
+      this.store.dispatch(OtherTeamAction.GetAllPlayers({name:TeamNamesEnum.Astralis}));
+      this.store.select(OtherTeamSelect.selectName).subscribe((data)=>console.log(data));
+      }
+     // else if (this.compType == "myteam")
+     }  
+    })
+    ;
   }
+ 
 
   InitilizeTeamNames()
   {
@@ -45,7 +59,9 @@ export class PoljeComponent implements OnInit {
       this.TeamNames[i] = values[i];
        i++;
     } 
+  
   }
+
 
   test()
   {
@@ -58,5 +74,4 @@ export class PoljeComponent implements OnInit {
   // console.log("value: "+t.value)
 
   }
-
 }

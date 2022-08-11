@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { user } from '../models/user';
+import {  LoginUser, user } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class UserService {
 
   Login(email:string,password:string)
   {
-    return this.http.get<user>(environment.api + `/korisnici?email=${email.toLowerCase()}&&password=${password}`);
+    return this.http.get<LoginUser[]>(environment.api + `/LoginData?email=${email.toLowerCase()}&&password=${password}`);
   }
 
   CheckEmail(email:string)
@@ -32,7 +32,7 @@ export class UserService {
 
   GetUserByUsername(username:string)
   {
-    return this.http.get<user>(environment.api + `/korisnici?email=${username.toLowerCase()}`);
+    return this.http.get<user[]>(environment.api + `/korisnici?email=${username.toLowerCase()}`);
   }
 
     

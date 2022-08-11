@@ -1,10 +1,13 @@
 import { Component, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { AppState } from '../app.state';
 import { user } from '../models/user';
 
 import { UserService } from '../services/user.service';
 import * as UserActions from '../store/user.action';
+import * as UserSelector from '../store/user.selector';
+import { selectUsersname } from '../store/user.selector';
 
 @Component({
   selector: 'app-login',
@@ -14,17 +17,17 @@ import * as UserActions from '../store/user.action';
 
 export class LoginComponent implements OnInit {
 
-  Mode:boolean; // 0 - login | 1 - register
+  Mode:boolean = false; // 0 - login | 1 - register
   errorMsg:number; // -1 - default | 0 - inputi prazni | 1 - losa lozinka | 2 - vec koriscen mail | 3 - vec koriscen username | 4 - losi podaci za login
-
-  constructor(private userservice:UserService,private router:Router,private store:Store) 
+ 
+  constructor(private userservice:UserService,private router:Router,public store:Store<AppState>) 
   { 
   this.Mode = false;
   this.errorMsg = -1;
   }
 
   ngOnInit(): void {
-
+    this.Mode = false;
   }
 
   SwitchMode():void
@@ -45,8 +48,11 @@ export class LoginComponent implements OnInit {
 
   login(email:string,password:string):void
   {
-    this.userservice.Login(email,password).subscribe((data)=>{console.log(data);if(data.toString() != "")this.router.navigate(["home"]);else this.errorMsg = 4;})
-   // this.store.dispatch(UserActions.loginUser({email,password}));
+
+    this.store.dispatch(UserActions.loginUser({email:email,password:password}));
+    this.store.dispatch(UserActions.GetLoggedUser({username:localStorage.getItem("username") + ""}))
+    //this.userservice.Login(email,password).subscribe((data)=>{console.log(data);if(data.toString() != "")this.router.navigate(["home"]);else this.errorMsg = 4;})
+    
   }
 
   register(username:string,email:string,password:string,passwordcheck:string)

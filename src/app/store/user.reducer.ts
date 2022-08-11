@@ -1,19 +1,34 @@
 import { state } from '@angular/animations';
 import { createReducer, on } from '@ngrx/store';
 import { user } from '../models/user';
-import { GetLoggedUser, loginUser } from './user.action';
+import * as UserActions from './user.action';
 
 export interface UserState {
     loggedIn:boolean,
-    user: user | null,
+    CurrentUser: user | null,
+    component:string,
   }
 
   export const initialState: UserState = {
     loggedIn:false,
-    user: null,
+    CurrentUser: null,
+    component:"",
   };
 
   export const userReducer = createReducer(
     initialState,
-    on(GetLoggedUser,(state,action)=> ({ ...state, user: action.data}))
-  );
+    on(UserActions.GetLoggedUserSuccess,(state,{data})=> ({ ...state, CurrentUser: data, loggedIn:true})),
+
+    on(UserActions.loginSuccess,
+    (state,{data}) => ({ ...state ,CurrentUser:data, loggedIn:true})),//{data}
+  
+    on(UserActions.ChangeLogin,
+    (state, {data}) => ({ ...state , loggedIn:data})),
+
+    on(UserActions.SetComponent,
+      (state, {comp}) => ({ ...state , component:comp})),
+    
+  /*  on(UserActions.loginUser,
+      (state, {email,password}) => ({ ...state , loggedIn:true}))*/
+      );
+  

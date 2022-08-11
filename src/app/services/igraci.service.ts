@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { player } from '../models/player';
 import { environment } from 'src/environments/environment';
-import { team } from '../models/team';
 import { user } from '../models/user';
 
 @Injectable({
@@ -16,11 +15,13 @@ export class IgraciService {
   {
     return this.http.get<player[]>(environment.api + '/igraci');
   }
-
-  GetAllTeams()
+  
+  GetTeamPlayers(TeamName:string)
   {
-    return this.http.get<team[]>(environment.api + '/timovi');
+    return this.http.get<player[]>(environment.api + `/igraci?team=${TeamName}`);
   }
+
+  
 
   Test()
   {

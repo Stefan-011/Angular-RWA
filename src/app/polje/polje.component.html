@@ -80,86 +80,35 @@
         <div class="mid-linija"></div>
 
         <div class="tim-desni-div">
-            <div class= "flex-column">
+            <div class= "flex-column text-center">
                 <div class = "pb-2">
-                    <select class="form-select text-center Team-cmbox" aria-label="Default">
-                        <option value = "1">Faze</option>
-                        <option value = "1">G2</option>
-                        <option value = "1">Navi</option>
-                    </select>
+                    <select id= "Team-cmbox" class="form-select text-center Team-cmbox" aria-label="Default" (change)="test()">
+                        <option *ngFor="let obj of TeamNames" value = "{{obj}}">{{obj}}</option>
+                    </select>                 
                 </div>
                    <label class = "ms-5 pt-1 pb-3 h1" style="color: white;">Navi</label><br>
                    <div style="height: 25px;"></div>
-                <div class= "mx-2 mt-2 player-profile text-center"><label class = " pt-1" style="color: white;">Frager</label><br><img class="rounded-circle p-1" src="/assets/img/Player.png" alt="..."/><div class= "ms-0 d-flex justify-content-center stats-div">
-                    <div style="float: right;width: 50%;" class="flex-column">
-                        <div class = "text-center pt-4 stat-div" >K/D: <label>10</label></div>
-                        <div class = "text-center pt-4 stat-div">Uticaj: <label>10</label></div>
+                   <div *ngFor="let obj of $ActiveTeam |async">
+                    <div class= "d-flex justify-content-center">
+                        <div style="height: 300px;"></div>
+                        <div class= "mx-2 mt-2 player-profile"> <label class = " pt-1" style="color: white;"><p class="h4">{{obj.nick}}</p><br>{{obj.name}} {{obj.lname}}</label><br><img class="rounded-circle p-1" src="{{obj.img}}" alt="..."/><div class= "ms-0 d-flex justify-content-center stats-div">
+                            <div style="float: right;width: 50%;" class="flex-column">
+                                <div class = "text-center pt-2 stat-div" >K/D: <label>{{obj.kd}}</label></div>
+                                <div class = "text-center pt-2 stat-div">Uticaj: <label>{{obj.impact}}</label></div>
+                            </div>
+                             
+                            <div style="float: left; width: 50%;">
+                                <div class = "text-center pt-2 stat-div">Originalni tim: <label>{{obj.team}}</label></div>
+                                <div class = "text-center pt-2 stat-div">Rejting: <label>{{obj.rating}}</label></div>
+                            </div>  
+            
+                        </div>
+                        <button *ngIf="compType == 'shop'" style="width: 100%;" class="shop-btns">Kupi {{obj.price}}€</button>
+                        <button *ngIf="compType == 'myteam'" style="width: 100%;" class="team-btns">Prodaj {{obj.price}}€</button>
                     </div>
-                     
-                    <div style="float: left; width: 50%;">
-                        <div class = "text-center pt-4 stat-div">Pozicija: <label>10</label></div>
-                        <div class = "text-center pt-4 stat-div">Rejting: <label>92</label></div>
-                    </div>  
-    
                 </div>
-            </div>
-            <div style="height: 25px;"></div>
-                <div class= "mx-2 mt-2 player-profile text-center"><label class = " pt-1" style="color: white;">Frager</label><br><img class="rounded-circle p-1" src="/assets/img/Player.png" alt="..."/><div class= "ms-0 d-flex justify-content-center stats-div">
-                    <div style="float: right;width: 50%;" class="flex-column">
-                        <div class = "text-center pt-4 stat-div" >K/D: <label>10</label></div>
-                        <div class = "text-center pt-4 stat-div">Uticaj: <label>10</label></div>
-                    </div>
-                     
-                    <div style="float: left; width: 50%;">
-                        <div class = "text-center pt-4 stat-div">Pozicija: <label>10</label></div>
-                        <div class = "text-center pt-4 stat-div">Rejting: <label>92</label></div>
-                    </div>  
-    
                 </div>
-            </div>
-            <div class= "mx-2 mt-2 player-profile text-center"><label class = " pt-1" style="color: white;">Frager</label><br><img class="rounded-circle p-1" src="/assets/img/Player.png" alt="..."/><div class= "ms-0 d-flex justify-content-center stats-div">
-                <div style="float: right;width: 50%;" class="flex-column">
-                    <div class = "text-center pt-4 stat-div" >K/D: <label>10</label></div>
-                    <div class = "text-center pt-4 stat-div">Uticaj: <label>10</label></div>
-                </div>
-                 
-                <div style="float: left; width: 50%;">
-                    <div class = "text-center pt-4 stat-div">Pozicija: <label>10</label></div>
-                    <div class = "text-center pt-4 stat-div">Rejting: <label>92</label></div>
-                </div>  
-
-            </div>
-        </div>
-        <div style="height: 25px;"></div>
-        <div class= "mx-2 mt-2 player-profile text-center"><label class = " pt-1" style="color: white;">Frager</label><br><img class="rounded-circle p-1" src="/assets/img/Player.png" alt="..."/><div class= "ms-0 d-flex justify-content-center stats-div">
-            <div style="float: right;width: 50%;" class="flex-column">
-                <div class = "text-center pt-4 stat-div" >K/D: <label>10</label></div>
-                <div class = "text-center pt-4 stat-div">Uticaj: <label>10</label></div>
-            </div>
-             
-            <div style="float: left; width: 50%;">
-                <div class = "text-center pt-4 stat-div">Pozicija: <label>10</label></div>
-                <div class = "text-center pt-4 stat-div">Rejting: <label>92</label></div>
-            </div>  
-
-        </div>
-    </div>
-    <div style="height: 25px;"></div>
-    <div class= "mx-2 mt-2 player-profile text-center"><label class = " pt-1" style="color: white;">Frager</label><br><img class="rounded-circle p-1" src="/assets/img/Player.png" alt="..."/><div class= "ms-0 d-flex justify-content-center stats-div">
-        <div style="float: right;width: 50%;" class="flex-column">
-            <div class = "text-center pt-4 stat-div" >K/D: <label>10</label></div>
-            <div class = "text-center pt-4 stat-div">Uticaj: <label>10</label></div>
-        </div>
-         
-        <div style="float: left; width: 50%;">
-            <div class = "text-center pt-4 stat-div">Pozicija: <label>10</label></div>
-            <div class = "text-center pt-4 stat-div">Rejting: <label>92</label></div>
-        </div>  
-
-    </div>
-</div>
-
-                </div> 
+        </div> 
         </div>       
  
         <app-rezultat></app-rezultat>

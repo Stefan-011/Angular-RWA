@@ -1,5 +1,14 @@
 import { Component, HostListener, OnInit, Output } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { IgraciService } from '../services/igraci.service';
+import * as UserSelectors from 'src/app/store/user.selector'
+import { Observable } from 'rxjs';
+import { AppState } from '../app.state';
+import { user } from '../models/user';
+import { state } from '@angular/animations';
+import * as UserActions from '../store/user.action';
+import { Router } from '@angular/router';
+import * as OtherTeamAction from "src/app/store/Otherteam.action"
 
 @Component({
   selector: 'app-home',
@@ -8,34 +17,45 @@ import { IgraciService } from '../services/igraci.service';
 })
 export class HomeComponent implements OnInit {
   @Output() ruta:number;
-  @Output() MenuState:boolean;// Promenjiva koja aktivira collapse menu
-
-  constructor(private test:IgraciService)
+  MenuState:boolean;// Promenjiva koja aktivira collapse menu
+  $username:Observable<string | undefined>;
+  $LogState:Observable<boolean>
+  LogState:boolean;
+ 
+  
+  constructor(private igraciservis:IgraciService,private store:Store<AppState>,private route:Router)
   {
     this.ruta = -1;
     this.MenuState = false;
+    this.LogState = false;
+    this.$username = this.store.select(UserSelectors.selectUsersname);
+    this.$LogState = this.store.select(UserSelectors.selectLoggedIn);
+    
   }
 
-  ngOnInit()
+  ngOnInit():void
   {
+    this.$LogState.subscribe((data)=>this.LogState = data);
+    //this.igraciservis.GetTeamPlayers("G2").subscribe((data)=>console.log(data));
+   // this.store.subscribe((state)=> alert(state.user.loggedIn));
    // this.test.Test().subscribe();
-    this.test.TestGet().subscribe((data)=>{console.log(data.money)});
-    this.test.GetAllTeams().subscribe((data)=>{console.log(data)})
+   // this.test.TestGet().subscribe((data)=>{console.log(data.money)});
   }
 
   switchR(text:string)
   {
-    
     switch(text)
     {
       case "sim":
         this.ruta = 0;
         break;
         case "myteam":
+          this.store.dispatch(UserActions.SetComponent({comp:"myteam"}))
         this.ruta = 1;
         break;
         case "shop":
-        this.ruta = 2;
+      this.store.dispatch(UserActions.SetComponent({comp:"shop"}))
+        this.ruta = 1;
         break;
         default :
         this.ruta = -1;
@@ -59,6 +79,17 @@ OpenCollapse()
   this.MenuState = true;
   else
     this.MenuState = false;
+}
+
+logout()
+{
+  localStorage.clear();
+  this.route.navigate(["login"]);
+}
+
+OnDestroy()
+{
+  //this.$LogState.unsubsribe()
 }
 
 

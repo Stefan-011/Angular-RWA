@@ -38,8 +38,13 @@
 
 .spacer
 {
-    height: 35vh;
+    height: 60vh;
 }
+
+.masthead
+    {
+       background-color: none !important;
+    }
 
 @media screen and (max-width: 991px) {
  .video-container video
@@ -68,4 +73,21 @@
     }
     
  }
+
+ @media screen and (max-width: 280px) {
+    .masthead
+    {
+       padding: 2vh;
+    }
+    
+ }
+
+ @media screen and (max-width: 375px) {
+    .masthead
+    {
+       padding: 2vh;
+    }
+    
+ }
+ 
 

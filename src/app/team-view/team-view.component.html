@@ -1,0 +1,37 @@
+<section class ="font-lexend">
+    <div class="ViewPolje">    
+        <div class="text-center" >
+            <label *ngIf="compType == 'shop'" class = "ms-5  pb-3 h1" style="color: white;">SHOP</label><br>
+            <label  *ngIf="compType == 'myteam'" class = "ms-5  pb-3 h1" style="color: white;">Vas tim</label><br>
+            <div *ngIf="compType == 'shop'" class = "pb-2">
+                <select id="Team-cmbox"class="form-select text-center Team-cmbox" aria-label="Default" (change)="test()">
+                    <option *ngFor="let obj of TeamNames" value = "{{obj}}">{{obj}}</option>
+                </select>             
+            </div>
+            <label class = "ms-5 pt-1 pb-3 h1"style="color: white;">Budzet:</label><label class = "ms-5 pt-1 pb-3 h1" style="color: white;">{{$UsersMoney | async}}€</label><br>
+            <div *ngFor="let obj of $ActiveTeam |async">
+    
+                <div class= "d-flex justify-content-center">
+                    <div style="height: 300px;"></div>
+                    <div class= "mx-2 mt-2 player-profile"> <label class = " pt-1" style="color: white;"><p class="h4">{{obj.nick}}</p><br>{{obj.name}} {{obj.lname}}</label><br><img class="rounded-circle p-1" src="{{obj.img}}" alt="..."/><div class= "ms-0 d-flex justify-content-center stats-div">
+                        <div style="float: right;width: 50%;" class="flex-column">
+                            <div class = "text-center pt-3 stat-div" >K/D: <label>{{obj.kd}}</label></div>
+                            <div class = "text-center pt-3 stat-div">Uticaj: <label>{{obj.impact}}</label></div>
+                        </div>
+                         
+                        <div style="float: left; width: 50%;">
+                            <div class = "text-center pt-3 stat-div">Originalni tim: <label *ngIf="obj.team != 'Natus Vincere'">{{obj.team}}</label><label *ngIf="obj.team == 'Natus Vincere'">NaVi</label></div>
+                            <div class = "text-center pt-3 stat-div">Rejting: <label>{{obj.rating}}</label></div>
+                        </div>  
+        
+                    </div>
+                    <button *ngIf="compType == 'shop'" style="width: 100%;" class="shop-btns">Kupi {{obj.price}}€</button>
+                    <button *ngIf="compType == 'myteam'" style="width: 100%;" class="team-btns">Prodaj {{obj.price}}€</button>
+                </div>
+            </div>
+            </div>
+        </div> 
+   </div>   
+</section>
+
+

@@ -61,6 +61,7 @@ background-color: none;
     color: white;
     opacity: 90%;
     border: white 2px solid;
+    padding: 2vh;
 }
 
 .Team-cmbox
@@ -117,6 +118,8 @@ background-color: none;
     {
         margin-top: 100px;
         padding-bottom: 13rem !important;
+        height: 30vh !important;
+        margin-bottom: 2vh;
     }
     .stat-div
     {
@@ -202,5 +205,32 @@ background-color: none;
        height: 2.22rem;
        padding-top: 0;
    }
+    .player-profile
+    {
+        height: 48vh !important;
+        color: red !important;
+    }
+    .stat-div
+    {
+        font-size: 9px;
+        height: 40%;
+        padding-top: 0;
+    }
+ 
 }
+
+@media screen and (max-width:318) {
+    .player-profile
+    {
+            height: 50vh !important;
+            color: red !important;
+    }
+ }
+
+
+   
+
+   
+ 
+ 
 

@@ -9,6 +9,7 @@ export class player
     rating:number;
     team:string;
     img:string;
+    price:number;
     
     constructor() 
     {
@@ -20,6 +21,7 @@ export class player
         this.impact = 0;
         this.rating = 0;
         this.team = "";
+        this.price =  0;
         this.img = "/assets/img/Player.png"
     }
 }
