@@ -1,0 +1,57 @@
+.Result-Table{
+    width: 70%;
+    font-size: 3vh;
+    background-color: #212529;
+    color: white;
+    padding: 10px;
+   
+}
+
+.Result-Table tr
+{
+    border: 2px white solid;
+    height: 6vh;
+}
+
+.btn-sim
+{
+ background-color: #212529 !important;
+ color: orange;
+ box-shadow: 0 0 0 0.1rem black;
+ margin-left: 45%;
+}
+
+.btn-sim:hover
+{
+  background-color: orange !important;
+  color: #212529;
+  box-shadow: 0 0 0 0.15rem orange;
+}
+
+
+
+
+td
+{
+    color: #000;;
+}
+
+@media screen and (max-width:1200px){
+
+    .btn-sim{
+        width: 100%;
+        margin-left: 40%;
+    }
+}
+
+
+@media screen and (max-width:1024px){
+    .Result-Table{
+        width: 100%
+       
+    }
+    .btn-sim{
+        width: 100%;
+        margin-left: 0%;
+    }
+}

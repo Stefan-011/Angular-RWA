@@ -1,9 +1,12 @@
-import { Component, HostListener, Output } from '@angular/core';
-import { Route, Router } from '@angular/router';
+import { Component, EventEmitter, HostListener, Output } from '@angular/core';
+import { OutletContext, Route, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from './app.state';
 import { IgraciService } from './services/igraci.service';
 import * as UserActions from '../app/store/user.action';
+import { MyteamService } from './services/myteam.service';
+import { selectUsersname } from './store/user.selector';
+import { GetMyTeam } from './store/myteam.action';
 
 @Component({
   selector: 'app-root',
@@ -15,9 +18,7 @@ export class AppComponent {
 
  
   constructor(private router:Router,private store:Store<AppState>)
-  {
-   
-  }
+  {}
 
   ngOnInit()
   {
@@ -26,12 +27,14 @@ export class AppComponent {
       this.router.navigate(["home"]);
      // this.store.dispatch(UserActions.ChangeLogin({data:true}));
      this.store.dispatch(UserActions.GetLoggedUser({username:localStorage.getItem("username") + ""}))
+     this.store.select(selectUsersname).subscribe(data=>{console.log(data);this.store.dispatch(GetMyTeam({name:data}));})// Poboljsaj
     } 
     else
     this.router.navigate(["login"]);
 
-  //  this.router.navigate(['teamview'])
-  }
+    //this.router.navigate(["rezultat"]);
+
+}
 
 
 

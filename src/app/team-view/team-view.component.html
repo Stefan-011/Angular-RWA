@@ -20,13 +20,13 @@
                         </div>
                          
                         <div style="float: left; width: 50%;">
-                            <div class = "text-center pt-3 stat-div">Originalni tim: <label *ngIf="obj.team != 'Natus Vincere'">{{obj.team}}</label><label *ngIf="obj.team == 'Natus Vincere'">NaVi</label></div>
+                            <div class = "text-center pt-3 stat-div">Tim: <label *ngIf="obj.team != 'Natus Vincere'">{{obj.team}}</label><label *ngIf="obj.team == 'Natus Vincere'">NaVi</label></div>
                             <div class = "text-center pt-3 stat-div">Rejting: <label>{{obj.rating}}</label></div>
                         </div>  
         
                     </div>
-                    <button *ngIf="compType == 'shop'" style="width: 100%;" class="shop-btns">Kupi {{obj.price}}€</button>
-                    <button *ngIf="compType == 'myteam'" style="width: 100%;" class="team-btns">Prodaj {{obj.price}}€</button>
+                    <button *ngIf="compType == 'shop'" style="width: 100%;" class="shop-btns"(click)="BuyPlayer(obj.nick,obj.id)">Kupi {{obj.price}}€</button>
+                    <button *ngIf="compType == 'myteam'" style="width: 100%;" class="team-btns" (click)="SellPlayer(obj.id)">Prodaj {{obj.price}}€</button>
                 </div>
             </div>
             </div>

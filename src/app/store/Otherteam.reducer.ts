@@ -29,8 +29,6 @@ export interface OtherTeamState extends EntityState<player>{
 
       on(OtherTeamAction.SetName,
         (state, {name}) => ({ ...state , name:name})),
-
-
       );
    
     

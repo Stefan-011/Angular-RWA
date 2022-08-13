@@ -14,9 +14,11 @@ import { HomeComponent } from './home/home.component';
 import { StoreModule } from '@ngrx/store';
 import { AppState } from './app.state';
 import { OtherTeamEffects } from './store/Otherteam.effects';
+import { MyTeamEffects } from './store/myteam.effects';
 import { UserEffects } from './store/user.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { TeamViewComponent } from './team-view/team-view.component'
+import { MyTeamReducer } from './store/myteam.reducer';
 
 @NgModule({
   declarations: [
@@ -32,8 +34,8 @@ import { TeamViewComponent } from './team-view/team-view.component'
     AppRoutingModule,
     HttpClientModule ,
     CommonModule,
-    StoreModule.forRoot<AppState>({user: userReducer, OtherTeam:OtherTeamState}),
-    EffectsModule.forRoot([OtherTeamEffects,UserEffects]),
+    StoreModule.forRoot<AppState>({user: userReducer, OtherTeam:OtherTeamState, MyTeam:MyTeamReducer}),
+    EffectsModule.forRoot([OtherTeamEffects,UserEffects,MyTeamEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       autoPause: true, // Pauses recording actions and state changes when the extension window is not open

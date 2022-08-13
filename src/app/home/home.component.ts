@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, Output } from '@angular/core';
+import { Component, HostListener, Input, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { IgraciService } from '../services/igraci.service';
 import * as UserSelectors from 'src/app/store/user.selector'
@@ -16,11 +16,12 @@ import * as OtherTeamAction from "src/app/store/Otherteam.action"
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  @Output() ruta:number;
+  ruta:number;
   MenuState:boolean;// Promenjiva koja aktivira collapse menu
   $username:Observable<string | undefined>;
   $LogState:Observable<boolean>
   LogState:boolean;
+  @Input() Username:string;
  
   
   constructor(private igraciservis:IgraciService,private store:Store<AppState>,private route:Router)
@@ -28,9 +29,10 @@ export class HomeComponent implements OnInit {
     this.ruta = -1;
     this.MenuState = false;
     this.LogState = false;
+    this.Username = "";
     this.$username = this.store.select(UserSelectors.selectUsersname);
     this.$LogState = this.store.select(UserSelectors.selectLoggedIn);
-    
+    this.$username.subscribe((data)=>{this.Username = data+""}); 
   }
 
   ngOnInit():void

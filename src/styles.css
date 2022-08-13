@@ -11833,19 +11833,6 @@ background: linear-gradient(90deg, rgba(9,9,121,1) 0%, rgba(15,15,193,1) 21%, rg
   color:#03BDFF;
 }
 
-.btn-sim
-{
- background-color: var(--bs-red) !important;
- box-shadow: 0 0 0 0.1rem black;
- margin-left: 45%;
-}
-
-.btn-sim:hover
-{
-  background-color: black !important;
-  color: #03BDFF;
-  box-shadow: 0 0 0 0.15rem #03BDFF;
-}
 
 
 @media screen and (max-width: 335px) {

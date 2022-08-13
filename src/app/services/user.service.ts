@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Input } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import {  LoginUser, user } from '../models/user';
 
@@ -17,22 +17,31 @@ export class UserService {
 
   CheckEmail(email:string)
   {
-    return this.http.get(environment.api + `/korisnici?email=${email.toLowerCase()}`);
+    return this.http.get(environment.api + `/LoginData?email=${email.toLowerCase()}`);
   }
 
   CheckUsername(username:string)
   {
-    return this.http.get(environment.api + `/korisnici?username=${username.toLowerCase()}`);
+    return this.http.get(environment.api + `/LoginData?username=${username.toLowerCase()}`);
   }
 
   Register(username:string,email:string,password:string)
-  {
-      return this.http.post(environment.api + "/korisnici/",{username:username.toLowerCase(),password:password,email:email.toLowerCase()});
+  { 
+      return this.http.post(environment.api + "/LoginData/",{username:username.toLowerCase(),password:password,email:email.toLowerCase()});
   }
 
   GetUserByUsername(username:string)
   {
-    return this.http.get<user[]>(environment.api + `/korisnici?email=${username.toLowerCase()}`);
+    return this.http.get<user[]>(environment.api + `/korisnici?username=${username.toLowerCase()}`);
+  }
+
+  CreateUser(username:string)
+  {
+    let NewOne = new user();
+    alert(username)
+    NewOne.username = username;
+   
+    return this.http.post<user[]>(environment.api + `/korisnici`,NewOne);
   }
 
     

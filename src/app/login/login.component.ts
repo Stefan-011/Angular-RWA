@@ -48,11 +48,9 @@ export class LoginComponent implements OnInit {
 
   login(email:string,password:string):void
   {
-
+    if(email.length == 0 || password.length == 0 )
+    this.errorMsg = 4
     this.store.dispatch(UserActions.loginUser({email:email,password:password}));
-    this.store.dispatch(UserActions.GetLoggedUser({username:localStorage.getItem("username") + ""}))
-    //this.userservice.Login(email,password).subscribe((data)=>{console.log(data);if(data.toString() != "")this.router.navigate(["home"]);else this.errorMsg = 4;})
-    
   }
 
   register(username:string,email:string,password:string,passwordcheck:string)
@@ -64,15 +62,12 @@ export class LoginComponent implements OnInit {
     if(password == passwordcheck)
     this.userservice.CheckEmail(email).subscribe((data)=>
     {
+      console.log(data)
       if(data.toString() == "")
-      this.userservice.CheckUsername(username).subscribe((data2)=>
       {
-        console.log(data2)
-        if(data2.toString() == "")
-        this.userservice.Register(username,email,password).subscribe((data3)=>{alert("Uspesno ste se registovali!"); this.SwitchMode();})
-        else
-        this.errorMsg = 3;
-      })
+        this.store.dispatch(UserActions.RegisterUser({username:username,password:password,email:email}))
+        this.Mode = false;
+      }
       else
       this.errorMsg = 2;
     })
