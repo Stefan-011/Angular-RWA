@@ -4,6 +4,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { catchError, map, mergeMap, of } from "rxjs";
 import { AppState } from "../app.state";
+import { MyTeam } from "../models/MyTeam";
 import { player } from "../models/player";
 import { LoginUser, user } from "../models/user";
 import { IgraciService } from "../services/igraci.service";
@@ -18,9 +19,9 @@ export class MyTeamEffects {
   GetMyTeam$ = createEffect(() =>
   this.actions$.pipe(
     ofType(MyTeamActions.GetMyTeam),
-    mergeMap(({name})=> this.myteamservices.GetMyTeam(name).pipe(
-      map((data:player[])=>{
-        console.log(data);
+    mergeMap(({token})=> this.myteamservices.GetMyTeam(token).pipe(
+      map((data:MyTeam)=>{
+        console.log(data.players);
         return MyTeamActions.GetMyTeamSuccess({MyTeam:data});
       }),
       catchError(()=> of({type:"load error"}))
@@ -31,7 +32,7 @@ export class MyTeamEffects {
 SellPlayer$ = createEffect(() =>
   this.actions$.pipe(
     ofType(MyTeamActions.SellPlayer),
-    mergeMap(({ID})=> this.myteamservices.SellMyPlayer(ID).pipe(
+    mergeMap(({ID,token})=> this.myteamservices.SellMyPlayer(ID,token).pipe(
       map(()=>{
         console.log("wat")
         return MyTeamActions.SellPlayerSuccess({ID:ID});
@@ -44,18 +45,21 @@ SellPlayer$ = createEffect(() =>
 BuyPlayer$ = createEffect(() =>
   this.actions$.pipe(
     ofType(MyTeamActions.BuyPlayer),
-    mergeMap(({ID,username})=> this.igraciservice.GetPlayernameID(ID).pipe(
+    mergeMap(({ID,token})=> this.myteamservices.BuyMyPlayer(ID,token).pipe(
       map((data:player)=>{
-        console.log(data)
-        this.store.dispatch(MyTeamActions.BuyPlayerSaved({NewOne:data,username:username}));
+        if(data != undefined)
         return  MyTeamActions.BuyPlayerSuccess({NewOne:data})
+        else
+        return MyTeamActions.BuyPlayerFail();
       }),
       catchError(()=> of({type:"load error"}))
     ))
   )
 );
 
-SavePlayer$ = createEffect(() =>
+
+
+/*SavePlayer$ = createEffect(() =>
   this.actions$.pipe(
     ofType(MyTeamActions.BuyPlayerSaved),
     mergeMap(({NewOne,username})=> this.myteamservices.BuyMyPlayer(NewOne,username).pipe(
@@ -67,7 +71,7 @@ SavePlayer$ = createEffect(() =>
   )
 );
 
-checkPlayer$ = createEffect(() =>
+/*checkPlayer$ = createEffect(() =>
   this.actions$.pipe(
     ofType(MyTeamActions.CheckMyPlayer),
     mergeMap(({nick,username,ID})=>this.myteamservices.CheckMyPlayer(nick,username).pipe(
@@ -81,7 +85,7 @@ checkPlayer$ = createEffect(() =>
       catchError(()=> of({type:"load error"}))
     ))
   )
-);
+);*/
 
 
   }

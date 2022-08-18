@@ -8,12 +8,14 @@ import * as MyTeamActions from './myteam.action';
 export interface MyTeamState extends EntityState<player>{
      SelectedPlayer:number;
      NumberOfPlayers:number
+    // Sponzor:number;
    }
    const adapter = createEntityAdapter<player>();
  
    export const initialState: MyTeamState = adapter.getInitialState ({
      SelectedPlayer: 0,
      NumberOfPlayers: 0
+     //Sponzor:null;
    });
  
   
@@ -21,7 +23,7 @@ export interface MyTeamState extends EntityState<player>{
     initialState,
     on(MyTeamActions.GetMyTeamSuccess ,(state,{MyTeam})=>
     {
-      return adapter.setAll(MyTeam,state);
+      return adapter.setAll(MyTeam.players,state);
       }),
       on(MyTeamActions.SelectPlayer ,(state,{ID})=>
      {

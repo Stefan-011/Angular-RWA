@@ -9,6 +9,7 @@ import { state } from '@angular/animations';
 import * as UserActions from '../store/user.action';
 import { Router } from '@angular/router';
 import * as OtherTeamAction from "src/app/store/Otherteam.action"
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +25,7 @@ export class HomeComponent implements OnInit {
   @Input() Username:string;
  
   
-  constructor(private igraciservis:IgraciService,private store:Store<AppState>,private route:Router)
+  constructor(private igraciservis:IgraciService,private store:Store<AppState>,private route:Router, private cookies:CookieService)
   {
     this.ruta = -1;
     this.MenuState = false;
@@ -86,6 +87,7 @@ OpenCollapse()
 logout()
 {
   localStorage.clear();
+  this.cookies.deleteAll();
   this.route.navigate(["login"]);
 }
 

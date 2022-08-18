@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, Input } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { IncomingPackage } from '../models/IncomingPackage';
 import {  LoginUser, user } from '../models/user';
 
 @Injectable({
@@ -10,32 +11,31 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  Login(email:string,password:string)
+  Login(email:string,password:string) // RADI !!
   {
-    return this.http.get<LoginUser[]>(environment.api + `/LoginData?email=${email.toLowerCase()}&&password=${password}`);
+    return this.http.post<IncomingPackage>(environment.api + `/auth/login`,{username:email,password:password});
   }
 
-  CheckEmail(email:string)
-  {
-    return this.http.get(environment.api + `/LoginData?email=${email.toLowerCase()}`);
-  }
-
-  CheckUsername(username:string)
-  {
-    return this.http.get(environment.api + `/LoginData?username=${username.toLowerCase()}`);
-  }
 
   Register(username:string,email:string,password:string)
   { 
-      return this.http.post(environment.api + "/LoginData/",{username:username.toLowerCase(),password:password,email:email.toLowerCase()});
+      return this.http.post<boolean>(environment.api + "/auth/register",{username:username.toLowerCase(),password:password,email:email.toLowerCase()});
   }
 
-  GetUserByUsername(username:string)
+  GetUserByToken(token: string) // RADI !!
   {
-    return this.http.get<user[]>(environment.api + `/korisnici?username=${username.toLowerCase()}`);
+    var headers_object = new HttpHeaders({
+      'Authorization': "Bearer " + token,
+      'Content-Type': 'application/json',
+    });
+    const httpOptions = {
+      headers: headers_object,
+    };
+
+    return this.http.get<user>(environment.api + `/user/GetMyProfile`,httpOptions);
   }
 
-  CreateUser(username:string)
+  CreateUser(username:string) // VRV se brise
   {
     let NewOne = new user();
     alert(username)
@@ -45,6 +45,8 @@ export class UserService {
   }
 
     
+
+  
  
   
 }

@@ -1,3 +1,4 @@
+import { Token } from "@angular/compiler";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
@@ -7,23 +8,30 @@ import { AppState } from "../app.state";
 import { LoginUser, user } from "../models/user";
 import { UserService } from "../services/user.service";
 import * as UserActions from '../store/user.action';
+import { IncomingPackage } from "../models/IncomingPackage";
+import {CookieService} from 'ngx-cookie-service';
+
 
 @Injectable()
 export class UserEffects {
-  constructor(private actions$: Actions,private userservice:UserService,private router:Router,private store:Store<AppState>) {}
+  constructor(private actions$: Actions,private userservice:UserService,private router:Router,private store:Store<AppState>, private cookieService:CookieService) {}
 
   loginUser$ = createEffect(()=>
   this.actions$.pipe(
     ofType(UserActions.loginUser),
     mergeMap(({email,password}) => this.userservice.Login(email,password).pipe(
-      map((data1:LoginUser[])=> { 
-        if(data1[0] == undefined)
+      map((data1:IncomingPackage)=> { 
+        console.log(data1.data)
+        if(data1 == undefined)
         alert("Uneli ste pogresne podatke !")
-        localStorage.setItem("username",data1[0].username);
+        this.cookieService.delete("token");
+        this.cookieService.set("token",data1.access_token,{ expires: new Date(new Date().getTime() + 3600 * 1000)})//3600 * 1000
+        localStorage.clear()
         localStorage.setItem("loggedIn","true");
         this.router.navigate(["home"]);
         let data = new user();
-        data.username = data1[0].username;
+        data.money = data1.data.money;
+        data.username = data1.data.username
         return UserActions.loginSuccess({data})
       }),
       catchError(()=> of({type:"load error"}))
@@ -35,9 +43,10 @@ export class UserEffects {
   GetLoggedInUser$ = createEffect(()=>
   this.actions$.pipe(
     ofType(UserActions.GetLoggedUser),
-    mergeMap(({username}) => this.userservice.GetUserByUsername(username).pipe(
-      map((data1:user[])=> { 
-        let data = data1[0];
+    mergeMap(({token}) => this.userservice.GetUserByToken(token).pipe(
+      map((data1:user)=> { 
+        console.log(data1)
+        let data = data1;
         return UserActions.GetLoggedUserSuccess({data})
       }),
       catchError(()=> of({type:"load error"}))
@@ -50,8 +59,13 @@ export class UserEffects {
   this.actions$.pipe(
     ofType(UserActions.RegisterUser),
     mergeMap(({username,email,password}) => this.userservice.Register(username,email,password).pipe(
-      map((data)=> 
+      map((data:boolean)=> 
       { 
+        if(data==true)
+        alert("Uspesno registrovanje!")
+        else
+        alert("Greska pri registovanju !")
+
          this.store.dispatch(UserActions.CreateUser({username:username}));
          return UserActions.RegisterUserSuccess();
       }),

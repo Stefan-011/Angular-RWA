@@ -14,6 +14,7 @@ import * as MyTeamSelector from 'src/app/store/myteam.selector'
 import { MyteamService } from '../services/myteam.service';
 import { UserService } from '../services/user.service';
 import { IgraciService } from '../services/igraci.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-team-view',
@@ -30,7 +31,7 @@ export class TeamViewComponent implements OnInit {
   @Input() Username:string;
 
 
-  constructor(private store:Store<AppState>,private myteamservice:MyteamService,private igraciservice:IgraciService) { 
+  constructor(private store:Store<AppState>,private myteamservice:MyteamService,private igraciservice:IgraciService, private cookieservice:CookieService) { 
     this.compType = "";
     this.$ComponentType = store.select(UserSelectors.SelectComponent);
     this.$UsersMoney = store.select(UserSelectors.selectUsersMoney);
@@ -96,7 +97,7 @@ export class TeamViewComponent implements OnInit {
    // this.store.select(MyTeamSelector.selectPlayerID).subscribe((data=>{alert(data)}))
     this.store.select(MyTeamSelector.selectPlayer).subscribe((data)=>ID = parseInt(data?.id+"")) // Poboljsaj
    // this.myteamservice.SellMyPlayer(ID).subscribe((data2)=>console.log(data2))
-   this.store.dispatch(MyTeamActions.SellPlayer({ID:ID}))
+   this.store.dispatch(MyTeamActions.SellPlayer({ID:ID,token:this.cookieservice.get("token")}))
   }
 
   BuyPlayer(nick:string,id:number)
@@ -111,7 +112,7 @@ export class TeamViewComponent implements OnInit {
     }
     else
     alert("Vas tim je pun (5/5)")
-   //this.store.dispatch(MyTeamActions.BuyPlayer({ID:id,username:this.Username}))
+   this.store.dispatch(MyTeamActions.BuyPlayer({ID:id,token:this.cookieservice.get("token")}))
    //this.igraciservice.GetPlayerID(id).subscribe((data)=>this.myteamservice.BuyMyPlayer(data).subscribe())
   }
 

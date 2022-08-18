@@ -120,18 +120,7 @@
       "img": "https://img-cdn.hltv.org/playerbodyshot/PE0UP_iMAYKXrTX1BUN4vv.png?bg=3e4c54&h=200&ixlib=java-2.1.0&rect=128%2C4%2C478%2C478&w=200&s=fad9431247d887261cebc50d951ab88c",
       "price": 1000
     },
-    {
-      "id": 10,
-      "name": "Jakob",
-      "lname": "Nygaard",
-      "nick": "jabbi",
-      "kd": 1,
-      "impact": 1,
-      "rating": 1.03,
-      "team": "Heroic",
-      "img": "https://img-cdn.hltv.org/playerbodyshot/PE0UP_iMAYKXrTX1BUN4vv.png?bg=3e4c54&h=200&ixlib=java-2.1.0&rect=128%2C4%2C478%2C478&w=200&s=fad9431247d887261cebc50d951ab88c",
-      "price": 1000
-    },
+
     {
       "id": 11,
       "name": "Robin",
@@ -521,27 +510,39 @@
       "price": 1000
     },
     {
-      "name": "Nikola",
-      "lname": "Kovac",
-      "impact": 1.31,
+      "name": "Emil",
+      "lname": "Reif",
+      "impact": 1.12,
       "team": "ss",
-      "nick": "NiKo",
+      "nick": "Magisk",
       "price": 1000,
-      "rating": 1.15,
-      "kd": 1.19,
-      "img": "https://img-cdn.hltv.org/playerbodyshot/JDxiCoK-7_ZeBNCLNiSvFX.png?bg=3e4c54&h=200&ixlib=java-2.1.0&rect=128%2C12%2C459%2C459&w=200&s=ad0928af5587ee6fe3c5885b3b7b2ecb",
+      "rating": 1.08,
+      "kd": 1.14,
+      "img": "https://img-cdn.hltv.org/playerbodyshot/g12VVou-TG1isR6QGgefUH.png?bg=3e4c54&h=200&ixlib=java-2.1.0&rect=140%2C8%2C439%2C439&w=200&s=a25b3f67c817a0994270e0480833f875",
+      "id": 6
+    },
+    {
+      "name": "Andreas",
+      "lname": "Højsleth",
+      "impact": 0.97,
+      "team": "ss",
+      "nick": "Xyp9x",
+      "price": 1000,
+      "rating": 1.02,
+      "kd": 1.07,
+      "img": "https://img-cdn.hltv.org/playerbodyshot/_O_rLyH5KqS0ZRjomxJaU6.png?bg=3e4c54&h=200&ixlib=java-2.1.0&rect=128%2C19%2C463%2C463&w=200&s=9a590ce1d0766b34c461fdb2aefb4de7",
       "id": 7
     },
     {
-      "name": "Nemanja",
-      "lname": "Kovac",
-      "impact": 1.23,
+      "name": "Casper",
+      "lname": "Moller",
+      "impact": 1.12,
       "team": "ss",
-      "nick": "huNter",
+      "nick": "cadiaN",
       "price": 1000,
-      "rating": 1.12,
-      "kd": 1.16,
-      "img": "https://img-cdn.hltv.org/playerbodyshot/Gt-t5B9h3GI2DMgqbs5t7V.png?bg=3e4c54&h=200&ixlib=java-2.1.0&rect=121%2C8%2C471%2C471&w=200&s=24b73d7ae13c3e9a999a25693c076c37",
+      "rating": 1.04,
+      "kd": 1.1,
+      "img": "https://img-cdn.hltv.org/playerbodyshot/VJ9qjM0bYy7MtycRp0tfdj.png?bg=3e4c54&h=200&ixlib=java-2.1.0&rect=140%2C8%2C424%2C424&w=200&s=f18283be1eb853ec29ed14db406c8b95",
       "id": 8
     },
     {
@@ -554,31 +555,19 @@
       "rating": 1.11,
       "kd": 1.18,
       "img": "https://img-cdn.hltv.org/playerbodyshot/3W2WeF7zohMOjpjxGpurGG.png?bg=3e4c54&h=200&ixlib=java-2.1.0&rect=132%2C8%2C455%2C455&w=200&s=80d469f6b6bad25879d3f2ef3aa79e29",
-      "id": 11
+      "id": 9
     },
     {
-      "name": "Fredrik",
-      "lname": "Sterner",
-      "impact": 1.11,
+      "name": "Lukas",
+      "lname": "Rossander",
+      "impact": 1.05,
       "team": "ss",
-      "nick": "REZ",
+      "nick": "gla1ve",
       "price": 1000,
-      "rating": 1.03,
-      "kd": 1.06,
-      "img": "https://img-cdn.hltv.org/playerbodyshot/wo_7u8xDj7_NLVMkFr-_J7.png?bg=3e4c54&h=200&ixlib=java-2.1.0&rect=140%2C12%2C463%2C463&w=200&s=53884b46f6030f3731907aeb55c84a0c",
-      "id": 12
-    },
-    {
-      "name": "Casper",
-      "lname": "Moller",
-      "impact": 1.12,
-      "team": "ss",
-      "nick": "cadiaN",
-      "price": 1000,
-      "rating": 1.04,
-      "kd": 1.1,
-      "img": "https://img-cdn.hltv.org/playerbodyshot/VJ9qjM0bYy7MtycRp0tfdj.png?bg=3e4c54&h=200&ixlib=java-2.1.0&rect=140%2C8%2C424%2C424&w=200&s=f18283be1eb853ec29ed14db406c8b95",
-      "id": 13
+      "rating": 0.98,
+      "kd": 1.09,
+      "img": "https://img-cdn.hltv.org/playerbodyshot/RRW9pDs6BiIbvBFIWQ4LAr.png?bg=3e4c54&h=200&ixlib=java-2.1.0&rect=124%2C8%2C471%2C471&w=200&s=abf8e60e846b0abdfc39f609922b6bf0",
+      "id": 10
     }
   ]
 }

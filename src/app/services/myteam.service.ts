@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { environment } from 'src/environments/environment';
 import { AppState } from '../app.state';
+import { MyTeam } from '../models/MyTeam';
 import { player } from '../models/player';
 import { user } from '../models/user';
 import { selectUsersname } from '../store/user.selector';
@@ -15,9 +16,17 @@ export class MyteamService {
   constructor(private http: HttpClient,private store:Store<AppState>) { }
 
 
-  GetMyTeam(username:string)
+  GetMyTeam(token:string)
   {
-    return this.http.get<player[]>(environment.api + `/MyTeamPlayers?team=${username}`);
+    var headers_object = new HttpHeaders({
+      'Authorization': "Bearer " + token,
+      'Content-Type': 'application/json',
+    });
+    const httpOptions = {
+      headers: headers_object,
+    };
+
+    return this.http.get<MyTeam>(environment.api + `/my-team/GetMyTeam`,httpOptions);
   }
 
   SaveMyTeam(team:player[])
@@ -35,30 +44,35 @@ export class MyteamService {
     return this.http.get(environment.api + `/MyTeamPlayers?nick=${nickname}`,);
   }
 
-  SellMyPlayer(ID:number)
+  SellMyPlayer(ID:number,token:string)
   {
-    return this.http.delete<player>(environment.api + `/MyTeamPlayers/${ID}`);
+    var headers_object = new HttpHeaders({
+      'Authorization': "Bearer " + token,
+      'Content-Type': 'application/json',
+    });
+    const httpOptions = {
+      headers: headers_object,
+    };
+    return this.http.delete<player>(environment.api + `/my-team/RemovePlayer:${ID}`,httpOptions);
   }
 
-  BuyMyPlayer(NewOne:player,username:string)
+  BuyMyPlayer(NewOneID:number,token:string)
   {
-    return this.http.post<player>(environment.api + `/MyTeamPlayers`,
-    {
-    name:NewOne.name, 
-    lname:NewOne.lname,
-    impact:NewOne.impact, 
-    team:username, 
-    nick:NewOne.nick, 
-    price:NewOne.price, 
-    rating:NewOne.rating,
-    kd:NewOne.kd,
-    img:NewOne.img
-  });
+
+    var headers_object = new HttpHeaders({
+      'Authorization': "Bearer " + token,
+      'Content-Type': 'application/json',
+    });
+    const httpOptions = {
+      headers: headers_object,
+    };
+
+    return this.http.get<player>(environment.api + `/my-team/AddPlayer:${NewOneID}`,httpOptions);
 }
 
 CheckMyPlayer(nick:string,username:string)
 {
-  return this.http.get<player[]>(environment.api + `/MyTeamPlayers?team=ss&&nick=${nick}`);
+  return this.http.get<player[]>(environment.api + `/MyTeamPlayers?team=${username}&&nick=${nick}`);
 }
     
 }

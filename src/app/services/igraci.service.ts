@@ -16,17 +16,17 @@ export class IgraciService {
 
   GetAllPlayers()
   {
-    return this.http.get<player[]>(environment.api + '/igraci');
+    return this.http.get<player[]>(environment.api + '/my-team');
   }
   
   GetTeamPlayers(TeamName:string)
   {
-    return this.http.get<player[]>(environment.api + `/igraci?team=${TeamName}`);
+    return this.http.get<player[]>(environment.api + `/players/GetAllByTeam:${TeamName}`,);
   }
 
   GetPlayernameID(id:number)
   {
-    return this.http.get<player>(environment.api + `/igraci/${id}`);
+    return this.http.get<player>(environment.api + `/players/GetPlayerByID:${id}`);
   }
 
   

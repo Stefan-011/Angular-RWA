@@ -4,7 +4,6 @@ export class user
 {
     username:string;
     money:number;
-    
     constructor() 
     {
         this.username = "";
@@ -16,13 +15,11 @@ export class LoginUser
 {
     username:string;
     password:string;
-    email:string;
     
     constructor() 
     {
         this.username = "";
         this.password = "";
-        this.email = "";
     }
 }
 

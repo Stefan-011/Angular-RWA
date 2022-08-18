@@ -26,7 +26,7 @@ export interface UserState {
     (state, {data}) => ({ ...state , loggedIn:data})),
 
     on(UserActions.SetComponent,
-      (state, {comp}) => ({ ...state , component:comp})),
+      (state, {comp}) => {console.log(comp);return ({ ...state , component:comp})}),
     
   /*  on(UserActions.loginUser,
       (state, {email,password}) => ({ ...state , loggedIn:true}))*/

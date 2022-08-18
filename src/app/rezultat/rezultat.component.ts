@@ -64,6 +64,8 @@ export class RezultatComponent implements OnInit {
 
   obracun()
   {
+    let Btn = document.getElementById("btn-sim") as HTMLButtonElement;
+    Btn.disabled = true;
     let Row = document.getElementById("GameTable") as HTMLTableRowElement;
     this.RightWinns = 0;
     this.LeftWinns = 0;
@@ -87,12 +89,13 @@ export class RezultatComponent implements OnInit {
         winner = this.LeftTeamName  
         let Array = [this.LeftWinns+":"+this.RightWinns,"Pobednik: "+winner.toUpperCase()]
         this.ResultListener.emit(Array)
+        Btn.disabled = false;
       }
     }, 2500);      
     
     
 
-   
+    
   }
 
   GetRandomMap()

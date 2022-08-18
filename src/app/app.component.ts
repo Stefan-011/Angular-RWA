@@ -7,6 +7,7 @@ import * as UserActions from '../app/store/user.action';
 import { MyteamService } from './services/myteam.service';
 import { selectUsersname } from './store/user.selector';
 import { GetMyTeam } from './store/myteam.action';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-root',
@@ -17,17 +18,18 @@ export class AppComponent {
   title = 'MajorSim';
 
  
-  constructor(private router:Router,private store:Store<AppState>)
+  constructor(private router:Router,private store:Store<AppState> , private cookieservice:CookieService)
   {}
 
   ngOnInit()
   {
-    if(localStorage.getItem("loggedIn") != null && localStorage.getItem("username") != null )
+    console.log(this.cookieservice.get("token"))
+    if(localStorage.getItem("loggedIn") != null && this.cookieservice.get("token") != '' )
     {
       this.router.navigate(["home"]);
      // this.store.dispatch(UserActions.ChangeLogin({data:true}));
-     this.store.dispatch(UserActions.GetLoggedUser({username:localStorage.getItem("username") + ""}))
-     this.store.select(selectUsersname).subscribe(data=>{console.log(data);this.store.dispatch(GetMyTeam({name:data}));})// Poboljsaj
+     this.store.dispatch(UserActions.GetLoggedUser({token:this.cookieservice.get("token")}))
+     this.store.dispatch(GetMyTeam({token:this.cookieservice.get("token")}))
     } 
     else
     this.router.navigate(["login"]);

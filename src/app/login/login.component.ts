@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.Mode = false;
+    let test= "valie:"
   }
 
   SwitchMode():void
@@ -60,20 +61,15 @@ export class LoginComponent implements OnInit {
     this.errorMsg = 0;    
     else
     if(password == passwordcheck)
-    this.userservice.CheckEmail(email).subscribe((data)=>
-    {
-      console.log(data)
-      if(data.toString() == "")
-      {
-        this.store.dispatch(UserActions.RegisterUser({username:username,password:password,email:email}))
-        this.Mode = false;
-      }
-      else
-      this.errorMsg = 2;
-    })
-    else
-    this.errorMsg = 1;
+    this.store.dispatch(UserActions.RegisterUser({username:username,password:password,email:email}))
+    this.Mode = false;
   }
+   
+      
+        
+    
+     
+  
   
   
 }
