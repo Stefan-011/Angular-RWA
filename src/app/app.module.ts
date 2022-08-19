@@ -20,6 +20,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { TeamViewComponent } from './team-view/team-view.component'
 import { MyTeamReducer } from './store/myteam.reducer';
 
+
 @NgModule({
   declarations: [
     AppComponent,

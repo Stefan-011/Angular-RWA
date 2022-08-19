@@ -27,7 +27,10 @@ export interface UserState {
 
     on(UserActions.SetComponent,
       (state, {comp}) => {console.log(comp);return ({ ...state , component:comp})}),
-    
+      
+    //  on(UserActions.SaveChangesSuccess,
+    //    (state, {comp}) => {console.log(comp);return ({ ...state , component:comp})}),
+      
   /*  on(UserActions.loginUser,
       (state, {email,password}) => ({ ...state , loggedIn:true}))*/
       );

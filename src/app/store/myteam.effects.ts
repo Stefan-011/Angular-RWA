@@ -6,6 +6,7 @@ import { catchError, map, mergeMap, of } from "rxjs";
 import { AppState } from "../app.state";
 import { MyTeam } from "../models/MyTeam";
 import { player } from "../models/player";
+import { Sponzor } from "../models/Sponzor";
 import { LoginUser, user } from "../models/user";
 import { IgraciService } from "../services/igraci.service";
 import { MyteamService } from "../services/myteam.service";
@@ -22,6 +23,8 @@ export class MyTeamEffects {
     mergeMap(({token})=> this.myteamservices.GetMyTeam(token).pipe(
       map((data:MyTeam)=>{
         console.log(data.players);
+        console.log(data.sponzor)
+        this.store.dispatch(MyTeamActions.GetMyTeamSuccess_Sponzor({sponzor:data.sponzor}))
         return MyTeamActions.GetMyTeamSuccess({MyTeam:data});
       }),
       catchError(()=> of({type:"load error"}))
@@ -51,6 +54,30 @@ BuyPlayer$ = createEffect(() =>
         return  MyTeamActions.BuyPlayerSuccess({NewOne:data})
         else
         return MyTeamActions.BuyPlayerFail();
+      }),
+      catchError(()=> of({type:"load error"}))
+    ))
+  )
+);
+
+addSponzor$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(MyTeamActions.AddSponzor),
+    mergeMap(({id,token})=> this.myteamservices.AddSponzor(token,id).pipe(
+      map((data:Sponzor)=>{  
+        return  MyTeamActions.AddSponzorSuccess({sponzor:data})
+      }),
+      catchError(()=> of({type:"load error"}))
+    ))
+  )
+);
+
+RemoveSponzor$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(MyTeamActions.RemoveSponzor),
+    mergeMap(({token})=> this.myteamservices.RemoveSponzor(token).pipe(
+      map(()=>{  
+        return  MyTeamActions.RemoveSponzorSuccess({sponzor:new Sponzor()})
       }),
       catchError(()=> of({type:"load error"}))
     ))

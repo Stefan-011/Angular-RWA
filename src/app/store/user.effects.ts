@@ -91,4 +91,20 @@ export class UserEffects {
   );
 
 
+  SaveChanges$ = createEffect(()=>
+  this.actions$.pipe(
+    ofType(UserActions.SaveChanges),
+    mergeMap(({token,money}) => this.userservice.SaveChanges(token,money).pipe(
+      map((data)=> 
+      { 
+        console.log(data)
+        this.store.dispatch(UserActions.GetLoggedUser({token:token}));
+         return UserActions.SaveChangesSuccess();
+      }),
+      catchError(()=> of({type:"load error"}))
+      )
+     )
+    )
+  );
+
   }

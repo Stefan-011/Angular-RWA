@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { AppState } from '../app.state';
 import { MyTeam } from '../models/MyTeam';
 import { player } from '../models/player';
+import { Sponzor } from '../models/Sponzor';
 import { user } from '../models/user';
 import { selectUsersname } from '../store/user.selector';
 
@@ -70,10 +71,36 @@ export class MyteamService {
     return this.http.get<player>(environment.api + `/my-team/AddPlayer:${NewOneID}`,httpOptions);
 }
 
-CheckMyPlayer(nick:string,username:string)
-{
-  return this.http.get<player[]>(environment.api + `/MyTeamPlayers?team=${username}&&nick=${nick}`);
-}
+// CheckMyPlayer(nick:string,username:string)
+// {
+//   return this.http.get<player[]>(environment.api + `/MyTeamPlayers?team=${username}&&nick=${nick}`);
+// }
     
+AddSponzor(token:string,id:number) // RADI !!
+  {
+    var headers_object = new HttpHeaders({
+      'Authorization': "Bearer " + token,
+      'Content-Type': 'application/json',
+    });
+    const httpOptions = {
+      headers: headers_object,
+    };
+
+    return this.http.get<Sponzor>(environment.api + `/my-team/AddSponzor:${id}`,httpOptions);
+  }
+
+  RemoveSponzor(token:string) // RADI !!
+  {
+    var headers_object = new HttpHeaders({
+      'Authorization': "Bearer " + token,
+      'Content-Type': 'application/json',
+    });
+    const httpOptions = {
+      headers: headers_object,
+    };
+
+    return this.http.get<boolean>(environment.api + `/my-team/RemoveSponzor`,httpOptions);
+  }
+
 }
 

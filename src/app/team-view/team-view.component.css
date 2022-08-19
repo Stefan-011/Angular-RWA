@@ -39,7 +39,7 @@
     font-style: italic;
     color: white;
     width: 30%;
-    margin-left: 36%;
+    margin-left: 35.5%;
 }
 
 .player-profile img
@@ -64,6 +64,23 @@
     background-color: #2B8601;
     border: white 2px solid;
     color: white;
+}
+
+.opt-btn-div{
+    border-bottom: solid 2px orange;
+  margin-bottom: 10vh;
+}
+
+.opt-btn{
+    background-color: #212529;
+    color: orange; 
+    height:6vh;
+    width:15vh;
+}
+
+.opt-btn:hover{
+    background-color: orange;
+    color:#212529; 
 }
 
 .team-btns

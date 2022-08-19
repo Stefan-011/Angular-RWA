@@ -17,3 +17,6 @@ export const RegisterUserSuccess = createAction("RegisterUserSuccess");
 
 export const CreateUser = createAction("CreateUser",props<{username:string}>());
 export const CreateUserSuccess = createAction("CreateUserSuccess");
+
+export const SaveChanges = createAction("SaveChanges",props<{token:string,money:number}>());
+export const SaveChangesSuccess = createAction("SaveChangesSuccess");

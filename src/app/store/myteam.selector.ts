@@ -32,10 +32,10 @@ export const selectNumberOfPlayers = createSelector(
      (MyTeam) => MyTeam.ids.length
 );
 
-/*export const selectSponzor = createSelector(
+export const selectSponzor = createSelector(
     SelectMyTeamFeature,
      (MyTeam) => MyTeam.Sponzor
-);*/
+);
 
 
 

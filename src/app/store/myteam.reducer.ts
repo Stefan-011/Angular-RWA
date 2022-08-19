@@ -2,20 +2,21 @@ import { state } from '@angular/animations';
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
 import { player } from '../models/player';
+import { Sponzor } from '../models/Sponzor';
 import { user } from '../models/user';
 import * as MyTeamActions from './myteam.action';
 
 export interface MyTeamState extends EntityState<player>{
      SelectedPlayer:number;
      NumberOfPlayers:number
-    // Sponzor:number;
+     Sponzor:Sponzor;
    }
    const adapter = createEntityAdapter<player>();
  
    export const initialState: MyTeamState = adapter.getInitialState ({
      SelectedPlayer: 0,
-     NumberOfPlayers: 0
-     //Sponzor:null;
+     NumberOfPlayers: 0,
+     Sponzor:new Sponzor()
    });
  
   
@@ -42,6 +43,27 @@ export interface MyTeamState extends EntityState<player>{
          alert("Igrac je vec u vasem timu!");
         return state;
         }),
+        on(MyTeamActions.GetMyTeamSuccess_Sponzor ,(state,{sponzor})=>
+        {
+         return {
+          ...state, 
+          Sponzor:sponzor
+         }
+         }),
+         on(MyTeamActions.AddSponzorSuccess ,(state,{sponzor})=>
+        {
+         return {
+          ...state, 
+          Sponzor:sponzor
+         }
+         }),
+         on(MyTeamActions.RemoveSponzorSuccess ,(state,{sponzor})=>
+        {
+         return {
+          ...state, 
+          Sponzor:sponzor
+         }
+         }),
 
       );
   

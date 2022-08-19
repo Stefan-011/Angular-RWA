@@ -8,6 +8,7 @@ import { MyteamService } from './services/myteam.service';
 import { selectUsersname } from './store/user.selector';
 import { GetMyTeam } from './store/myteam.action';
 import { CookieService } from 'ngx-cookie-service';
+import { SponzorService } from './services/sponzor.service';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,7 @@ export class AppComponent {
   title = 'MajorSim';
 
  
-  constructor(private router:Router,private store:Store<AppState> , private cookieservice:CookieService)
+  constructor(private router:Router,private store:Store<AppState> , private cookieservice:CookieService,private test:SponzorService)
   {}
 
   ngOnInit()
@@ -33,7 +34,6 @@ export class AppComponent {
     } 
     else
     this.router.navigate(["login"]);
-
     //this.router.navigate(["rezultat"]);
 
 }
