@@ -1,5 +1,5 @@
-import { player } from "./player";
 
+// Klasa za predstavljanje korisnika
 export class user
 {
     username:string;
@@ -7,20 +7,6 @@ export class user
     constructor() 
     {
         this.username = "";
-        this.money = 50000;
+        this.money = 6000;
     }
 }
-
-export class LoginUser
-{
-    username:string;
-    password:string;
-    
-    constructor() 
-    {
-        this.username = "";
-        this.password = "";
-    }
-}
-
-

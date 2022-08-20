@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, Input } from '@angular/core';
-import { environment } from 'src/environments/environment';
 import { IncomingPackage } from '../models/IncomingPackage';
-import {  LoginUser, user } from '../models/user';
+import { environment } from 'src/environments/environment';
+import { Injectable } from '@angular/core';
+import { user } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +11,9 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  Login(email:string,password:string) // RADI !!
+  Login(email:string,password:string) 
   {
-    return this.http.post<IncomingPackage>(environment.api + `/auth/login`,{username:email,password:password});
+    return this.http.post<IncomingPackage>(environment.api + `/auth/login`,{username:email.toLowerCase(),password:password});
   }
 
 
@@ -22,7 +22,7 @@ export class UserService {
       return this.http.post<boolean>(environment.api + "/auth/register",{username:username.toLowerCase(),password:password,email:email.toLowerCase()});
   }
 
-  GetUserByToken(token: string) // RADI !!
+  GetUserByToken(token: string) 
   {
     var headers_object = new HttpHeaders({
       'Authorization': "Bearer " + token,
@@ -35,17 +35,15 @@ export class UserService {
     return this.http.get<user>(environment.api + `/user/GetMyProfile`,httpOptions);
   }
 
-  CreateUser(username:string) // VRV se brise
+  CreateUser(username:string) 
   {
     let NewOne = new user();
-    alert(username)
     NewOne.username = username;
-   
     return this.http.post<user[]>(environment.api + `/korisnici`,NewOne);
   }
 
     
-  SaveChanges(token:string,money:number) // VRV se brise
+  SaveChanges(token:string,money:number)
   {
     var headers_object = new HttpHeaders({
       'Authorization': "Bearer " + token,
@@ -54,8 +52,7 @@ export class UserService {
     const httpOptions = {
       headers: headers_object,
     };
-  
-
+    
     return this.http.get<user[]>(environment.api + `/user/SaveChanges:${money}`,httpOptions);
   }
   

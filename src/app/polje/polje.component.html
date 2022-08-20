@@ -29,7 +29,7 @@
         <div class="tim-desni-div">
             <div class= "flex-column text-center" >
                 <div class = "pb-1">
-                    <select id= "Team-cmbox" class="form-select text-center Team-cmbox" aria-label="Default" (change)="test()">
+                    <select id= "Team-cmbox" class="form-select text-center Team-cmbox" aria-label="Default" (change)="ChangeOtherTeam()">
                         <option *ngFor="let obj of TeamNames" value = "{{obj}}">{{obj}}</option>
                     </select>                 
                 </div>

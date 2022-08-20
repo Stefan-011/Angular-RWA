@@ -1,14 +1,10 @@
-import { state } from '@angular/animations';
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import { Actions } from '@ngrx/effects';
+import * as OtherTeamAction from './Otherteam.action';
 import { createReducer, on } from '@ngrx/store';
 import { player } from '../models/player';
-import { user } from '../models/user';
-import * as OtherTeamAction from './Otherteam.action';
-import { Component } from '@angular/core';
+
 
 export interface OtherTeamState extends EntityState<player>{
- //   CurrentTeam: player[],
     name:string,
     SelectedPlayer:number
   }

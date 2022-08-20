@@ -1,15 +1,12 @@
-import { Component, HostListener, Input, OnInit, Output } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { IgraciService } from '../services/igraci.service';
-import * as UserSelectors from 'src/app/store/user.selector'
-import { Observable } from 'rxjs';
-import { AppState } from '../app.state';
-import { user } from '../models/user';
-import { state } from '@angular/animations';
+import { Component, HostListener, Input, OnInit} from '@angular/core';
+import * as UserSelectors from 'src/app/store/user.selector';
 import * as UserActions from '../store/user.action';
-import { Router } from '@angular/router';
-import * as OtherTeamAction from "src/app/store/Otherteam.action"
 import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
+import { AppState } from '../app.state';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-home',
@@ -17,84 +14,99 @@ import { CookieService } from 'ngx-cookie-service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  ruta:number;
-  MenuState:boolean;// Promenjiva koja aktivira collapse menu
+
+  @Input() Username:string; // Input za prosledjivanej Username-a
+
+//----------------Observables----------------//
   $username:Observable<string | undefined>;
-  $LogState:Observable<boolean>
-  LogState:boolean;
-  @Input() Username:string;
+  $LogState:Observable<boolean>;
+//-----------------------------------------// 
+
+ //---------- Pomocne promenjive ----------//
+  Ruta:number; // Promenjiva koja pokazuje koja se komponenta aktivira
+  LogState:boolean; // Promenjiva koja pokazuje da li je korisnik ulogovan ili ne
+  MenuState:boolean;// Promenjiva koja aktivira collapse menu
+//-----------------------------------------//
  
   
-  constructor(private igraciservis:IgraciService,private store:Store<AppState>,private route:Router, private cookies:CookieService)
+  constructor(
+    private cookies:CookieService,
+    private store:Store<AppState>,
+    private route:Router 
+    )
   {
-    this.ruta = -1;
-    this.MenuState = false;
-    this.LogState = false;
+    this.Ruta = -1;
     this.Username = "";
-    this.$username = this.store.select(UserSelectors.selectUsersname);
+    this.LogState = false;
+    this.MenuState = false; 
     this.$LogState = this.store.select(UserSelectors.selectLoggedIn);
-    this.$username.subscribe((data)=>{this.Username = data+""}); 
+    this.$username = this.store.select(UserSelectors.selectUsersname);
+    
   }
 
   ngOnInit():void
   {
+    this.$username.subscribe((data)=>{this.Username = data+""}); 
     this.$LogState.subscribe((data)=>this.LogState = data);
-    //this.igraciservis.GetTeamPlayers("G2").subscribe((data)=>console.log(data));
-   // this.store.subscribe((state)=> alert(state.user.loggedIn));
-   // this.test.Test().subscribe();
-   // this.test.TestGet().subscribe((data)=>{console.log(data.money)});
   }
 
-  switchR(text:string)
+  // Funkcija koja sluzi za promenu fokus komponente
+  switchR(text:string):void
   {
     switch(text)
     {
       case "sim":
-        this.ruta = 0;
-        break;
-        case "myteam":
-          this.store.dispatch(UserActions.SetComponent({comp:"myteam"}))
-        this.ruta = 1;
-        break;
-        case "shop":
-      this.store.dispatch(UserActions.SetComponent({comp:"shop"}))
-        this.ruta = 1;
-        break;
-        default :
-        this.ruta = -1;
-        break;
+        this.Ruta = 0;
+      break;
+
+      case "myteam":
+        this.store.dispatch(UserActions.SetComponent({comp:"myteam"}))
+        this.Ruta = 1;
+      break;
+
+      case "shop":
+        this.store.dispatch(UserActions.SetComponent({comp:"shop"}))
+        this.Ruta = 1;
+      break;
+
+      default :
+        this.Ruta = -1;
+      break;
     }
   }
 
-// Listener koji gleda promenu sirine ekrana
+
+// Listener koji gleda promenu sirine ekrana (koristise za collapse menu)
 @HostListener('window:resize', ['$event'])
 onWindowResize(): void 
 {
-  let  getScreenWidth = window.innerWidth;
+  let getScreenWidth = window.innerWidth;
   if(getScreenWidth >= 991 && this.MenuState == true)
-  this.MenuState = false;
+    this.MenuState = false;
 }
-OpenCollapse()
+
+// Funkcija za otvaranje collapse menu-a
+OpenCollapse():void
 {
-  let  getScreenWidth = window.innerWidth;
-  getScreenWidth = window.innerWidth;
+  let getScreenWidth = window.innerWidth;
+      getScreenWidth = window.innerWidth;
+
   if(getScreenWidth <= 991 && this.MenuState == false)
-  this.MenuState = true;
+    this.MenuState = true;
   else
     this.MenuState = false;
 }
 
-logout()
+
+logout():void
 {
   localStorage.clear();
   this.cookies.deleteAll();
   this.route.navigate(["login"]);
 }
 
-OnDestroy()
-{
-  //this.$LogState.unsubsribe()
-}
+OnDestroy():void
+{}
 
 
 }

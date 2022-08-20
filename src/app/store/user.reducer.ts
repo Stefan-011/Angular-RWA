@@ -1,12 +1,12 @@
-import { state } from '@angular/animations';
 import { createReducer, on } from '@ngrx/store';
-import { user } from '../models/user';
 import * as UserActions from './user.action';
+import { user } from '../models/user';
+
 
 export interface UserState {
-    loggedIn:boolean,
-    CurrentUser: user | null,
-    component:string,
+    loggedIn:boolean, // Promenjiva koja pokazuje da li je korisnik ulogovan
+    CurrentUser: user | null, // Promenjiva koja pokazuje trenutnog korisnika
+    component:string, // Promenjiva koja pokazuje koja je komponenta trenutno u fokusu
   }
 
   export const initialState: UserState = {
@@ -20,18 +20,11 @@ export interface UserState {
     on(UserActions.GetLoggedUserSuccess,(state,{data})=> ({ ...state, CurrentUser: data, loggedIn:true})),
 
     on(UserActions.loginSuccess,
-    (state,{data}) => ({ ...state ,CurrentUser:data, loggedIn:true})),//{data}
+    (state,{data}) => ({ ...state ,CurrentUser:data, loggedIn:true})),
   
-    on(UserActions.ChangeLogin,
-    (state, {data}) => ({ ...state , loggedIn:data})),
 
     on(UserActions.SetComponent,
-      (state, {comp}) => {console.log(comp);return ({ ...state , component:comp})}),
+      (state, {comp}) => ({ ...state , component:comp})),
       
-    //  on(UserActions.SaveChangesSuccess,
-    //    (state, {comp}) => {console.log(comp);return ({ ...state , component:comp})}),
-      
-  /*  on(UserActions.loginUser,
-      (state, {email,password}) => ({ ...state , loggedIn:true}))*/
       );
   

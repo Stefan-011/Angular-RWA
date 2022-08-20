@@ -19,23 +19,24 @@ export class AppComponent {
   title = 'MajorSim';
 
  
-  constructor(private router:Router,private store:Store<AppState> , private cookieservice:CookieService,private test:SponzorService)
-  {}
+  constructor(
+    private router:Router,
+    private store:Store<AppState>, 
+    private cookieservice:CookieService,
+    private test:SponzorService
+    ){}
+  
 
-  ngOnInit()
+  ngOnInit():void
   {
-    console.log(this.cookieservice.get("token"))
-    if(localStorage.getItem("loggedIn") != null && this.cookieservice.get("token") != '' )
+    if(localStorage.getItem("loggedIn") != null && this.cookieservice.get("token") != '' ) // rutiranje u zavisnosti od toga da li je korisnik ulogovan ili ne
     {
-      this.router.navigate(["home"]);
-     // this.store.dispatch(UserActions.ChangeLogin({data:true}));
-     this.store.dispatch(UserActions.GetLoggedUser({token:this.cookieservice.get("token")}))
+     this.router.navigate(["home"]);
      this.store.dispatch(GetMyTeam({token:this.cookieservice.get("token")}))
+     this.store.dispatch(UserActions.GetLoggedUser({token:this.cookieservice.get("token")}))   
     } 
     else
     this.router.navigate(["login"]);
-    //this.router.navigate(["rezultat"]);
-
 }
 
 

@@ -1,11 +1,10 @@
+import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { player } from '../models/player';
-import { environment } from 'src/environments/environment';
-import { user } from '../models/user';
-import { Store } from '@ngrx/store';
-import { selectUsersname } from '../store/user.selector';
 import { AppState } from '../app.state';
+import { Store } from '@ngrx/store';
+
 
 @Injectable({
   providedIn: 'root'
@@ -28,20 +27,4 @@ export class IgraciService {
   {
     return this.http.get<player>(environment.api + `/players/GetPlayerByID:${id}`);
   }
-
-  
-
-  Test()
-  {
-    let t = new user();
-    t.money = 500;
-    t.username ="Milos"
-    return this.http.post(environment.api + '/korisnici',t);
-  }
-
-  TestGet()
-  {
-    return this.http.get<user>(environment.api + '/korisnici/1');
-  }
-
 }

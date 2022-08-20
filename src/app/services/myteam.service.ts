@@ -1,20 +1,21 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { environment } from 'src/environments/environment';
-import { AppState } from '../app.state';
+import { Sponzor } from '../models/Sponzor';
+import { Injectable } from '@angular/core';
 import { MyTeam } from '../models/MyTeam';
 import { player } from '../models/player';
-import { Sponzor } from '../models/Sponzor';
-import { user } from '../models/user';
-import { selectUsersname } from '../store/user.selector';
+import { AppState } from '../app.state';
+import { Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MyteamService {
 
-  constructor(private http: HttpClient,private store:Store<AppState>) { }
+  constructor(
+    private http: HttpClient,
+    private store:Store<AppState>
+    ) {}
 
 
   GetMyTeam(token:string)
@@ -30,20 +31,6 @@ export class MyteamService {
     return this.http.get<MyTeam>(environment.api + `/my-team/GetMyTeam`,httpOptions);
   }
 
-  SaveMyTeam(team:player[])
-  {
-    return this.http.post<player[]>(environment.api + `/MyTeamPlayers`,team);
-  }
-  
-  /*RemovePlayer(nickname:string)
-  {
-    return this.http.delete(environment.api + `/MyTeamPlayers?nick=${nickname}`,);
-  }*/
-
-  RemovePlayer(nickname:string)
-  {
-    return this.http.get(environment.api + `/MyTeamPlayers?nick=${nickname}`,);
-  }
 
   SellMyPlayer(ID:number,token:string)
   {
@@ -71,12 +58,8 @@ export class MyteamService {
     return this.http.get<player>(environment.api + `/my-team/AddPlayer:${NewOneID}`,httpOptions);
 }
 
-// CheckMyPlayer(nick:string,username:string)
-// {
-//   return this.http.get<player[]>(environment.api + `/MyTeamPlayers?team=${username}&&nick=${nick}`);
-// }
-    
-AddSponzor(token:string,id:number) // RADI !!
+
+AddSponzor(token:string,id:number) 
   {
     var headers_object = new HttpHeaders({
       'Authorization': "Bearer " + token,
@@ -89,7 +72,8 @@ AddSponzor(token:string,id:number) // RADI !!
     return this.http.get<Sponzor>(environment.api + `/my-team/AddSponzor:${id}`,httpOptions);
   }
 
-  RemoveSponzor(token:string) // RADI !!
+
+  RemoveSponzor(token:string)
   {
     var headers_object = new HttpHeaders({
       'Authorization': "Bearer " + token,

@@ -1,10 +1,10 @@
-import { state } from '@angular/animations';
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import { createReducer, on } from '@ngrx/store';
-import { player } from '../models/player';
-import { Sponzor } from '../models/Sponzor';
-import { user } from '../models/user';
 import * as MyTeamActions from './myteam.action';
+import { createReducer, on } from '@ngrx/store';
+import { Sponzor } from '../models/Sponzor';
+import { player } from '../models/player';
+
+
 
 export interface MyTeamState extends EntityState<player>{
      SelectedPlayer:number;
@@ -24,45 +24,37 @@ export interface MyTeamState extends EntityState<player>{
     initialState,
     on(MyTeamActions.GetMyTeamSuccess ,(state,{MyTeam})=>
     {
-      return adapter.setAll(MyTeam.players,state);
-      }),
+        return adapter.setAll(MyTeam.players,state);
+    }),
+
       on(MyTeamActions.SelectPlayer ,(state,{ID})=>
-     {
-      return { ... state, SelectedPlayer:ID}
-      }),
+    {
+        return { ... state, SelectedPlayer:ID}
+    }),
+
       on(MyTeamActions.SellPlayerSuccess ,(state,{ID})=>
-     {
-      return adapter.removeOne(ID,state);
-      }),
-      on(MyTeamActions.BuyPlayerSuccess ,(state,{NewOne})=>
       {
-       return adapter.addOne(NewOne,state);
-       }),
-       on(MyTeamActions.CheckMyPlayerFail ,(state)=>
+        return adapter.removeOne(ID,state);
+      }),
+
+      on(MyTeamActions.BuyPlayerSuccess ,(state,{NewOne})=>
        {
-         alert("Igrac je vec u vasem timu!");
-        return state;
-        }),
+          return adapter.addOne(NewOne,state);
+       }),
+
         on(MyTeamActions.GetMyTeamSuccess_Sponzor ,(state,{sponzor})=>
-        {
-         return {
-          ...state, 
-          Sponzor:sponzor
-         }
-         }),
+       {
+            return { ...state, Sponzor:sponzor }
+        }),
+
          on(MyTeamActions.AddSponzorSuccess ,(state,{sponzor})=>
         {
-         return {
-          ...state, 
-          Sponzor:sponzor
-         }
+            return { ...state, Sponzor:sponzor }
          }),
+
          on(MyTeamActions.RemoveSponzorSuccess ,(state,{sponzor})=>
         {
-         return {
-          ...state, 
-          Sponzor:sponzor
-         }
+         return { ...state, Sponzor:sponzor }
          }),
 
       );

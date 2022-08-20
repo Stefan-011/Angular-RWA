@@ -1,17 +1,14 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { observable, Observable } from 'rxjs';
-import { AppState } from '../app.state';
 import * as OtherTeamSelect from "src/app/store/Otherteam.selector"
 import * as OtherTeamAction from "src/app/store/Otherteam.action"
-import * as UserSelectors from 'src/app/store/user.selector'
-import * as MyTeamActions from 'src/app/store/myteam.action'
-import * as MyTeamSelector from 'src/app/store/myteam.selector'
-import { TeamNamesEnum } from '../Enums/TeamNamesEnum';
-import { player } from '../models/player';
-import { MyteamService } from '../services/myteam.service';
-import { selectUsersname } from 'src/app/store/user.selector';
 import { selectMyTeam } from 'src/app/store/myteam.selector';
+import * as UserSelectors from 'src/app/store/user.selector'
+import { TeamNamesEnum } from '../Enums/TeamNamesEnum';
+import { Component, Input, OnInit} from '@angular/core';
+import { player } from '../models/player';
+import { AppState } from '../app.state';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-polje',
@@ -20,61 +17,64 @@ import { selectMyTeam } from 'src/app/store/myteam.selector';
 })
 export class PoljeComponent implements OnInit {
 
-  $ComponentType:Observable<string>;
-  @Input() $ActiveTeam:Observable<player[]>;
-  @Input() $MyTeam:Observable<player[]>;
-  compType:string;
-  TeamNames:string[];
-  ActiveTeamName:string;
-  FinalResult:string[];
+//-----------------Inputs-----------------//
+  @Input() $ActiveTeam:Observable<player[]>; // Input za prenos aktivnog tima
+  @Input() $MyTeam:Observable<player[]>; // Input za prenos korisnickog tima
+//-----------------------------------------//
 
-  constructor(private store:Store<AppState>,private myteamservice:MyteamService) {
+//---------------Observables----------------//
+  $ComponentType:Observable<string>; // Observable za predstavljanje fokus komponente
+//-----------------------------------------//
+
+//---------- Pomocne promenjive -----------//
+  compType:string; // Promenjiva koja prikazuje koja je fokus komponenta
+  TeamNames:string[]; // Promenjiva koja sadrzi imena default timova
+  FinalResult:string[]; // Promenjiva koja sadrzi rezultat
+  ActiveTeamName:string; // Promenjiva koja sadrzi ime aktivnog tima
+//-----------------------------------------//
+
+  constructor(private store:Store<AppState>) 
+    {
     this.compType = "";
-    this.$ComponentType = store.select(UserSelectors.SelectComponent);
-    this.TeamNames = []
-    this.ActiveTeamName = ""
-    this.$ActiveTeam = this.store.select(OtherTeamSelect.selectCurrentOtherTeams);
-    this.$MyTeam = this.store.select(selectMyTeam)
+    this.TeamNames = [];
     this.FinalResult = [];
+    this.ActiveTeamName = "";
+    this.$MyTeam = this.store.select(selectMyTeam);
+    this.$ComponentType = store.select(UserSelectors.SelectComponent);
+    this.$ActiveTeam = this.store.select(OtherTeamSelect.selectCurrentOtherTeams); 
    }
 
-  ngOnInit(): void {
+
+  ngOnInit(): void 
+  {
     this.InitilizeTeamNames();
-    this.store.dispatch(OtherTeamAction.GetAllPlayers({name:TeamNamesEnum.Astralis}));
     this.ActiveTeamName = TeamNamesEnum.Astralis;
-   // this.store.select(selectUsersname).subscribe(data=>{console.log(data);this.store.dispatch(MyTeamActions.GetMyTeam({name:data}));})// Poboljsaj
-   
-   //
-  //  this.store.dispatch(MyTeamActions.GetMyTeam());
-    //this.store.select(MyTeamSelector.selectMyTeam).subscribe((data)=>console.log(data))
-   // this.store.select(OtherTeamSelect.selectName).subscribe((data)=>console.log(data));
+    this.store.dispatch(OtherTeamAction.GetAllPlayers({name:TeamNamesEnum.Astralis})); 
   }
 
-  InitilizeTeamNames()
-  {
-    var select = document.getElementById('Team-cmbox');
-    let i = 0;
-    const values = Object.values(TeamNamesEnum);
-    
-    for (let obj in TeamNamesEnum)
-    {
-      this.TeamNames[i] = values[i];
-       i++;
-    } 
-  }
+ // Inicijalizacija Combobox-a sa imenima default timova
+ InitilizeTeamNames():void 
+ {
+   let i = 0;
+   const values = Object.values(TeamNamesEnum);
+   for (let obj in TeamNamesEnum)
+   {
+     this.TeamNames[i] = values[i];
+     i++;
+   } 
+ }
 
-  test()
+// Na event promene vrednosti combobox opcija se menja stanje trenutno aktivnog predstavljenog tima
+ChangeOtherTeam():void
   {
-    let name = document.getElementById("Team-cmbox") as HTMLSelectElement
+    let name = document.getElementById("Team-cmbox") as HTMLSelectElement;
     this.ActiveTeamName = name.value;
     this.store.dispatch(OtherTeamAction.GetAllPlayers({name:name.value}));
     this.$ActiveTeam = this.store.select(OtherTeamSelect.selectCurrentOtherTeams);
-    this.$ActiveTeam.subscribe((data)=>console.log(data))
-    //this.ActiveTeam =
- //   let  t = document.getElementById("Team-cmbox") as HTMLSelectElement;
-  // console.log("value: "+t.value)
+    this.$ActiveTeam.subscribe();
   }
 
+  // Prihvatanje rezultata iz komponente rezultats
   GetRezultat(data: string[]){   
     this.FinalResult =  data;
   }

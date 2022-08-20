@@ -30,7 +30,6 @@
                         <li class="nav-item"><a class="nav-link" (click) ="switchR('sim')">Simuliraj</a></li>
                         <li class="nav-item"><a class="nav-link" (click) = "switchR('myteam')">MyTeam</a></li>
                         <li class="nav-item"><a class="nav-link" (click) = "switchR('shop')">shop</a></li>
-                        <li class="nav-item"><a class="nav-link" (click) = "switchR('teamView')">test</a></li>
                         <li *ngIf="LogState" class="nav-item"><a class="nav-link" >korisnik: {{$username | async}}</a></li>
                         <li *ngIf="LogState" class="nav-item"><a class="nav-link" (click) = "logout()">logout</a></li>
                     </ul>
@@ -53,8 +52,8 @@
             <div class="container video-container">
                 <div class="mt-5 mb-5 masthead-heading text-uppercase d-flex justify-content-center"> 
                     <p >CS:GO major simulator</p>
-                    <video class = "test" [muted]="'muted'" autoplay="autoplay" loop="loop">
-                    <source src="../../assets/video/test.mp4" type="video/mp4">
+                    <video [muted]="'muted'" autoplay="autoplay" loop="loop">
+                    <source src="../../assets/video//HomeVideo.mp4" type="video/mp4">
                     Your browser does not support HTML5 video.
                   </video>  
                   <div class="overlay"></div>
@@ -66,8 +65,8 @@
         </header>
         <div class="spacer"></div>
        <div class="content-region">
-        <app-polje *ngIf="ruta == 0"></app-polje>
-        <app-team-view *ngIf="ruta == 1" [Username]="Username"></app-team-view>
+        <app-polje *ngIf="Ruta == 0"></app-polje>
+        <app-team-view *ngIf="Ruta == 1" [Username]="Username"></app-team-view>
        </div>
         
 

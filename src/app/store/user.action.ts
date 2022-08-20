@@ -8,8 +8,6 @@ export const loginSuccess = createAction('loginSuccess',props<{data:user}>());
 export const GetLoggedUser = createAction('GetLoggedIn',props<{token:string}>());
 export const GetLoggedUserSuccess  = createAction('GetLoggedInSuccess',props<{data:user}>());
 
-export const ChangeLogin = createAction('ChangeLogin',props<{data:boolean}>());
-
 export const SetComponent = createAction("SetComponent",props<{comp:string}>());
 
 export const RegisterUser = createAction("RegisterUser",props<{username:string,password:string,email:string}>());

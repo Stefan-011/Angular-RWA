@@ -1,9 +1,10 @@
 import { player } from "./player";
 import { Sponzor } from "./Sponzor";
 
+
+// Interface koji sluzi za predstavljanje korisnickog tima
 export interface MyTeam
 {
-   // name:string;
     players:player[];
     sponzor:Sponzor;
 }

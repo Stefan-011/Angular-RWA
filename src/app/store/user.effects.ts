@@ -1,34 +1,43 @@
-import { Token } from "@angular/compiler";
-import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
-import { catchError, map, mergeMap, of } from "rxjs";
+import { user } from "../models/user";
 import { AppState } from "../app.state";
-import { LoginUser, user } from "../models/user";
-import { UserService } from "../services/user.service";
-import * as UserActions from '../store/user.action';
-import { IncomingPackage } from "../models/IncomingPackage";
+import { Router } from "@angular/router";
+import { Injectable } from "@angular/core";
 import {CookieService} from 'ngx-cookie-service';
+import * as UserActions from '../store/user.action';
+import { catchError, map, mergeMap, of } from "rxjs";
+import { UserService } from "../services/user.service";
+import { IncomingPackage } from "../models/IncomingPackage";
+import { Actions, createEffect, ofType } from "@ngrx/effects";
+
 
 
 @Injectable()
 export class UserEffects {
-  constructor(private actions$: Actions,private userservice:UserService,private router:Router,private store:Store<AppState>, private cookieService:CookieService) {}
+  constructor(
+    private router:Router,
+    private actions$: Actions,
+    private store:Store<AppState>, 
+    private userservice:UserService,
+    private cookieService:CookieService
+    ) {}
 
   loginUser$ = createEffect(()=>
   this.actions$.pipe(
     ofType(UserActions.loginUser),
     mergeMap(({email,password}) => this.userservice.Login(email,password).pipe(
       map((data1:IncomingPackage)=> { 
-        console.log(data1.data)
         if(data1 == undefined)
         alert("Uneli ste pogresne podatke !")
+
         this.cookieService.delete("token");
-        this.cookieService.set("token",data1.access_token,{ expires: new Date(new Date().getTime() + 3600 * 1000)})//3600 * 1000
+        this.cookieService.set("token",data1.access_token,{ expires: new Date(new Date().getTime() + 3600 * 1000)})
+
         localStorage.clear()
         localStorage.setItem("loggedIn","true");
+
         this.router.navigate(["home"]);
+
         let data = new user();
         data.money = data1.data.money;
         data.username = data1.data.username
@@ -44,9 +53,7 @@ export class UserEffects {
   this.actions$.pipe(
     ofType(UserActions.GetLoggedUser),
     mergeMap(({token}) => this.userservice.GetUserByToken(token).pipe(
-      map((data1:user)=> { 
-        console.log(data1)
-        let data = data1;
+      map((data:user)=> { 
         return UserActions.GetLoggedUserSuccess({data})
       }),
       catchError(()=> of({type:"load error"}))
@@ -97,7 +104,6 @@ export class UserEffects {
     mergeMap(({token,money}) => this.userservice.SaveChanges(token,money).pipe(
       map((data)=> 
       { 
-        console.log(data)
         this.store.dispatch(UserActions.GetLoggedUser({token:token}));
          return UserActions.SaveChangesSuccess();
       }),

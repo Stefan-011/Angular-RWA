@@ -29,11 +29,12 @@ z-index: -1;
 
 .login-div
 {
-    padding-top: 2vh;
-    width: 45vh;
-    height: 50vh;
+    padding-top: 15vh;
+    width: 60vh;
+    height: 38vw;
     background: #090916;
     opacity: 0.89;
+   
 }
 
 .section-field p
@@ -48,7 +49,7 @@ background-color:transparent;
 color: white;
 border: 0;
 border-bottom: white solid 1px;
-font-size: 2vh;
+font-size: 1.5vw;
 margin: 15px;
 }
 
@@ -72,7 +73,7 @@ margin-top:4vh ;
 background-color: transparent;
 color: white;
 border: white 1px solid;
-font-size: 2.3vh;
+font-size: 1.6vw;
 margin-bottom: 4vh;
 }
 
@@ -87,7 +88,7 @@ border: orange 1px solid;
 .section-field label
 {
 margin: 2vh;
-font-size: 1.7vh;
+font-size: 1vw;
 color: white;
 }
 
@@ -105,4 +106,33 @@ color: white;
         height: 90%;
         opacity: 0.89;
     } */
+}
+
+@media screen and (max-width: 912px)
+{
+    .login-div
+    {
+        padding-top: 2vh;
+        width: 45vh;
+        height: 45vh;
+           
+    } 
+    .section-field p
+    {
+    color: white;
+    font-size: 3vh;
+    } 
+    .section-field input
+    {
+    font-size: 2.5vh; 
+    }
+    .section-field button
+    {
+        font-size: 2.5vh;
+        margin-bottom: 2vh;
+    }
+    .section-field label
+    {
+        font-size: 1.5vh;
+    }
 }

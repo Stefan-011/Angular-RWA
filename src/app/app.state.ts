@@ -6,6 +6,6 @@ import { UserState } from "./store/user.reducer";
 
 export interface AppState {
     user:UserState,
-    OtherTeam:OtherTeamState,
-    MyTeam:MyTeamState
+    MyTeam:MyTeamState,
+    OtherTeam:OtherTeamState
   }
