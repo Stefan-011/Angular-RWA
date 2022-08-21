@@ -124,7 +124,6 @@ export class TeamViewComponent implements OnInit {
 
     // U ovom bloku se obradjuje povracaj novca korisniku
     this.MyTeamMoney =  +this.MyTeamMoney + +price;
-    this.store.dispatch(UserActions.SaveChanges({token:this.cookieservice.get("token"),money:this.MyTeamMoney})) ;
   }
 
 
@@ -132,20 +131,19 @@ export class TeamViewComponent implements OnInit {
   BuyPlayer(nick:string,id:number ,price:number):void
   {
     let Num = 0; 
-    this.store.select(MyTeamSelector.selectNumberOfPlayers).subscribe((data)=> Num = data) // Ovde dobijamo broj igraca u korisnickom timu
+    this.store.select(MyTeamSelector.selectNumberOfPlayers).subscribe((data)=> Num = data); // Ovde dobijamo broj igraca u korisnickom timu
   
     if(Num <= 4) // Ovde radimo proveru da li postoji slobodno mesto u timu za novog igraca
     {
       if(price <= this.MyTeamMoney ) // Ovde proveravamo da li korisnik ima dovoljno novca za ovu transakciju
       {
       this.store.dispatch(MyTeamActions.BuyPlayer({ID:id,token:this.cookieservice.get("token")}));
-      this.MyTeamMoney =  +this.MyTeamMoney - +price;
-      this.store.dispatch(UserActions.SaveChanges({token:this.cookieservice.get("token"),money:this.MyTeamMoney})); 
-      alert(`(${Num+1}/5)`);
+      this.store.select(MyTeamSelector.selectNumberOfPlayers).subscribe((data)=> Num = data);  
+      Num++;
+      alert("("+Num+"/5)")
       }
       else
       alert('Nemate dovljno novca za kupovinu !');
-     
     }
     else
     alert("Vas tim je pun (5/5)")   
@@ -168,6 +166,7 @@ export class TeamViewComponent implements OnInit {
 // Funkcija koja se poziva na event (click) koja sluzi za apliciranje  u cilju saradnje korisnickog tima za sponzorom
   Apliciraj(Money:number, id:number)
   {
+    
     let PureChance = 0, ExitResult = false; // Promenjiva koja predstavnja sansu koju korisnik ima za ostvarenjem saradnje
 
     if(this.SponzorMyTeam.id!= -1)
@@ -201,7 +200,7 @@ export class TeamViewComponent implements OnInit {
         alert("Vas zahtev je prihvacen !")
         this.MyTeamMoney = +this.MyTeamMoney+ + Money
         this.store.dispatch(MyTeamActions.AddSponzor({id:id,token:this.cookieservice.get("token")}))      
-        this.store.dispatch(UserActions.SaveChanges({token:this.cookieservice.get("token"),money:this.MyTeamMoney})) 
+        console.log("hm")
     }
     else
     alert("Vas zahtev je odbijen !")
@@ -214,7 +213,6 @@ export class TeamViewComponent implements OnInit {
     if(money <= this.MyTeamMoney) // Provera da li korisnik ima dovoljno novca za prekid saranje za sponzorom
     {
       this.store.dispatch(MyTeamActions.RemoveSponzor({token:this.cookieservice.get("token")}))
-      this.store.dispatch(UserActions.SaveChanges({token:this.cookieservice.get("token"), money:+ this.MyTeamMoney- +money})) 
     }
     else
     alert("Pre prekida saradnje morate vratiti novac sponzoru !!!")

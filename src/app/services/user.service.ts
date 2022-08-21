@@ -42,20 +42,4 @@ export class UserService {
     return this.http.post<user[]>(environment.api + `/korisnici`,NewOne);
   }
 
-    
-  SaveChanges(token:string,money:number)
-  {
-    var headers_object = new HttpHeaders({
-      'Authorization': "Bearer " + token,
-      'Content-Type': 'application/json',
-    });
-    const httpOptions = {
-      headers: headers_object,
-    };
-    
-    return this.http.get<user[]>(environment.api + `/user/SaveChanges:${money}`,httpOptions);
-  }
-  
- 
-  
 }

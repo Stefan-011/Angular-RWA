@@ -24,7 +24,6 @@ export interface UserState {
   
 
     on(UserActions.SetComponent,
-      (state, {comp}) => ({ ...state , component:comp})),
-      
+      (state, {comp}) => ({ ...state , component:comp})), 
       );
   
