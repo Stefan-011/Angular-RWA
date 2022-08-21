@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as OtherTeamSelect from "src/app/store/Otherteam.selector"
 import * as UserSelect from "src/app/store/user.selector"
+import { GameStats } from '../models/GameStats';
 import { MapsEnum } from '../Enums/MapsEnum';
 import { player } from '../models/player';
 import { AppState } from '../app.state';
 import { Store } from '@ngrx/store';
 import { Observable,  } from 'rxjs';
-import { GameStats } from '../models/GameStats';
+
 
 
 @Component({

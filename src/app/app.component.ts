@@ -1,14 +1,12 @@
-import { Component, EventEmitter, HostListener, Output } from '@angular/core';
-import { OutletContext, Route, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from './app.state';
-import { IgraciService } from './services/igraci.service';
-import * as UserActions from '../app/store/user.action';
-import { MyteamService } from './services/myteam.service';
-import { selectUsersname } from './store/user.selector';
+import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 import { GetMyTeam } from './store/myteam.action';
 import { CookieService } from 'ngx-cookie-service';
+import * as UserActions from '../app/store/user.action';
 import { SponzorService } from './services/sponzor.service';
+
 
 @Component({
   selector: 'app-root',
@@ -38,8 +36,4 @@ export class AppComponent {
     else
     this.router.navigate(["login"]);
 }
-
-
-
-
 }

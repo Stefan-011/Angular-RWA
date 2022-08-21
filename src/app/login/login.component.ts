@@ -1,9 +1,12 @@
 import { Component, OnInit, Output } from '@angular/core';
+import { GetMyTeam } from 'src/app/store/myteam.action';
 import { UserService } from '../services/user.service';
+import { CookieService } from 'ngx-cookie-service';
 import * as UserActions from '../store/user.action';
 import { Router } from '@angular/router';
 import { AppState } from '../app.state';
 import { Store } from '@ngrx/store';
+
 
 
 @Component({
@@ -21,7 +24,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private userservice:UserService,
     public store:Store<AppState>,
-    private router:Router
+    private router:Router,
+    private cookieservice:CookieService
   ) 
   { 
   this.Mode = false;
@@ -56,6 +60,7 @@ export class LoginComponent implements OnInit {
     if(email.length == 0 || password.length == 0 )
     this.errorMsg = 4
     this.store.dispatch(UserActions.loginUser({email:email,password:password}));
+    this.store.dispatch(GetMyTeam({token:this.cookieservice.get("token")}))
   }
 
 
@@ -70,11 +75,5 @@ export class LoginComponent implements OnInit {
         this.Mode = false;
   }
    
-      
-        
-    
-     
-  
-  
   
 }
