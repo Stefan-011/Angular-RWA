@@ -7,6 +7,7 @@ import {CookieService} from 'ngx-cookie-service';
 import * as UserActions from '../store/user.action';
 import { catchError, map, mergeMap, of } from "rxjs";
 import { UserService } from "../services/user.service";
+import { GetMyTeam } from 'src/app/store/myteam.action';
 import { IncomingPackage } from "../models/IncomingPackage";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 
@@ -41,6 +42,7 @@ export class UserEffects {
         let data = new user();
         data.money = data1.data.money;
         data.username = data1.data.username
+        this.store.dispatch(GetMyTeam({token:data1.access_token}))
         return UserActions.loginSuccess({data})
       }),
       catchError(()=> of({type:"load error"}))

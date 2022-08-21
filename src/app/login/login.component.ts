@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
     if(email.length == 0 || password.length == 0 )
     this.errorMsg = 4
     this.store.dispatch(UserActions.loginUser({email:email,password:password}));
-    this.store.dispatch(GetMyTeam({token:this.cookieservice.get("token")}))
+   
   }
 
 
