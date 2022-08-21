@@ -83,7 +83,7 @@ export class TeamViewComponent implements OnInit {
         {
           this.ModeChange(false)
           this.$ActiveTeam = this.store.select(selectMyTeam)
-          this.$SponzorObs.subscribe((sponzor)=>this.SponzorMyTeam = sponzor);
+          this.$SponzorObs.subscribe((sponzor)=> {if(sponzor != null)this.SponzorMyTeam = sponzor});
         }
      }  
     });
@@ -135,7 +135,7 @@ export class TeamViewComponent implements OnInit {
   
     if(Num <= 4) // Ovde radimo proveru da li postoji slobodno mesto u timu za novog igraca
     {
-      if(price <= this.MyTeamMoney ) // Ovde proveravamo da li korisnik ima dovoljno novca za ovu transakciju
+      if((+price) <= (+this.MyTeamMoney) ) // Ovde proveravamo da li korisnik ima dovoljno novca za ovu transakciju
       {
       this.store.dispatch(MyTeamActions.BuyPlayer({ID:id,token:this.cookieservice.get("token")}));
       this.store.select(MyTeamSelector.selectNumberOfPlayers).subscribe((data)=> Num = data);  
@@ -157,7 +157,7 @@ export class TeamViewComponent implements OnInit {
   }
 
  // Funkcija za uzimanje sponzora iz baze podataka
-  GetSponzori():void
+  async GetSponzori()
   {
     this.SponzorService.GetAll().subscribe((data)=>this.SponzorArray = data);  
   }
@@ -166,14 +166,13 @@ export class TeamViewComponent implements OnInit {
 // Funkcija koja se poziva na event (click) koja sluzi za apliciranje  u cilju saradnje korisnickog tima za sponzorom
   Apliciraj(Money:number, id:number)
   {
-    
+
     let PureChance = 0, ExitResult = false; // Promenjiva koja predstavnja sansu koju korisnik ima za ostvarenjem saradnje
 
-    if(this.SponzorMyTeam.id!= -1)
+    if(this.SponzorMyTeam.id != -1)
     return alert("Vi vec imate aktivno sponzorstvo !")
-
     PureChance = Math.floor(Math.random() * (100 - 1 + 1)) + 1;
-
+    
     switch(parseInt(Money+""))
     {
       case 3000:
@@ -200,7 +199,6 @@ export class TeamViewComponent implements OnInit {
         alert("Vas zahtev je prihvacen !")
         this.MyTeamMoney = +this.MyTeamMoney+ + Money
         this.store.dispatch(MyTeamActions.AddSponzor({id:id,token:this.cookieservice.get("token")}))      
-        console.log("hm")
     }
     else
     alert("Vas zahtev je odbijen !")

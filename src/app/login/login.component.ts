@@ -1,5 +1,4 @@
 import { Component, OnInit, Output } from '@angular/core';
-import { GetMyTeam } from 'src/app/store/myteam.action';
 import { UserService } from '../services/user.service';
 import { CookieService } from 'ngx-cookie-service';
 import * as UserActions from '../store/user.action';

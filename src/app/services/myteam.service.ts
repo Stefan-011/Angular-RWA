@@ -82,7 +82,6 @@ AddSponzor(token:string,id:number)
     const httpOptions = {
       headers: headers_object,
     };
-
     return this.http.get<boolean>(environment.api + `/my-team/RemoveSponzor`,httpOptions);
   }
 
