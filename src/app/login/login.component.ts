@@ -44,12 +44,12 @@ export class LoginComponent implements OnInit {
     if(this.Mode)
     {
       this.Mode = false;
-      loginDiv.style.height = "50vh" 
+      loginDiv.style.height = "35vw" 
     }
     else
     {
       this.Mode = true;
-      loginDiv.style.height = "60vh" 
+      loginDiv.style.height = "42vw" 
     }
     this.errorMsg = -1;
   }

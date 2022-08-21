@@ -110,7 +110,6 @@ export class TeamViewComponent implements OnInit {
     let name = document.getElementById("Team-cmbox") as HTMLSelectElement;
     this.store.dispatch(OtherTeamAction.GetAllPlayers({name:name.value}));
     this.$ActiveTeam = this.store.select(OtherTeamSelect.selectCurrentOtherTeams);
-    //this.$ActiveTeam.subscribe() Potecijalno za obirsanje !!!
   }
 
 
