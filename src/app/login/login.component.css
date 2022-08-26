@@ -29,9 +29,9 @@ z-index: -1;
 
 .login-div
 {
-    padding-top: 15vh;
+    padding-top: 8vh;
     width: 60vh;
-    height: 35vw;
+    height: 73vh !important;
     background: #090916;
     opacity: 0.89;
    
@@ -53,7 +53,7 @@ font-size: 1.5vw;
 margin: 15px;
 }
 
-.section-field input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+.section-field input::placeholder {
     color: white;
     opacity: 1; 
     font-weight:300;
@@ -97,24 +97,12 @@ color: white;
     color: orange;
 }
 
-@media screen and (max-width: 1100px)
-{
-  /*  .login-div
-    {
-        padding-top: 10%;
-        width: 25%;
-        height: 90%;
-        opacity: 0.89;
-    } */
-}
 
 @media screen and (max-width: 912px)
 {
     .login-div
     {
-        padding-top: 2vh;
-        width: 45vh;
-        height: 45vh;
+        padding-top: 14vh;
            
     } 
     .section-field p
@@ -135,4 +123,5 @@ color: white;
     {
         font-size: 1.5vh;
     }
+
 }

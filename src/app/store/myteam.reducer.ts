@@ -16,7 +16,12 @@ export interface MyTeamState extends EntityState<player>{
    export const initialState: MyTeamState = adapter.getInitialState ({
      SelectedPlayer: 0,
      NumberOfPlayers: 0,
-     Sponzor:new Sponzor()
+     Sponzor: {
+      id:-1,
+      img:"",
+      name:"",
+      money:0,
+     }
    });
  
   

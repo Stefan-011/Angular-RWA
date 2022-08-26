@@ -31,14 +31,16 @@ export class UserService {
     const httpOptions = {
       headers: headers_object,
     };
-
+  
     return this.http.get<user>(environment.api + `/user/GetMyProfile`,httpOptions);
   }
 
   CreateUser(username:string) 
   {
-    let NewOne = new user();
-    NewOne.username = username;
+    let NewOne:user = {
+      username:username,
+      money:0 
+    };
     return this.http.post<user[]>(environment.api + `/korisnici`,NewOne);
   }
 

@@ -82,7 +82,13 @@ RemoveSponzor$ = createEffect(() =>
     mergeMap(({token})=> this.myteamservices.RemoveSponzor(token).pipe(
       map(()=>{  
         this.store.dispatch(UserActions.GetLoggedUser({token:token}));
-        return  MyTeamActions.RemoveSponzorSuccess({sponzor:new Sponzor()})
+        var Sponzor:Sponzor = { 
+          id:-1,
+          img:"",
+          name:"",
+          money:0,
+        };
+        return  MyTeamActions.RemoveSponzorSuccess({sponzor: Sponzor})
       }),
       catchError(()=> of({type:"load error"}))
     ))

@@ -16,22 +16,16 @@ import { Observable } from 'rxjs';
   styleUrls: ['./polje.component.css']
 })
 export class PoljeComponent implements OnInit {
+  @Input() $ActiveTeam:Observable<player[]>; 
+  @Input() $MyTeam:Observable<player[]>; 
 
-//-----------------Inputs-----------------//
-  @Input() $ActiveTeam:Observable<player[]>; // Input za prenos aktivnog tima
-  @Input() $MyTeam:Observable<player[]>; // Input za prenos korisnickog tima
-//-----------------------------------------//
+  $ComponentType:Observable<string>; 
 
-//---------------Observables----------------//
-  $ComponentType:Observable<string>; // Observable za predstavljanje fokus komponente
-//-----------------------------------------//
+  compType:string; 
+  TeamNames:string[]; 
+  FinalResult:string[]; 
+  ActiveTeamName:string; 
 
-//---------- Pomocne promenjive -----------//
-  compType:string; // Promenjiva koja prikazuje koja je fokus komponenta
-  TeamNames:string[]; // Promenjiva koja sadrzi imena default timova
-  FinalResult:string[]; // Promenjiva koja sadrzi rezultat
-  ActiveTeamName:string; // Promenjiva koja sadrzi ime aktivnog tima
-//-----------------------------------------//
 
   constructor(private store:Store<AppState>) 
     {
@@ -52,7 +46,7 @@ export class PoljeComponent implements OnInit {
     this.store.dispatch(OtherTeamAction.GetAllPlayers({name:TeamNamesEnum.Astralis})); 
   }
 
- // Inicijalizacija Combobox-a sa imenima default timova
+
  InitilizeTeamNames():void 
  {
    let i = 0;
@@ -64,7 +58,7 @@ export class PoljeComponent implements OnInit {
    } 
  }
 
-// Na event promene vrednosti combobox opcija se menja stanje trenutno aktivnog predstavljenog tima
+
 ChangeOtherTeam():void
   {
     let name = document.getElementById("Team-cmbox") as HTMLSelectElement;
@@ -74,7 +68,7 @@ ChangeOtherTeam():void
     this.$ActiveTeam.subscribe();
   }
 
-  // Prihvatanje rezultata iz komponente rezultats
+
   GetRezultat(data: string[]){   
     this.FinalResult =  data;
   }

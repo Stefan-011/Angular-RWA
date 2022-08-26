@@ -5,7 +5,6 @@ import { Component } from '@angular/core';
 import { GetMyTeam } from './store/myteam.action';
 import { CookieService } from 'ngx-cookie-service';
 import * as UserActions from '../app/store/user.action';
-import { SponzorService } from './services/sponzor.service';
 
 
 @Component({
@@ -21,19 +20,26 @@ export class AppComponent {
     private router:Router,
     private store:Store<AppState>, 
     private cookieservice:CookieService,
-    private test:SponzorService
     ){}
   
 
   ngOnInit():void
   {
-    if(localStorage.getItem("loggedIn") != null && this.cookieservice.get("token") != '' ) // rutiranje u zavisnosti od toga da li je korisnik ulogovan ili ne
+    if(localStorage.getItem("loggedIn") == null && this.cookieservice.get("token") != '')
+    {
+      localStorage.setItem("loggedIn","true");
+    }
+    else if(localStorage.getItem("loggedIn") != null && this.cookieservice.get("token") != '' )
     {
      this.router.navigate(["home"]);
      this.store.dispatch(GetMyTeam({token:this.cookieservice.get("token")}))
      this.store.dispatch(UserActions.GetLoggedUser({token:this.cookieservice.get("token")}))   
     } 
     else
-    this.router.navigate(["login"]);
+    {
+      localStorage.clear()
+      this.cookieservice.deleteAll();
+      this.router.navigate(["login"]);
+    }
 }
 }

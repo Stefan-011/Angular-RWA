@@ -4,7 +4,6 @@ import { AppState } from '../app.state';
 import { player } from '../models/player';
 import { Sponzor } from '../models/Sponzor';
 import { CookieService } from 'ngx-cookie-service';
-import * as UserActions from '../store/user.action';
 import { TeamNamesEnum } from '../Enums/TeamNamesEnum';
 import { Component, Input, OnInit } from '@angular/core';
 import * as MyTeamActions from 'src/app/store/myteam.action'
@@ -23,29 +22,22 @@ import * as OtherTeamSelect from "src/app/store/Otherteam.selector";
 })
 export class TeamViewComponent implements OnInit {
 
-  @Input() Username:string; // Input za prosledjivanej Username-a
+  @Input() Username:string;
 
-  //----------------Observables----------------//
-  $ComponentType:Observable<string>; // Observable koji posmatra komponentu u kojoj smo
-  $ActiveTeam:Observable<player[]>; // Observable koji posmatra tim koji je trenutni predstavljen
-  $UsersMoney:Observable<number>; // Observable koji posmatra trenutno stanje novca korisnickog tima
-  $SponzorObs:Observable<Sponzor>; // Observable koji posmatra trenutnog sponzora korisnickog tima
-  //------------------------------------------//
-
-  //---------- Pomocne promenjive -----------//
-  compType:string; // Promenjiva koja pokazuje trenutnu aktivnu komponentu
-  Shop_mode:boolean; // Promenjiva koja pokazuje u kom modu kupovine se nalazimo (false --> Igraci | true --> Sponzori)
-  TeamNames:string[]; // Promenjiva koja sadrzi imena svih default timova
-  MyTeamMoney:number; // Promenjiva koja sadrzi kolicinu novca korisnickog tima
-  SponzorMyTeam:Sponzor; // Promenjiva koja sadrzi podatke sponzora korisnickog tima
-  SponzorArray:Sponzor[]; // Promenjiva koja sadrzi sve postojece sponzore
-  //-----------------------------------------//
-  
+  $ComponentType:Observable<string>;
+  $ActiveTeam:Observable<player[]>; 
+  $UsersMoney:Observable<number>; 
+  $SponzorObs:Observable<Sponzor>; 
   
 
-  
+  compType:string;
+  Shop_mode:boolean; 
+  TeamNames:string[]; 
+  MyTeamMoney:number; 
+  SponzorMyTeam:Sponzor; 
+  SponzorArray:Sponzor[]; 
  
-
+  
   constructor(
     private store:Store<AppState>,
     private cookieservice:CookieService,
@@ -57,11 +49,16 @@ export class TeamViewComponent implements OnInit {
     this.MyTeamMoney = 0;
     this.SponzorArray = [];
     this.Shop_mode = false;
-    this.SponzorMyTeam = new Sponzor();
     this.$UsersMoney = store.select(UserSelectors.selectUsersMoney);
     this.$ComponentType = store.select(UserSelectors.SelectComponent);
     this.$SponzorObs = this.store.select(MyTeamSelector.selectSponzor);
     this.$ActiveTeam = this.store.select(OtherTeamSelect.selectCurrentOtherTeams);  
+    this.SponzorMyTeam = { 
+      id:-1,
+      img:"",
+      name:"",
+      money:0,
+    };
   }
 
   ngOnInit(): void 
@@ -69,17 +66,17 @@ export class TeamViewComponent implements OnInit {
     this.GetSponzori();
     this.InitilizeTeamNames();
     this.$ActiveTeam.subscribe();
-    this.$ComponentType.subscribe((type)=>{  // Kada usledi promena trenutne komponente izvrsava se jedna od dve moguce sekvence
+    this.$ComponentType.subscribe((type)=>{  
       if(this.compType != type)
      {
         this.compType = type;
-        if(type == "shop") // Aktivira se "Shop" layout
+        if(type == "shop") 
         {
           this.$ActiveTeam = this.store.select(OtherTeamSelect.selectCurrentOtherTeams);
           this.store.dispatch(OtherTeamAction.GetAllPlayers({name:TeamNamesEnum.Astralis}));
           this.store.select(OtherTeamSelect.selectName).subscribe();
         }
-        else if (this.compType == "myteam") // Aktivira se "MyTeam" layout
+        else if (this.compType == "myteam") 
         {
           this.ModeChange(false)
           this.$ActiveTeam = this.store.select(selectMyTeam)
@@ -92,7 +89,7 @@ export class TeamViewComponent implements OnInit {
   }
  
 
- // Inicijalizacija Combobox-a sa imenima default timova
+ 
   InitilizeTeamNames():void 
   {
     let i = 0;
@@ -104,7 +101,7 @@ export class TeamViewComponent implements OnInit {
     } 
   }
 
-// Na event promene vrednosti combobox opcija se menja stanje trenutno aktivnog predstavljenog tima
+
   ChangeOtherTeam():void
   {
     let name = document.getElementById("Team-cmbox") as HTMLSelectElement;
@@ -113,29 +110,25 @@ export class TeamViewComponent implements OnInit {
   }
 
 
-// Na (click) dugmeta da prodavanje igraca se aktiviria i prodaje igraca 
   SellPlayer(id:number ,price:number):void
   {
-   // U ovom bloku se selektuje igrac kog treba prodati i u bazi podataka se on uklanja iz tima
-    let ID = 0;
+    var ID = 0;
     this.store.dispatch(MyTeamActions.SelectPlayer({ID:id}));
     this.store.select(MyTeamSelector.selectPlayer).subscribe((data)=>ID = parseInt(data?.id+""));
     this.store.dispatch(MyTeamActions.SellPlayer({ID:ID,token:this.cookieservice.get("token")}));
-
-    // U ovom bloku se obradjuje povracaj novca korisniku
     this.MyTeamMoney =  +this.MyTeamMoney + +price;
   }
 
 
-// Na (click) dugmeta da kupovinu igraca se aktiviria i kupuje igraca
-  BuyPlayer(nick:string,id:number ,price:number):void
+
+  BuyPlayer(nick:string, id:number ,price:number):void
   {
-    let Num = 0; 
-    this.store.select(MyTeamSelector.selectNumberOfPlayers).subscribe((data)=> Num = data); // Ovde dobijamo broj igraca u korisnickom timu
+    var Num = 0; 
+    this.store.select(MyTeamSelector.selectNumberOfPlayers).subscribe((data)=> Num = data); 
   
-    if(Num <= 4) // Ovde radimo proveru da li postoji slobodno mesto u timu za novog igraca
+    if(Num <= 4) 
     {
-      if((+price) <= (+this.MyTeamMoney) ) // Ovde proveravamo da li korisnik ima dovoljno novca za ovu transakciju
+      if((+price) <= (+this.MyTeamMoney) )
       {
       this.store.dispatch(MyTeamActions.BuyPlayer({ID:id,token:this.cookieservice.get("token")}));
       this.store.select(MyTeamSelector.selectNumberOfPlayers).subscribe((data)=> Num = data);  
@@ -149,25 +142,22 @@ export class TeamViewComponent implements OnInit {
     alert("Vas tim je pun (5/5)")   
   }
 
-
-  // Promna stanja Shop-a
+  
   ModeChange(mode:boolean):void
   {
     this.Shop_mode = mode;
   }
 
- // Funkcija za uzimanje sponzora iz baze podataka
+ 
   async GetSponzori()
   {
     this.SponzorService.GetAll().subscribe((data)=>this.SponzorArray = data);  
   }
 
 
-// Funkcija koja se poziva na event (click) koja sluzi za apliciranje  u cilju saradnje korisnickog tima za sponzorom
   Apliciraj(Money:number, id:number)
   {
-
-    let PureChance = 0, ExitResult = false; // Promenjiva koja predstavnja sansu koju korisnik ima za ostvarenjem saradnje
+    let PureChance = 0, ExitResult = false;
 
     if(this.SponzorMyTeam.id != -1)
     return alert("Vi vec imate aktivno sponzorstvo !")
@@ -205,10 +195,9 @@ export class TeamViewComponent implements OnInit {
   }
   
 
- // Funkcija koja se poziva na event (click) koja sluzi za prekid saradnje korisnickog tima za sponzorom
   PrekiniSaradanju(money:number)
   {
-    if(money <= this.MyTeamMoney) // Provera da li korisnik ima dovoljno novca za prekid saranje za sponzorom
+    if(money <= this.MyTeamMoney)
     {
       this.store.dispatch(MyTeamActions.RemoveSponzor({token:this.cookieservice.get("token")}))
     }

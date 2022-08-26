@@ -1,8 +1,6 @@
-import { Component, OnInit, Output } from '@angular/core';
-import { UserService } from '../services/user.service';
-import { CookieService } from 'ngx-cookie-service';
+import { Component, HostListener, OnInit, Output } from '@angular/core';
 import * as UserActions from '../store/user.action';
-import { Router } from '@angular/router';
+
 import { AppState } from '../app.state';
 import { Store } from '@ngrx/store';
 
@@ -15,16 +13,13 @@ import { Store } from '@ngrx/store';
 })
 
 export class LoginComponent implements OnInit {
-//---------- Pomocne promenjive ----------//
-  Mode:boolean = false; // Promenjiva koja odredjuje mod komponente (0 - login | 1 - register)
-  errorMsg:number; // Promenjiva koja odredjuje vrstu error-a (-1 - default | 0 - inputi prazni | 1 - losa lozinka | 2 - vec koriscen mail | 3 - vec koriscen username | 4 - losi podaci za login)
- //--------------------------------------//
+
+  Mode:boolean = false;
+  errorMsg:number; 
+
 
   constructor(
-    private userservice:UserService,
     public store:Store<AppState>,
-    private router:Router,
-    private cookieservice:CookieService
   ) 
   { 
   this.Mode = false;
@@ -32,24 +27,14 @@ export class LoginComponent implements OnInit {
   }
 
 
-
   ngOnInit(): void {
     this.Mode = false;
   }
 
+
   SwitchMode():void
   {
-    var loginDiv = document.getElementById("login") as HTMLDivElement;
-    if(this.Mode)
-    {
-      this.Mode = false;
-      loginDiv.style.height = "35vw" 
-    }
-    else
-    {
-      this.Mode = true;
-      loginDiv.style.height = "42vw" 
-    }
+    this.Mode = !this.Mode;
     this.errorMsg = -1;
   }
 
@@ -59,7 +44,6 @@ export class LoginComponent implements OnInit {
     if(email.length == 0 || password.length == 0 )
     this.errorMsg = 4
     this.store.dispatch(UserActions.loginUser({email:email,password:password}));
-   
   }
 
 

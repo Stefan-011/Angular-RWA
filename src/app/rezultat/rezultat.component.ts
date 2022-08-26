@@ -17,24 +17,21 @@ import { Observable,  } from 'rxjs';
 })
 
 export class RezultatComponent implements OnInit {
-
- //----------------Inputs & Outputs----------------//
-  @Output() ResultListener:EventEmitter<string[]>; // Output za slanje rezultata komponenti polje
-  @Input() $ActiveTeam:Observable<player[]>; // Input za prihvatanje aktivnog tima iz koponenti polje
-  @Input() $MyTeam:Observable<player[]>;// Input za prihvatanje korisnickog tima iz koponenti polje
-//------------------------------------------------//
-
-//---------- Pomocne promenjive -----------//
-  RightTeamName:string; // Promenjiva koja pokazuje ime desnog tima (Korisnickog)
-  LeftTeamName:string // Promenjiva koja pokazuje ime levog tima (Protivnickog)
-  MapsUsed:string[]; // Niz koji sadrzi sve mape koje se koriste u kompetativne svrhe
-
-  LeftTeam:player[]; // Promenjiva koja sadrzi igrace levog tima (Korisnickog)
-  RightTeam:player[]; // Promenjiva koja sadrzi igrace desnog tima (Protivnickog)
   
-  LeftWinns:number; // Broj pobedjenih rudni od strane levog tima (Korisnickog)
-  RightWinns:number; // Broj pobedjenih rudni od strane desnog tima (Protivnickog)
-//----------------------------------------//
+  @Output() ResultListener:EventEmitter<string[]>;
+  @Input() $ActiveTeam:Observable<player[]>; 
+  @Input() $MyTeam:Observable<player[]>;
+
+  RightTeamName:string; 
+  LeftTeamName:string 
+  MapsUsed:string[]; 
+
+  LeftTeam:player[]; 
+  RightTeam:player[]; 
+  
+  LeftWinns:number; 
+  RightWinns:number; 
+
 
   constructor(private store:Store<AppState>) { 
     this.ResultListener = new EventEmitter();
@@ -61,17 +58,15 @@ export class RezultatComponent implements OnInit {
     let RetVal = 0;
     Team.forEach((player)=>
     {
-      RetVal += (player.impact*40)+(player.kd*60)+(player.rating*10) // Odnosi u procentima 40% + 60% + bonus 10%
+      RetVal += (player.impact*40)+(player.kd*60)+(player.rating*10) 
     })
 
-    return RetVal + Math.floor(Math.random() * (20 - 1 + 1)) + 1;  // Ljudski faktor timskog rada 1-20
+    return RetVal + Math.floor(Math.random() * (20 - 1 + 1)) + 1;  
   }
 
-  // Funkcija koja pokrece simulaciju
+ 
   Simuliraj():void
   {
-
-    //-------------Priprema promenjivih za pokretanje simulacije--------------//
     let Btn = document.getElementById("btn-sim") as HTMLButtonElement;
     let Row = document.getElementById("GameTable") as HTMLTableRowElement;
     this.ResultListener.emit(["",""])
@@ -82,18 +77,15 @@ export class RezultatComponent implements OnInit {
     this.MapsUsed = []
     let winner = "";
 
-    // Praznjenje tabele rezulatata rundi
+
     while (Row.firstChild) {
       Row.removeChild(Row.firstChild);
     }
-   //-------------------------------------------------------------------------//
-    
 
-    // Periodicno simuliranje i prikazivanje runde
      let display = setInterval(() => {
       this.StartGame(GameCounter)
       GameCounter++;
-      if(this.RightWinns == 2 || this.LeftWinns == 2) // U slucaju zavrsetka 3 game-a zavrsava se simulacija
+      if(this.RightWinns == 2 || this.LeftWinns == 2) 
       { 
         clearInterval(display);
 
@@ -109,7 +101,7 @@ export class RezultatComponent implements OnInit {
     }, 2500);      
   }
 
-  // Funkcija za generisanje mape
+
   GetRandomMap():string
   {
     let Index = Math.floor(Math.random() * (7 - 1 + 0)) + 0;
@@ -150,15 +142,10 @@ export class RezultatComponent implements OnInit {
   }
 
 
-  // Algoritam za simulaciju rundi i krajnjeg rezulata game-a
-  /* U zavisnosti od odnosa efektivnosti tima se generisu rezulatati rundi ali postoje osnovna pravila razlike:
-   --> U koliko je razlika 0-30 slabiji tim ima mogunost da pobedi 2 game-a 
-    --> U koliko je razlika 30-60 slabiji tim ima mogunost da pobedi 1 game-a
-     --> U koliko je razlika 60> slabiji tim ima mogunost da pobedi 0 game-a                                 */
-   
+ 
   RoundsAlghoritm(LeftScore:number,rightScore:number,Game:number):string
   {
-    let HigherChance, Razlika,HigherRound = 0,LowwerRound = 0 // false = levi | true = desni
+    let HigherChance, Razlika,HigherRound = 0,LowwerRound = 0;
 
     if(LeftScore > rightScore)
     HigherChance = false;
@@ -229,8 +216,8 @@ export class RezultatComponent implements OnInit {
    
   } 
 
-// Produzetak algoritma koji se specijalno bavi rezultatom game-ova
-  RoundsAlghoritmExtension(Difference:number,Type:boolean):number // true = higher | false = lowwer
+
+  RoundsAlghoritmExtension(Difference:number,Type:boolean):number 
   {
    if(Type == true)
    {
@@ -252,7 +239,7 @@ export class RezultatComponent implements OnInit {
    }
   }
 
-// Funkcija za crtanje tabele rundi
+
 DrawResult(element:GameStats):void
  {
     let Table = document.getElementById("GameTable") as HTMLTableElement;
@@ -280,7 +267,7 @@ DrawResult(element:GameStats):void
   }
 }
 
-// Pomocna funkcija koja obezbedjuje da se mape ne ponavljaju
+
 CheckMapAppearance(map:string):boolean
 {
   let DuplicateCounter = 0;
@@ -297,7 +284,7 @@ CheckMapAppearance(map:string):boolean
     return true;
 }
 
-// Funkcija koja pokrece simulaciju gameova
+
 StartGame(GameCounter:number):void
 {
   let v:GameStats = {
@@ -310,7 +297,11 @@ StartGame(GameCounter:number):void
    }
    while(this.CheckMapAppearance(v.Map) != true)
 
-      v.Rounds = this.RoundsAlghoritm(this.RacunajEfektivnostTima(this.LeftTeam),this.RacunajEfektivnostTima(this.RightTeam),GameCounter)
+      v.Rounds = this.RoundsAlghoritm(
+        this.RacunajEfektivnostTima(this.LeftTeam),
+        this.RacunajEfektivnostTima(this.RightTeam),
+        GameCounter
+        );
       this.MapsUsed[GameCounter-1] = v.Map;   
       this.DrawResult(v);
       GameCounter++;

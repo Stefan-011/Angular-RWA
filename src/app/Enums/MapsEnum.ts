@@ -1,5 +1,3 @@
-// Enum za postojece kompetativne mape
-
 export enum MapsEnum {
     Inferno = 'Inferno',
     Mirage = 'Mirage',

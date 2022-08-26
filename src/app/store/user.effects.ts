@@ -17,7 +17,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 export class UserEffects {
   constructor(
     private router:Router,
-    private actions$: Actions,
+    private actions$:Actions,
     private store:Store<AppState>, 
     private userservice:UserService,
     private cookieService:CookieService
@@ -30,7 +30,6 @@ export class UserEffects {
       map((data1:IncomingPackage)=> { 
         if(data1 == undefined)
         alert("Uneli ste pogresne podatke !")
-
         this.cookieService.delete("token");
         this.cookieService.set("token",data1.access_token,{ expires: new Date(new Date().getTime() + 3600 * 1000)})
 
@@ -39,9 +38,10 @@ export class UserEffects {
 
         this.router.navigate(["home"]);
 
-        let data = new user();
-        data.money = data1.data.money;
-        data.username = data1.data.username
+        let data:user = {
+          money:data1.data.money,
+          username:data1.data.username
+        };
         this.store.dispatch(GetMyTeam({token:data1.access_token}))
         return UserActions.loginSuccess({data})
       }),
@@ -55,10 +55,14 @@ export class UserEffects {
   this.actions$.pipe(
     ofType(UserActions.GetLoggedUser),
     mergeMap(({token}) => this.userservice.GetUserByToken(token).pipe(
-      map((data:user)=> { 
+      map((data:user)=> {
         return UserActions.GetLoggedUserSuccess({data})
       }),
-      catchError(()=> of({type:"load error"}))
+      catchError(()=>{ 
+        localStorage.clear();
+        this.cookieService.deleteAll();
+        this.router.navigate(["login"]);
+        return of({type:"load error"})})
       )
      )
     )

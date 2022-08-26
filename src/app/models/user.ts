@@ -1,12 +1,5 @@
-
-// Klasa za predstavljanje korisnika
-export class user
+export interface user
 {
     username:string;
     money:number;
-    constructor() 
-    {
-        this.username = "";
-        this.money = 6000;
-    }
 }

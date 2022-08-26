@@ -15,20 +15,16 @@ import { Observable } from 'rxjs';
 })
 export class HomeComponent implements OnInit {
 
-  @Input() Username:string; // Input za prosledjivanej Username-a
+  @Input() Username:string; 
 
-//----------------Observables----------------//
   $username:Observable<string | undefined>;
   $LogState:Observable<boolean>;
-//-----------------------------------------// 
 
- //---------- Pomocne promenjive ----------//
-  Ruta:number; // Promenjiva koja pokazuje koja se komponenta aktivira
-  LogState:boolean; // Promenjiva koja pokazuje da li je korisnik ulogovan ili ne
-  MenuState:boolean;// Promenjiva koja aktivira collapse menu
-//-----------------------------------------//
+  Ruta:number;
+  LogState:boolean; 
+  MenuState:boolean;
+
  
-  
   constructor(
     private cookies:CookieService,
     private store:Store<AppState>,
@@ -44,13 +40,14 @@ export class HomeComponent implements OnInit {
     
   }
 
+  
   ngOnInit():void
   {
     this.$username.subscribe((data)=>{this.Username = data+""}); 
     this.$LogState.subscribe((data)=>this.LogState = data);
   }
 
-  // Funkcija koja sluzi za promenu fokus komponente
+
   switchR(text:string):void
   {
     switch(text)
@@ -76,7 +73,7 @@ export class HomeComponent implements OnInit {
   }
 
 
-// Listener koji gleda promenu sirine ekrana (koristise za collapse menu)
+
 @HostListener('window:resize', ['$event'])
 onWindowResize(): void 
 {
@@ -85,7 +82,7 @@ onWindowResize(): void
     this.MenuState = false;
 }
 
-// Funkcija za otvaranje collapse menu-a
+
 OpenCollapse():void
 {
   let getScreenWidth = window.innerWidth;
@@ -104,9 +101,5 @@ logout():void
   this.cookies.deleteAll();
   this.route.navigate(["login"]);
 }
-
-OnDestroy():void
-{}
-
 
 }

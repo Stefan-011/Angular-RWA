@@ -4,9 +4,9 @@ import { user } from '../models/user';
 
 
 export interface UserState {
-    loggedIn:boolean, // Promenjiva koja pokazuje da li je korisnik ulogovan
-    CurrentUser: user | null, // Promenjiva koja pokazuje trenutnog korisnika
-    component:string, // Promenjiva koja pokazuje koja je komponenta trenutno u fokusu
+    loggedIn:boolean, 
+    CurrentUser: user | null, 
+    component:string, 
   }
 
   export const initialState: UserState = {

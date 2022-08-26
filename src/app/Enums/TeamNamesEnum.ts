@@ -1,5 +1,3 @@
-// Enum za postojece default timove
-
 export enum TeamNamesEnum {
     Astralis = 'Astralis',
     Vitality = 'Vitality',
