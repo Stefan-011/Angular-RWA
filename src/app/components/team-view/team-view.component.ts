@@ -1,14 +1,14 @@
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { AppState } from '../app.state';
-import { player } from '../models/player';
-import { Sponzor } from '../models/Sponzor';
+import { AppState } from '../../app.state';
+import { player } from '../../models/player';
+import { Sponzor } from '../../models/Sponzor';
 import { CookieService } from 'ngx-cookie-service';
-import { TeamNamesEnum } from '../Enums/TeamNamesEnum';
+import { TeamNamesEnum } from '../../Enums/TeamNamesEnum';
 import { Component, Input, OnInit } from '@angular/core';
 import * as MyTeamActions from 'src/app/store/myteam.action'
 import { selectMyTeam } from 'src/app/store/myteam.selector';
-import { SponzorService } from '../services/sponzor.service';
+import { SponzorService } from '../../services/sponzor.service';
 import * as UserSelectors from 'src/app/store/user.selector';
 import * as MyTeamSelector from 'src/app/store/myteam.selector';
 import * as OtherTeamAction from "src/app/store/Otherteam.action";

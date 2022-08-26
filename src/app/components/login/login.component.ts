@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit, Output } from '@angular/core';
-import * as UserActions from '../store/user.action';
+import * as UserActions from '../../store/user.action';
 
-import { AppState } from '../app.state';
+import { AppState } from '../../app.state';
 import { Store } from '@ngrx/store';
 
 

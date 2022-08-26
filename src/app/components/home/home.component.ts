@@ -1,9 +1,9 @@
 import { Component, HostListener, Input, OnInit} from '@angular/core';
 import * as UserSelectors from 'src/app/store/user.selector';
-import * as UserActions from '../store/user.action';
+import * as UserActions from '../../store/user.action';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
-import { AppState } from '../app.state';
+import { AppState } from '../../app.state';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 

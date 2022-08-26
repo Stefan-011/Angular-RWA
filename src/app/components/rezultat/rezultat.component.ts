@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as OtherTeamSelect from "src/app/store/Otherteam.selector"
 import * as UserSelect from "src/app/store/user.selector"
-import { GameStats } from '../models/GameStats';
-import { MapsEnum } from '../Enums/MapsEnum';
-import { player } from '../models/player';
-import { AppState } from '../app.state';
+import { GameStats } from '../../models/GameStats';
+import { MapsEnum } from '../../Enums/MapsEnum';
+import { player } from '../../models/player';
+import { AppState } from '../../app.state';
 import { Store } from '@ngrx/store';
 import { Observable,  } from 'rxjs';
 
@@ -67,6 +67,9 @@ export class RezultatComponent implements OnInit {
  
   Simuliraj():void
   {
+    if(this.LeftTeam.length < 5)
+    return alert("Vas tim ima manje od 5 igraca !!!");
+
     let Btn = document.getElementById("btn-sim") as HTMLButtonElement;
     let Row = document.getElementById("GameTable") as HTMLTableRowElement;
     this.ResultListener.emit(["",""])

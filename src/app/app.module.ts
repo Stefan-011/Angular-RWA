@@ -6,18 +6,18 @@ import { OtherTeamState } from './store/Otherteam.reducer';
 import {EffectsModule} from '@ngrx/effects';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PoljeComponent } from './polje/polje.component';
-import { RezultatComponent } from './rezultat/rezultat.component';
+import { PoljeComponent } from './components/polje/polje.component';
+import { RezultatComponent } from './components/rezultat/rezultat.component';
 import { HttpClientModule } from  '@angular/common/http';
-import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './components/login/login.component';
+import { HomeComponent } from './components/home/home.component';
 import { StoreModule } from '@ngrx/store';
 import { AppState } from './app.state';
 import { OtherTeamEffects } from './store/Otherteam.effects';
 import { MyTeamEffects } from './store/myteam.effects';
 import { UserEffects } from './store/user.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { TeamViewComponent } from './team-view/team-view.component'
+import { TeamViewComponent } from './components/team-view/team-view.component'
 import { MyTeamReducer } from './store/myteam.reducer';
 
 

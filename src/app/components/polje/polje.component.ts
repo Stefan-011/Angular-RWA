@@ -2,10 +2,10 @@ import * as OtherTeamSelect from "src/app/store/Otherteam.selector"
 import * as OtherTeamAction from "src/app/store/Otherteam.action"
 import { selectMyTeam } from 'src/app/store/myteam.selector';
 import * as UserSelectors from 'src/app/store/user.selector'
-import { TeamNamesEnum } from '../Enums/TeamNamesEnum';
+import { TeamNamesEnum } from '../../Enums/TeamNamesEnum';
 import { Component, Input, OnInit} from '@angular/core';
-import { player } from '../models/player';
-import { AppState } from '../app.state';
+import { player } from '../../models/player';
+import { AppState } from '../../app.state';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
