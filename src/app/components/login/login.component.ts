@@ -16,7 +16,8 @@ export class LoginComponent implements OnInit {
 
   Mode:boolean = false;
   errorMsg:number; 
-
+  regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+  format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
 
   constructor(
     public store:Store<AppState>,
@@ -41,7 +42,7 @@ export class LoginComponent implements OnInit {
 
   login(email:string,password:string):void
   {
-    if(email.length == 0 || password.length == 0 )
+    if(email.length == 0 || password.length == 0 || (this.regexp.test(email) == false))
     this.errorMsg = 4
     this.store.dispatch(UserActions.loginUser({email:email,password:password}));
   }
@@ -49,13 +50,23 @@ export class LoginComponent implements OnInit {
 
   register(username:string,email:string,password:string,passwordcheck:string)
   {
+    if(this.regexp.test(email) == false)
+    {
+      this.errorMsg = 2; 
+      return;
+    }
 
-    if(username.length == 0 || email.length == 0 || password.length == 0 || passwordcheck.length == 0)
+    if(username.length == 0 || email.length == 0 || password.length == 0 || passwordcheck.length == 0 )
       this.errorMsg = 0;    
     else
       if(password == passwordcheck)
+      {
         this.store.dispatch(UserActions.RegisterUser({username:username,password:password,email:email}))
         this.Mode = false;
+      }     
+      else
+      this.errorMsg = 1; 
+      
   }
    
   
