@@ -1,46 +1,74 @@
-<section class="section-field font-lexend d-flex justify-content-center align-items-center">
-    <video [muted]="'muted'" autoplay="autoplay" loop="loop">
-        <source src="../../assets/video/LoginBg.mp4" type="video/mp4">
-        Your browser does not support HTML5 video.
-      </video>
-      <div class="overlay"></div>
+<section
+  class="section-field font-lexend d-flex justify-content-center align-items-center"
+>
+  <video [muted]="'muted'" autoplay="autoplay" loop="loop">
+    <source src="../../assets/video/LoginBg.mp4" type="video/mp4" />
+    Your browser does not support HTML5 video.
+  </video>
+  <div class="overlay"></div>
 
-      <div class="login-div text-center align-items-center" id="login">
-    <div *ngIf="Mode == false" (keydown.enter)="login(emaillogin.value,lozinkalogin.value)">
-        <p>Prijava</p>
-         <input type="email" placeholder="Email" #emaillogin>
-         <input type="password" placeholder="Lozinka" #lozinkalogin>
-         <br>
-          <button (click)="login(emaillogin.value,lozinkalogin.value)"  >Prijavi se</button>
-          <br>
-          <label (click)="SwitchMode()">Niste registrovani? Kliknite ovde!</label>
+  <div class="login-div text-center align-items-center" id="login">
+    <div
+      *ngIf="!SetLayoutByMode()"
+      (keydown.enter)="login(emaillogin.value, lozinkalogin.value)"
+    >
+      <p>Prijava</p>
+      <input type="email" placeholder="Email" #emaillogin />
+      <input type="password" placeholder="Lozinka" #lozinkalogin />
+      <br />
+      <button (click)="login(emaillogin.value, lozinkalogin.value)">
+        Prijavi se
+      </button>
+      <br />
+      <label (click)="SwitchMode()">Niste registrovani? Kliknite ovde!</label>
     </div>
-    <div *ngIf="Mode==true" (keydown.enter)="register(username.value,emailregister.value,passwordregister.value,passwordcheck.value)">
-        <p>Registracija</p>
-        <input type="text" placeholder="Korisnicko ime" #username>
-        <input type="email" placeholder="Email" #emailregister>
-        <input type="password" placeholder="Lozinka" #passwordregister>
-        <input type="password" placeholder="Lozinka ponovo" #passwordcheck>
-        <br>
-        <button (click)="register(username.value,emailregister.value,passwordregister.value,passwordcheck.value)" >Registruj se</button>
-        <br>
-        <label class="h4"(click)="SwitchMode()">Registrovani ste? Kliknite ovde!</label>
-        
+    <div
+      *ngIf="SetLayoutByMode()"
+      (keydown.enter)="
+        register(
+          username.value,
+          emailregister.value,
+          passwordregister.value,
+          passwordcheck.value
+        )
+      "
+    >
+      <p>Registracija</p>
+      <input type="text" placeholder="Korisnicko ime" #username />
+      <input type="email" placeholder="Email" #emailregister />
+      <input type="password" placeholder="Lozinka" #passwordregister />
+      <input type="password" placeholder="Lozinka ponovo" #passwordcheck />
+      <br />
+      <button
+        (click)="
+          register(
+            username.value,
+            emailregister.value,
+            passwordregister.value,
+            passwordcheck.value
+          )
+        "
+      >
+        Registruj se
+      </button>
+      <br />
+      <label class="h4" (click)="SwitchMode()"
+        >Registrovani ste? Kliknite ovde!</label
+      >
     </div>
-    <div [ngSwitch] = "errorMsg">
-        <div *ngSwitchCase = '0'>
-            <label>Unesite sve podatke</label>
-        </div>
-        <div *ngSwitchCase= '1'>
-            <label>Lozinke se ne poklapaju</label>
-        </div>
-        <div *ngSwitchCase= '2'>
-            <label>Email koji ste uneli nije ispravan !</label>
-        </div>
-        <div *ngSwitchCase= '4'>
-            <label>Uneli ste neispravne podatke!</label>
-        </div>
-    </div>
+    <div [ngSwitch]="CheckErrorMessage()">
+      <div *ngSwitchCase="2">
+        <label>Unesite sve podatke</label>
       </div>
-    </section>
-    
+      <div *ngSwitchCase="3">
+        <label>Lozinke se ne poklapaju</label>
+      </div>
+      <div *ngSwitchCase="1">
+        <label>Email koji ste uneli nije ispravan !</label>
+      </div>
+      <div *ngSwitchCase="4">
+        <label>Uneli ste neispravne podatke!</label>
+      </div>
+    </div>
+  </div>
+</section>

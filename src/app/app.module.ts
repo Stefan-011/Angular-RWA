@@ -3,12 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { userReducer } from './store/user.reducer';
 import { OtherTeamState } from './store/Otherteam.reducer';
-import {EffectsModule} from '@ngrx/effects';
+import { EffectsModule } from '@ngrx/effects';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PoljeComponent } from './components/polje/polje.component';
 import { RezultatComponent } from './components/rezultat/rezultat.component';
-import { HttpClientModule } from  '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { StoreModule } from '@ngrx/store';
@@ -17,9 +17,9 @@ import { OtherTeamEffects } from './store/Otherteam.effects';
 import { MyTeamEffects } from './store/myteam.effects';
 import { UserEffects } from './store/user.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { TeamViewComponent } from './components/team-view/team-view.component'
+import { TeamViewComponent } from './components/team-view/team-view.component';
 import { MyTeamReducer } from './store/myteam.reducer';
-
+import { LoginReducer } from './store/login.reducer';
 
 @NgModule({
   declarations: [
@@ -28,21 +28,26 @@ import { MyTeamReducer } from './store/myteam.reducer';
     RezultatComponent,
     HomeComponent,
     LoginComponent,
-    TeamViewComponent
+    TeamViewComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule ,
+    HttpClientModule,
     CommonModule,
-    StoreModule.forRoot<AppState>({user: userReducer, OtherTeam:OtherTeamState, MyTeam:MyTeamReducer}),
-    EffectsModule.forRoot([OtherTeamEffects,UserEffects,MyTeamEffects]),
+    StoreModule.forRoot<AppState>({
+      user: userReducer,
+      OtherTeam: OtherTeamState,
+      MyTeam: MyTeamReducer,
+      Login: LoginReducer,
+    }),
+    EffectsModule.forRoot([OtherTeamEffects, UserEffects, MyTeamEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       autoPause: true, // Pauses recording actions and state changes when the extension window is not open
     }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
