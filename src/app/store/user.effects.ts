@@ -110,7 +110,6 @@ export class UserEffects {
       mergeMap(({ username }) =>
         this.userservice.CreateUser(username).pipe(
           map(() => {
-            //alert("Uspesno ste se registovali!");
             return UserActions.CreateUserSuccess();
           }),
           catchError(() => of({ type: 'load error' }))

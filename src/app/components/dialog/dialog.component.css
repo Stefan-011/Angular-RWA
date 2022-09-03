@@ -1,0 +1,36 @@
+::ng-deep .mat-dialog-container {
+  background-color: #090916;
+  border: 0.1px solid orange;
+}
+
+.div-dialog {
+  width: auto;
+  height: auto;
+  max-height: 20vh;
+  color: orange;
+}
+
+.div-dialog p {
+  font-size: 3vh;
+}
+
+.div-dialog button {
+  margin-top: 16%;
+  font-size: 3vh;
+  padding: 0.6vh;
+  background-color: transparent;
+  width: 12vh;
+  color: orange;
+  border: orange 0.1px solid;
+}
+.div-dialog button:hover {
+  background-color: orange;
+  color: #090916;
+}
+
+@media screen and (max-width: 912px) {
+  .div-dialog {
+    width: 30vh;
+    height: 20vh;
+  }
+}

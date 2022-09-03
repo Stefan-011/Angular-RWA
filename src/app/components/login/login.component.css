@@ -1,127 +1,106 @@
-.section-field
-{
-    height: 100vh;
-    width: 100%;
+.section-field {
+  height: 100vh;
+  width: 100%;
 }
-.section-field video
-{
-position: absolute;
-left: 0;
-top: 0;
-width: 100%;
-height: 100%;
-object-fit: cover;
-z-index: -1;
+.section-field video {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
 }
 
-.overlay
-{
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1; 
-    background-color: blue;
-    opacity: 0.2;
+.overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  background-color: blue;
+  opacity: 0.2;
 }
 
-.login-div
-{
-    padding-top: 1vh;
-    width: 60vh;
-    height: 77vh !important;
-    background: #090916;
-    opacity: 0.89;
-   
+.login-div {
+  padding-top: 1vh;
+  width: 60vh;
+  height: 77vh !important;
+  background: #090916;
+  opacity: 0.89;
 }
 
-.section-field p
-{
-color: white;
-font-size: 3vh;
+.section-field p {
+  color: white;
+  font-size: 3vh;
 }
 
-.section-field input
-{
-background-color:transparent;
-color: white;
-border: 0;
-border-bottom: white solid 1px;
-font-size: 1.5vw;
-margin: 15px;
+.section-field input {
+  background-color: transparent;
+  color: white;
+  border: 0;
+  border-bottom: white solid 1px;
+  font-size: 1.5vw;
+  margin: 15px;
 }
 
 .section-field input::placeholder {
-    color: white;
-    opacity: 1; 
-    font-weight:300;
+  color: white;
+  opacity: 1;
+  font-weight: 300;
+}
+
+.section-field input:focus {
+  color: orange;
+  border: none;
+  font-weight: 300;
+}
+
+.section-field button {
+  margin-top: 4vh;
+  background-color: transparent;
+  color: white;
+  border: white 1px solid;
+  font-size: 1.6vw;
+  margin-bottom: 4vh;
+  padding: 1.5vh;
+}
+
+.section-field button:hover {
+  margin-top: 4vh;
+  background-color: transparent;
+  color: orange;
+  border: orange 1px solid;
+}
+
+.section-field label {
+  margin: 2vh;
+  font-size: 1vw;
+  color: white;
+}
+
+.section-field label:hover {
+  color: orange;
+}
+
+@media screen and (max-width: 912px) {
+  .login-div {
+    padding-top: 14vh;
   }
-
-.section-field input:focus
-{
-
-color: orange;
-border:none;
-font-weight: 300;
-}
-
-.section-field button
-{
-margin-top:4vh ;
-background-color: transparent;
-color: white;
-border: white 1px solid;
-font-size: 1.6vw;
-margin-bottom: 4vh;
-}
-
-.section-field button:hover
-{
-margin-top:4vh ;
-background-color: transparent;
-color: orange;
-border: orange 1px solid;
-}
-
-.section-field label
-{
-margin: 2vh;
-font-size: 1vw;
-color: white;
-}
-
-.section-field label:hover
-{
-    color: orange;
-}
-
-
-@media screen and (max-width: 912px)
-{
-    .login-div
-    {
-        padding-top: 14vh;
-           
-    } 
-    .section-field p
-    {
+  .section-field p {
     color: white;
     font-size: 3vh;
-    } 
-    .section-field input
-    {
-    font-size: 2.5vh; 
-    }
-    .section-field button
-    {
-        font-size: 2.5vh;
-        margin-bottom: 2vh;
-    }
-    .section-field label
-    {
-        font-size: 1.5vh;
-    }
-
+  }
+  .section-field input {
+    font-size: 2.5vh;
+  }
+  .section-field button {
+    font-size: 2.5vh;
+    margin-bottom: 2vh;
+  }
+  .section-field label {
+    font-size: 1.5vh;
+  }
 }

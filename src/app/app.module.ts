@@ -20,6 +20,12 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { TeamViewComponent } from './components/team-view/team-view.component';
 import { MyTeamReducer } from './store/myteam.reducer';
 import { LoginReducer } from './store/login.reducer';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DialogComponent } from './components/dialog/dialog.component';
+import { LoginEffects } from './store/login.effects';
+import { RezulatatEffects } from './store/rezultat.effects';
+import { RezultatReducer } from './store/rezultat.reducer';
 
 @NgModule({
   declarations: [
@@ -29,6 +35,7 @@ import { LoginReducer } from './store/login.reducer';
     HomeComponent,
     LoginComponent,
     TeamViewComponent,
+    DialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,12 +47,21 @@ import { LoginReducer } from './store/login.reducer';
       OtherTeam: OtherTeamState,
       MyTeam: MyTeamReducer,
       Login: LoginReducer,
+      Rezultat: RezultatReducer,
     }),
-    EffectsModule.forRoot([OtherTeamEffects, UserEffects, MyTeamEffects]),
+    EffectsModule.forRoot([
+      OtherTeamEffects,
+      UserEffects,
+      MyTeamEffects,
+      LoginEffects,
+      RezulatatEffects,
+    ]),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       autoPause: true, // Pauses recording actions and state changes when the extension window is not open
     }),
+    BrowserAnimationsModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

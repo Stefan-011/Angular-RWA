@@ -11854,3 +11854,5 @@ background: linear-gradient(90deg, rgba(9,9,121,1) 0%, rgba(15,15,193,1) 21%, rg
 }
 
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

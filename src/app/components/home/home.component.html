@@ -53,13 +53,13 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
             <li class="nav-item">
-              <a class="nav-link" (click)="switchR('sim')">Simuliraj</a>
+              <a class="nav-link" (click)="switchR('SIMULACIJA')">Simuliraj</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" (click)="switchR('myteam')">MyTeam</a>
+              <a class="nav-link" (click)="switchR('MYTEAM')">MyTeam</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" (click)="switchR('shop')">shop</a>
+              <a class="nav-link" (click)="switchR('SHOP')">shop</a>
             </li>
             <li *ngIf="LogState" class="nav-item">
               <a class="nav-link">korisnik: {{ $username | async }}</a>
@@ -74,13 +74,13 @@
         <!---->
         <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
           <li class="nav-item">
-            <a class="nav-link" (click)="switchR('sim')">Simuliraj</a>
+            <a class="nav-link" (click)="switchR('SIMULACIJA')">Simuliraj</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" (click)="switchR('myteam')">MyTeam</a>
+            <a class="nav-link" (click)="switchR('MYTEAM')">MyTeam</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" (click)="switchR('shop')">shop</a>
+            <a class="nav-link" (click)="switchR('SHOP')">shop</a>
           </li>
           <li *ngIf="LogState" class="nav-item">
             <a class="nav-link">korisnik: {{ $username | async }}</a>
@@ -109,8 +109,11 @@
     </header>
     <div class="spacer"></div>
     <div class="content-region">
-      <app-polje *ngIf="Ruta == 0"></app-polje>
-      <app-team-view *ngIf="Ruta == 1" [Username]="Username"></app-team-view>
+      <app-polje *ngIf="Ruta == 'SIMULACIJA'"></app-polje>
+      <app-team-view
+        *ngIf="Ruta == 'MYTEAM' || Ruta == 'SHOP'"
+        [Username]="Username"
+      ></app-team-view>
     </div>
 
     <!-- Team-->

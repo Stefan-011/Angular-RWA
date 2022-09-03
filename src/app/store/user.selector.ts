@@ -1,40 +1,31 @@
-import { createSelector} from '@ngrx/store';
+import { createSelector } from '@ngrx/store';
 import { AppState } from '../app.state';
 
 export const selectCurrentUser = createSelector(
-(state : AppState) => state.user,
-(user) => user
+  (state: AppState) => state.user,
+  (user) => user
 );
 
-export const selectUsersMoney = createSelector(
-    selectCurrentUser,
-    (data)=>
-    {
-        if(data.CurrentUser?.money != null)
-        return data.CurrentUser?.money; 
-        else return 0;
-    }
-)
+export const selectUsersMoney = createSelector(selectCurrentUser, (user) => {
+  if (user.CurrentUser?.money != null) return user.CurrentUser?.money;
+  else return 0;
+});
 
-export const selectUsersname = createSelector(
-    selectCurrentUser,
-    (data)=>
-    {
-        if(data.CurrentUser?.username != null) 
-        return data.CurrentUser?.username; 
-        else return "";
-    }
-)
+export const selectUsersname = createSelector(selectCurrentUser, (user) => {
+  if (user.CurrentUser?.username != null) return user.CurrentUser?.username;
+  else return '';
+});
 
-export const selectLoggedIn = createSelector(
-    selectCurrentUser,
-    (data)=>{ return data.loggedIn }
-)
+export const selectLoggedIn = createSelector(selectCurrentUser, (user) => {
+  return user.loggedIn;
+});
 
 export const SelectComponent = createSelector(
-    selectCurrentUser,
-    (data)=> 
-    {
-        if(data.component != null)return data.component; 
-        else return "";
-    })
+  selectCurrentUser,
+  (user) => user.component
+);
+
+export const SelectShopState = createSelector(
+  selectCurrentUser,
+  (user) => user.shop_state
+);

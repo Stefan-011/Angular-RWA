@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { AppState } from '../../app.state';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { ComponentEnum } from 'src/app/Enums/ComponentEnum';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,7 @@ export class HomeComponent implements OnInit {
   $username: Observable<string | undefined>;
   $LogState: Observable<boolean>;
 
-  Ruta: number;
+  Ruta: ComponentEnum;
   LogState: boolean;
   MenuState: boolean;
 
@@ -27,7 +28,7 @@ export class HomeComponent implements OnInit {
     private store: Store<AppState>,
     private route: Router
   ) {
-    this.Ruta = -1;
+    this.Ruta = ComponentEnum.none;
     this.Username = '';
     this.LogState = false;
     this.MenuState = false;
@@ -44,18 +45,22 @@ export class HomeComponent implements OnInit {
 
   switchR(text: string): void {
     switch (text) {
-      case 'sim':
-        this.Ruta = 0;
+      case 'SIMULACIJA':
+        this.Ruta = ComponentEnum.Simulacija;
         break;
 
-      case 'myteam':
-        this.store.dispatch(UserActions.SetComponent({ comp: 'myteam' }));
-        this.Ruta = 1;
+      case 'MYTEAM':
+        this.store.dispatch(
+          UserActions.SetComponent({ comp: ComponentEnum.MyTeam })
+        );
+        this.Ruta = ComponentEnum.MyTeam;
         break;
 
-      case 'shop':
-        this.store.dispatch(UserActions.SetComponent({ comp: 'shop' }));
-        this.Ruta = 1;
+      case 'SHOP':
+        this.store.dispatch(
+          UserActions.SetComponent({ comp: ComponentEnum.Shop })
+        );
+        this.Ruta = ComponentEnum.Shop;
         break;
 
       default:

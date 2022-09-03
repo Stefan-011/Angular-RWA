@@ -8,6 +8,8 @@ import { LoginMod } from 'src/app/Enums/LoginMod';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { ErrorMessage } from 'src/app/Enums/ErrorMessage';
 import { OperationResult } from 'src/app/Enums/OperationResult';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +33,7 @@ export class LoginComponent implements OnInit {
 
   /*---------------------------------------- | Zameni alertove sa dialog box-ovima | ----------------------------------*/
   // ------------------------- | Dodaj subject unsubscribe metod  | ------------------------------------------- //
-  constructor(public store: Store<AppState>) {
+  constructor(public store: Store<AppState>, private matDialog: MatDialog) {
     this.Mode = LoginMod.Login;
     this.ErrorMsg = ErrorMessage.None;
     this.$LogModeObs = this.store.select(LoginSelectors.selectLoginMode);
@@ -48,18 +50,18 @@ export class LoginComponent implements OnInit {
     this.$LogModeObs.pipe(takeUntil(this.$Unsubscribe)).subscribe((Mode) => {
       this.Mode = Mode;
     });
+
     this.$ErrorMessageObs
       .pipe(takeUntil(this.$Unsubscribe))
       .subscribe((Error) => {
         this.ErrorMsg = Error;
       });
 
-    // ------------------------- | U ova dva dodati funkciju za ispisivanje u zavisi od ishoda | ------------------------------------------- //
     this.$LoginValidity
       .pipe(takeUntil(this.$Unsubscribe))
       .subscribe((Validity) => {
-        if (Validity == OperationResult.Fail) alert('Greska pri loginz');
-        else if (Validity == OperationResult.Success) alert('Dobrodosli');
+        if (Validity == OperationResult.Fail)
+          this.OpenDialog('Greska pri prijavljivanju !');
         if (Validity != OperationResult.none)
           this.store.dispatch(LoginActions.RestartLogin());
       });
@@ -67,10 +69,11 @@ export class LoginComponent implements OnInit {
     this.$RegisterValidity
       .pipe(takeUntil(this.$Unsubscribe))
       .subscribe((Validity) => {
-        if (Validity == OperationResult.Fail) alert('Greska pri register');
+        if (Validity == OperationResult.Fail)
+          this.OpenDialog('Greska pri registraciji !');
         else if (Validity == OperationResult.Success) {
+          this.OpenDialog('Uspesna registracija !');
           this.SwitchMode();
-          alert('Uspex');
         }
         if (Validity != OperationResult.none)
           this.store.dispatch(LoginActions.RestartRegister());
@@ -101,6 +104,14 @@ export class LoginComponent implements OnInit {
     return this.ErrorMsg;
   }
 
+  OpenDialog(msg: string): void {
+    this.matDialog
+      .open(DialogComponent, {
+        data: msg,
+      })
+      .updatePosition({ top: '10%' });
+  }
+
   login(email: string, password: string): void {
     if (
       email.length == 0 ||
@@ -108,9 +119,10 @@ export class LoginComponent implements OnInit {
       this.regexp.test(email) == false
     )
       this.SetErrorMessage(ErrorMessage.LoginError);
-    this.store.dispatch(
-      UserActions.loginUser({ email: email, password: password })
-    );
+    else
+      this.store.dispatch(
+        UserActions.loginUser({ email: email, password: password })
+      );
   }
 
   register(
