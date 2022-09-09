@@ -18,8 +18,6 @@ export class PoljeComponent implements OnInit {
   @Input() $ActiveTeam: Observable<player[]>;
   @Input() $MyTeam: Observable<player[]>;
 
-  //$ComponentType:Observable<string>;
-
   TeamNames: string[];
   FinalResult: string[];
   ActiveTeamName: string;
@@ -29,7 +27,6 @@ export class PoljeComponent implements OnInit {
     this.FinalResult = [];
     this.ActiveTeamName = '';
     this.$MyTeam = this.store.select(selectMyTeam);
-    // this.$ComponentType = store.select(UserSelectors.SelectComponent);
     this.$ActiveTeam = this.store.select(
       OtherTeamSelect.selectCurrentOtherTeams
     );

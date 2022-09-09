@@ -3,19 +3,21 @@ import * as UserActions from './user.action';
 import { user } from '../models/user';
 import { ComponentEnum } from '../Enums/ComponentEnum';
 import { ShopMode } from '../Enums/ShopMode';
+import { Role } from '../Enums/Role';
+import { MenuSize } from '../Enums/MenuSize';
 
 export interface UserState {
   loggedIn: boolean;
   CurrentUser: user | null;
   component: ComponentEnum;
-  shop_state: ShopMode;
+  MenuSize: MenuSize;
 }
 
 export const initialState: UserState = {
   loggedIn: false,
   CurrentUser: null,
   component: ComponentEnum.none,
-  shop_state: ShopMode.Igraci,
+  MenuSize: MenuSize.default,
 };
 
 export const userReducer = createReducer(
@@ -36,9 +38,8 @@ export const userReducer = createReducer(
     ...state,
     component: comp,
   })),
-
-  on(UserActions.SetShopMode, (state, { Mode }) => ({
+  on(UserActions.SetMenuSize, (state, { Size }) => ({
     ...state,
-    shop_state: Mode,
+    MenuSize: Size,
   }))
 );

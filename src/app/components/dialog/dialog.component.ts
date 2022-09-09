@@ -1,5 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dialog',
@@ -21,4 +25,12 @@ export class DialogComponent implements OnInit {
   CloseDialog(): void {
     this.DialogRef.close();
   }
+}
+
+export function OpenDialog(msg: string, matDialog: MatDialog): void {
+  matDialog
+    .open(DialogComponent, {
+      data: msg,
+    })
+    .updatePosition({ top: '10%' });
 }

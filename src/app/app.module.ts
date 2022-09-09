@@ -8,7 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PoljeComponent } from './components/polje/polje.component';
 import { RezultatComponent } from './components/rezultat/rezultat.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { StoreModule } from '@ngrx/store';
@@ -26,7 +26,10 @@ import { DialogComponent } from './components/dialog/dialog.component';
 import { LoginEffects } from './store/login.effects';
 import { RezulatatEffects } from './store/rezultat.effects';
 import { RezultatReducer } from './store/rezultat.reducer';
-
+import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
+import { FormsModule } from '@angular/forms';
+import { AuthInterceptor } from './services/auth.interceptor';
+import { ShopReducer } from './store/shop.reducer';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,6 +39,7 @@ import { RezultatReducer } from './store/rezultat.reducer';
     LoginComponent,
     TeamViewComponent,
     DialogComponent,
+    AdminPanelComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,6 +52,7 @@ import { RezultatReducer } from './store/rezultat.reducer';
       MyTeam: MyTeamReducer,
       Login: LoginReducer,
       Rezultat: RezultatReducer,
+      Shop: ShopReducer,
     }),
     EffectsModule.forRoot([
       OtherTeamEffects,
@@ -62,8 +67,11 @@ import { RezultatReducer } from './store/rezultat.reducer';
     }),
     BrowserAnimationsModule,
     MatDialogModule,
+    FormsModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

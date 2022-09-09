@@ -5,18 +5,19 @@ import { LoginComponent } from './components/login/login.component';
 import { RezultatComponent } from './components/rezultat/rezultat.component';
 import { PoljeComponent } from './components/polje/polje.component';
 import { TeamViewComponent } from './components/team-view/team-view.component';
+import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 
-const routes: Routes = [  
-  {path:"home", component:HomeComponent},
-  {path:"login", component:LoginComponent},
-  {path:"rezultat", component:RezultatComponent},
-  {path:"teamview", component:TeamViewComponent},
-  {path:"polje", component:PoljeComponent}
+const routes: Routes = [
+  { path: 'home', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'rezultat', component: RezultatComponent },
+  { path: 'teamview', component: TeamViewComponent },
+  { path: 'polje', component: PoljeComponent },
+  { path: 'panel', component: AdminPanelComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}
- 

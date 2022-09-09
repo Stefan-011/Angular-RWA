@@ -1,17 +1,18 @@
 ::ng-deep .mat-dialog-container {
-  background-color: #090916;
-  border: 0.1px solid orange;
+  background-color: #101010;
+  border: 0.1px solid white;
 }
 
 .div-dialog {
-  width: auto;
-  height: auto;
-  max-height: 20vh;
-  color: orange;
+  width: fit-content;
+  height: fit-content;
+  max-height: 30vh;
+  color: #dfdfdf;
 }
 
 .div-dialog p {
   font-size: 3vh;
+  padding: 5px;
 }
 
 .div-dialog button {
@@ -20,12 +21,12 @@
   padding: 0.6vh;
   background-color: transparent;
   width: 12vh;
-  color: orange;
-  border: orange 0.1px solid;
+  color: white;
+  border: white 1px solid;
 }
 .div-dialog button:hover {
-  background-color: orange;
-  color: #090916;
+  background-color: white;
+  color: #101010;
 }
 
 @media screen and (max-width: 912px) {

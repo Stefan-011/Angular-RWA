@@ -42,14 +42,15 @@ export class UserEffects {
             localStorage.setItem('loggedIn', 'true');
 
             this.router.navigate(['home']);
-
-            let data: user = {
+            console.log(data1.data);
+            let User: user = {
               money: data1.data.money,
               username: data1.data.username,
+              role: data1.data.role,
             };
-            this.store.dispatch(GetMyTeam({ token: data1.access_token }));
+            this.store.dispatch(GetMyTeam());
 
-            return UserActions.loginSuccess({ data });
+            return UserActions.loginSuccess({ data: User });
           }),
           catchError(() => {
             this.store.dispatch(
@@ -66,7 +67,7 @@ export class UserEffects {
     this.actions$.pipe(
       ofType(UserActions.GetLoggedUser),
       mergeMap(({ token }) =>
-        this.userservice.GetUserByToken(token).pipe(
+        this.userservice.GetUserByToken().pipe(
           map((data: user) => {
             return UserActions.GetLoggedUserSuccess({ data });
           }),
@@ -90,7 +91,6 @@ export class UserEffects {
             this.store.dispatch(
               LoginActions.RegisterIsValid({ Result: OperationResult.Success })
             );
-            this.store.dispatch(UserActions.CreateUser({ username: username }));
             return UserActions.RegisterUserSuccess();
           }),
           catchError(() => {
@@ -99,20 +99,6 @@ export class UserEffects {
             );
             return of({ type: 'load error' });
           })
-        )
-      )
-    )
-  );
-
-  createUser$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(UserActions.CreateUser),
-      mergeMap(({ username }) =>
-        this.userservice.CreateUser(username).pipe(
-          map(() => {
-            return UserActions.CreateUserSuccess();
-          }),
-          catchError(() => of({ type: 'load error' }))
         )
       )
     )

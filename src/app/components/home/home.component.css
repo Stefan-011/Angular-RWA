@@ -1,93 +1,81 @@
-.video-container video
-{
-    position: absolute;
-    margin-top: 15vh;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 80vh;
-    object-fit: cover;
-    z-index: 0;
+.video-container video {
+  position: absolute;
+  margin-top: 15vh;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 80vh;
+  object-fit: cover;
+  z-index: 0;
 }
 
-.video-container p
-{
-    position:absolute;
-    z-index: 2;
-    font-size: 7vh;
+.video-container p {
+  position: absolute;
+  z-index: 2;
+  font-size: 7vh;
 }
 
-.overlay
-{
-    position: absolute;
-    margin-top: 15vh;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 80vh;
-    object-fit: cover;
-    z-index: 0;
-    background-color: blue;
-    opacity: 0.2;
+.overlay {
+  position: absolute;
+  margin-top: 15vh;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 80vh;
+  object-fit: cover;
+  z-index: 0;
+  background-color: blue;
+  opacity: 0.2;
 }
 
-.navbar 
-{
-    cursor:pointer;
+.dev {
+  background-color: white;
+  color: #101010;
 }
 
-.spacer
-{
-    height: 60vh;
+.navbar {
+  cursor: pointer;
 }
 
-.masthead
-    {
-       background-color: none !important;
-    }
+.spacer {
+  height: 60vh;
+}
+
+.masthead {
+  background-color: none !important;
+}
 
 @media screen and (max-width: 991px) {
- .video-container video
-{
+  .video-container video {
     position: absolute;
     margin-top: 8vh;
-}
-.overlay
-{
+  }
+  .overlay {
     position: absolute;
     margin-top: 8vh;
+  }
 }
- }
 
- @media screen and (max-width: 768px) {
-    #dev
-    {
-        margin-top: 20vh;
-    }
- }
+@media screen and (max-width: 768px) {
+  #dev {
+    margin-top: 20vh;
+  }
+}
 
- @media screen and (max-width: 414px) {
-    .video-container p
-    {
-        font-size: 5vh;
-    }
-    
- }
+@media screen and (max-width: 414px) {
+  .video-container p {
+    font-size: 5vh;
+  }
+}
 
- @media screen and (max-width: 280px) {
-    .masthead
-    {
-       padding: 2vh;
-    }
-    
- }
+@media screen and (max-width: 280px) {
+  .masthead {
+    padding: 2vh;
+  }
+}
 
- @media screen and (max-width: 375px) {
-    .masthead
-    {
-       padding: 2vh;
-    }
-    
- }
- 
-
+@media screen and (max-width: 375px) {
+  .masthead {
+    padding: 2vh;
+  }
+}

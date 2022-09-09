@@ -53,7 +53,7 @@
 }
 
 .section-field input:focus {
-  color: orange;
+  color: #4eb2ff;
   border: none;
   font-weight: 300;
 }
@@ -71,8 +71,8 @@
 .section-field button:hover {
   margin-top: 4vh;
   background-color: transparent;
-  color: orange;
-  border: orange 1px solid;
+  color: #4eb2ff;
+  border: #4eb2ff 1px solid;
 }
 
 .section-field label {
@@ -82,7 +82,7 @@
 }
 
 .section-field label:hover {
-  color: orange;
+  color: #4eb2ff;
 }
 
 @media screen and (max-width: 912px) {

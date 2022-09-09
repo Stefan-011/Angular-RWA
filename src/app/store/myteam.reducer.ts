@@ -50,5 +50,8 @@ export const MyTeamReducer = createReducer(
 
   on(MyTeamActions.RemoveSponzorSuccess, (state, { sponzor }) => {
     return { ...state, Sponzor: sponzor };
+  }),
+  on(MyTeamActions.SetNumberOfPlayers, (state, { PlayerCount }) => {
+    return { ...state, NumberOfPlayers: PlayerCount };
   })
 );

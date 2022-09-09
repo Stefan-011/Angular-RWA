@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 import * as RezultatSelector from 'src/app/store/rezultat.selector';
 import * as RezultatActions from 'src/app/store/rezultat.action';
 import { IMap } from 'src/app/models/IMap';
-import { DialogComponent } from '../dialog/dialog.component';
+import { DialogComponent, OpenDialog } from '../dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -84,7 +84,7 @@ export class RezultatComponent implements OnInit {
 
   Simuliraj(): void {
     if (this.LeftTeam.length < 5)
-      return this.OpenDialog('Vas tim ima manje od 5 igraca !!!');
+      return OpenDialog('Vas tim ima manje od 5 igraca !!!', this.matDialog);
 
     this.store.dispatch(RezultatActions.CleanMapPool());
     this.store.dispatch(
@@ -320,13 +320,5 @@ export class RezultatComponent implements OnInit {
     this.store.dispatch(RezultatActions.UseMap({ Map: NewMap }));
     this.DrawResult(Stats);
     GameCounter++;
-  }
-
-  OpenDialog(msg: string): void {
-    this.matDialog
-      .open(DialogComponent, {
-        data: msg,
-      })
-      .updatePosition({ top: '10%' });
   }
 }

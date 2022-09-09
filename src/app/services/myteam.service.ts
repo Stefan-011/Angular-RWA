@@ -6,84 +6,65 @@ import { MyTeam } from '../models/MyTeam';
 import { player } from '../models/player';
 import { AppState } from '../app.state';
 import { Store } from '@ngrx/store';
+import { RequestResponse } from '../models/RequestResponse';
+import { ShopErrorMsg } from '../Enums/ShopErrorMsg';
+import { TeamSablon } from '../models/TeamSablon';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MyteamService {
+  constructor(private http: HttpClient, private store: Store<AppState>) {}
 
-  constructor(
-    private http: HttpClient,
-    private store:Store<AppState>
-    ) {}
-
-
-  GetMyTeam(token:string)
-  {
-    var headers_object = new HttpHeaders({
-      'Authorization': "Bearer " + token,
-      'Content-Type': 'application/json',
-    });
-    const httpOptions = {
-      headers: headers_object,
-    };
-
-    return this.http.get<MyTeam>(environment.api + `/my-team/GetMyTeam`,httpOptions);
+  GetMyTeam() {
+    return this.http.get<MyTeam>(environment.api + `/my-team/GetMyTeam`);
   }
 
-
-  SellMyPlayer(ID:number,token:string)
-  {
-    var headers_object = new HttpHeaders({
-      'Authorization': "Bearer " + token,
-      'Content-Type': 'application/json',
-    });
-    const httpOptions = {
-      headers: headers_object,
-    };
-    return this.http.delete<player>(environment.api + `/my-team/RemovePlayer:${ID}`,httpOptions);
+  SellMyPlayer(ID: number) {
+    return this.http.delete<player>(
+      environment.api + `/my-team/RemovePlayer:${ID}`
+    );
   }
 
-  BuyMyPlayer(NewOneID:number,token:string)
-  {
+  BuyMyPlayer(NewOneID: number) {
+    return this.http.put<RequestResponse<player, ShopErrorMsg>>(
+      environment.api + `/my-team/AddPlayer:${NewOneID}`,
+      {
+        Headers: undefined,
+      }
+    );
+  }
 
-    var headers_object = new HttpHeaders({
-      'Authorization': "Bearer " + token,
-      'Content-Type': 'application/json',
-    });
-    const httpOptions = {
-      headers: headers_object,
-    };
+  AddSponzor(id: number) {
+    return this.http.put<RequestResponse<Sponzor, ShopErrorMsg>>(
+      environment.api + `/my-team/AddSponzor:${id}`,
+      {
+        Headers: undefined,
+      }
+    );
+  }
 
-    return this.http.get<player>(environment.api + `/my-team/AddPlayer:${NewOneID}`,httpOptions);
+  RemoveSponzor() {
+    return this.http.put<RequestResponse<Sponzor, ShopErrorMsg>>(
+      environment.api + `/my-team/RemoveSponzor`,
+      {
+        Headers: undefined,
+      }
+    );
+  }
+
+  CreateTeam(Team: TeamSablon) {
+    return this.http.post<TeamSablon>(
+      environment.api + `/my-team/CreateTeam`,
+      Team
+    );
+  }
+
+  EditTeam() {
+    //  return this.http.pust<MyTeam>(environment.api )
+  }
+
+  DeleteTeam() {
+    //  return this.http.delete<MyTeam>(environment.api )
+  }
 }
-
-
-AddSponzor(token:string,id:number) 
-  {
-    var headers_object = new HttpHeaders({
-      'Authorization': "Bearer " + token,
-      'Content-Type': 'application/json',
-    });
-    const httpOptions = {
-      headers: headers_object,
-    };
-
-    return this.http.get<Sponzor>(environment.api + `/my-team/AddSponzor:${id}`,httpOptions);
-  }
-
-
-  RemoveSponzor(token:string)
-  {
-    var headers_object = new HttpHeaders({
-      'Authorization': "Bearer " + token,
-      'Content-Type': 'application/json',
-    });
-    const httpOptions = {
-      headers: headers_object,
-    };
-    return this.http.get<boolean>(environment.api + `/my-team/RemoveSponzor`,httpOptions);
-  }
-
-}
-

@@ -3,4 +3,5 @@ export enum ComponentEnum {
   Simulacija = 'SIMULACIJA',
   MyTeam = 'MYTEAM',
   Shop = 'SHOP',
+  Panel = 'PANEL',
 }

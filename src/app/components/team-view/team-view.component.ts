@@ -16,6 +16,13 @@ import * as OtherTeamSelect from 'src/app/store/Otherteam.selector';
 import { ComponentEnum } from 'src/app/Enums/ComponentEnum';
 import { ShopMode } from 'src/app/Enums/ShopMode';
 import * as UserActions from 'src/app/store/user.action';
+import * as ShopAction from 'src/app/store/shop.action';
+import * as ShopSelect from 'src/app/store/shop.selector';
+import { MatDialog } from '@angular/material/dialog';
+import { OpenDialog } from '../dialog/dialog.component';
+import { ShopErrorMsg } from 'src/app/Enums/ShopErrorMsg';
+import { ComponentType } from '@angular/cdk/portal';
+import { leadingComment } from '@angular/compiler';
 
 @Component({
   selector: 'app-team-view',
@@ -30,6 +37,8 @@ export class TeamViewComponent implements OnInit {
   $UsersMoney: Observable<number>;
   $SponzorObs: Observable<Sponzor>;
   $ShopObs: Observable<ShopMode>;
+  $ShopErrorMsgObs: Observable<ShopErrorMsg>;
+  $PlayerCountObs: Observable<number>;
 
   compType: ComponentEnum;
   Shop_mode: ShopMode;
@@ -37,22 +46,31 @@ export class TeamViewComponent implements OnInit {
   MyTeamMoney: number;
   SponzorMyTeam: Sponzor;
   SponzorArray: Sponzor[];
+  ShopErrorMsg: ShopErrorMsg;
+  PlayerCount: number;
 
   constructor(
     private store: Store<AppState>,
     private cookieservice: CookieService,
-    private SponzorService: SponzorService
+    private SponzorService: SponzorService,
+    private matDialog: MatDialog
   ) {
     this.compType = ComponentEnum.none;
     this.Username = '';
     this.TeamNames = [];
     this.MyTeamMoney = 0;
     this.SponzorArray = [];
+    this.PlayerCount = -1;
     this.Shop_mode = ShopMode.Igraci;
-    this.$ShopObs = store.select(UserSelectors.SelectShopState);
+    this.ShopErrorMsg = ShopErrorMsg.default;
+    this.$ShopErrorMsgObs = store.select(ShopSelect.SelectErrorMsg);
+    this.$ShopObs = store.select(ShopSelect.SelectShopState);
     this.$UsersMoney = store.select(UserSelectors.selectUsersMoney);
     this.$ComponentType = store.select(UserSelectors.SelectComponent);
     this.$SponzorObs = this.store.select(MyTeamSelector.selectSponzor);
+    this.$PlayerCountObs = this.store.select(
+      MyTeamSelector.selectNumberOfPlayers
+    );
     this.$ActiveTeam = this.store.select(
       OtherTeamSelect.selectCurrentOtherTeams
     );
@@ -69,28 +87,49 @@ export class TeamViewComponent implements OnInit {
     this.InitilizeTeamNames();
     this.$ActiveTeam.subscribe();
     this.$ComponentType.subscribe((type) => {
-      if (this.compType != type) {
-        this.compType = type;
-        if (type == ComponentEnum.Shop) {
-          this.$ActiveTeam = this.store.select(
-            OtherTeamSelect.selectCurrentOtherTeams
-          );
-          this.store.dispatch(
-            OtherTeamAction.GetAllPlayers({ name: TeamNamesEnum.Astralis })
-          );
-          this.store.select(OtherTeamSelect.selectName).subscribe();
-        } else if (this.compType == ComponentEnum.MyTeam) {
-          this.ModeChange(ShopMode.Igraci);
-          this.$ActiveTeam = this.store.select(selectMyTeam);
-          this.$SponzorObs.subscribe((sponzor) => {
-            if (sponzor != null) this.SponzorMyTeam = sponzor;
-          });
-        }
-      }
+      if (type) this.LayoutSetup(type);
     });
 
     this.$UsersMoney.subscribe((money) => (this.MyTeamMoney = money));
     this.$ShopObs.subscribe((State) => (this.Shop_mode = State));
+    this.$ShopErrorMsgObs.subscribe((ErrMsg) => {
+      this.ShopErrorMsg = ErrMsg;
+      if (this.ShopErrorMsg != ShopErrorMsg.default)
+        this.ShowErrorMsg(this.ShopErrorMsg);
+    });
+
+    this.$PlayerCountObs.subscribe((NumOfPly) => {
+      if (this.PlayerCount != -1)
+        OpenDialog('(' + this.PlayerCount + '/5)', this.matDialog);
+      this.PlayerCount = NumOfPly;
+    });
+  }
+
+  LayoutSetup(type: ComponentEnum): void {
+    if (this.compType != type) {
+      this.compType = type;
+      if (type == ComponentEnum.Shop) {
+        this.$ActiveTeam = this.store.select(
+          OtherTeamSelect.selectCurrentOtherTeams
+        );
+        this.store.dispatch(
+          OtherTeamAction.GetAllPlayers({ name: TeamNamesEnum.Astralis })
+        );
+      } else if (this.compType == ComponentEnum.MyTeam) {
+        this.ModeChange(ShopMode.Igraci);
+        this.$ActiveTeam = this.store.select(selectMyTeam);
+        this.$SponzorObs.subscribe((sponzor) => {
+          if (
+            sponzor != null &&
+            this.SponzorMyTeam != null &&
+            this.compType == 'SHOP'
+          ) {
+            OpenDialog('Vas zahtev je prihvacen !', this.matDialog);
+          }
+          this.SponzorMyTeam = sponzor;
+        });
+      }
+    }
   }
 
   InitilizeTeamNames(): void {
@@ -122,37 +161,23 @@ export class TeamViewComponent implements OnInit {
         token: this.cookieservice.get('token'),
       })
     );
-    this.MyTeamMoney = +this.MyTeamMoney + +price;
   }
 
-  BuyPlayer(nick: string, id: number, price: number): void {
-    var Num = 0;
-    this.store
-      .select(MyTeamSelector.selectNumberOfPlayers)
-      .subscribe((data) => (Num = data));
-
-    if (Num <= 4) {
-      if (+price <= +this.MyTeamMoney) {
-        this.store.dispatch(
-          MyTeamActions.BuyPlayer({
-            ID: id,
-            token: this.cookieservice.get('token'),
-          })
-        );
-        this.store
-          .select(MyTeamSelector.selectNumberOfPlayers)
-          .subscribe((data) => (Num = data));
-        Num++;
-        alert('(' + Num + '/5)');
-      } else alert('Nemate dovljno novca za kupovinu !');
-    } else alert('Vas tim je pun (5/5)');
+  BuyPlayer(id: number): void {
+    this.store.dispatch(
+      MyTeamActions.BuyPlayer({
+        ID: id,
+        token: this.cookieservice.get('token'),
+        NumOfPlayers: this.PlayerCount,
+      })
+    );
   }
 
   ModeChange(mode: string): void {
     if (mode == ShopMode.Igraci)
-      this.store.dispatch(UserActions.SetShopMode({ Mode: ShopMode.Igraci }));
+      this.store.dispatch(ShopAction.SetShopMode({ Mode: ShopMode.Igraci }));
     else if (mode == ShopMode.Sponzori)
-      this.store.dispatch(UserActions.SetShopMode({ Mode: ShopMode.Sponzori }));
+      this.store.dispatch(ShopAction.SetShopMode({ Mode: ShopMode.Sponzori }));
   }
 
   async GetSponzori() {
@@ -162,11 +187,10 @@ export class TeamViewComponent implements OnInit {
   }
 
   Apliciraj(Money: number, id: number) {
+    //REWORK
     let PureChance = 0,
       ExitResult = false;
 
-    if (this.SponzorMyTeam.id != -1)
-      return alert('Vi vec imate aktivno sponzorstvo !');
     PureChance = Math.floor(Math.random() * (100 - 1 + 1)) + 1;
 
     switch (parseInt(Money + '')) {
@@ -187,7 +211,6 @@ export class TeamViewComponent implements OnInit {
     }
 
     if (ExitResult == true) {
-      alert('Vas zahtev je prihvacen !');
       this.MyTeamMoney = +this.MyTeamMoney + +Money;
       this.store.dispatch(
         MyTeamActions.AddSponzor({
@@ -195,14 +218,47 @@ export class TeamViewComponent implements OnInit {
           token: this.cookieservice.get('token'),
         })
       );
-    } else alert('Vas zahtev je odbijen !');
+    } else OpenDialog('Vas zahtev je odbijen !', this.matDialog);
   }
 
-  PrekiniSaradanju(money: number) {
+  PrekiniSaradanju(money: number): void {
+    //REWORK
     if (money <= this.MyTeamMoney) {
       this.store.dispatch(
         MyTeamActions.RemoveSponzor({ token: this.cookieservice.get('token') })
       );
-    } else alert('Pre prekida saradnje morate vratiti novac sponzoru !!!');
+    } else
+      OpenDialog(
+        'Pre prekida saradnje morate vratiti novac sponzoru !!',
+        this.matDialog
+      );
+  }
+
+  ShowErrorMsg(ErrMsg: ShopErrorMsg): void {
+    let Message: string = '';
+    switch (ErrMsg) {
+      case ShopErrorMsg.ActiveSponzorDealError:
+        Message = 'Vi vec imate aktivno sponzorstvo !';
+        break;
+      case ShopErrorMsg.BreakingSponzorDealError:
+        Message = 'Pre prekida saradnje <br /> morate vratiti novac sponzoru !';
+        break;
+      case ShopErrorMsg.FullTeamError:
+        Message = 'Kapaciteti vaseg tima su popunjeni!';
+        break;
+      case ShopErrorMsg.NoEnoughMoneyError:
+        Message = 'Nemate dovoljno novca za datu transakciju !';
+        break;
+      case ShopErrorMsg.PlayerAlreadyInTeamError:
+        Message = 'Izabrani igrac je vec u vasem timu !';
+        break;
+      case ShopErrorMsg.none:
+        Message = 'Uspesna transakcija !';
+        break;
+    }
+    OpenDialog(Message, this.matDialog);
+    this.store.dispatch(
+      ShopAction.SetErrorMsg({ ErrorMSG: ShopErrorMsg.default })
+    );
   }
 }

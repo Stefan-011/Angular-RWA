@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { ComponentEnum } from '../Enums/ComponentEnum';
+import { MenuSize } from '../Enums/MenuSize';
 import { ShopMode } from '../Enums/ShopMode';
 import { user } from '../models/user';
 
@@ -38,7 +39,7 @@ export const CreateUser = createAction(
 );
 export const CreateUserSuccess = createAction('CreateUserSuccess');
 
-export const SetShopMode = createAction(
-  'SetShopMode',
-  props<{ Mode: ShopMode }>()
+export const SetMenuSize = createAction(
+  'SetMenuSize',
+  props<{ Size: MenuSize }>()
 );

@@ -25,7 +25,12 @@ export const SelectComponent = createSelector(
   (user) => user.component
 );
 
-export const SelectShopState = createSelector(
+export const SelectUserRole = createSelector(
   selectCurrentUser,
-  (user) => user.shop_state
+  (user) => user.CurrentUser?.role
+);
+
+export const SelectMenuSize = createSelector(
+  selectCurrentUser,
+  (user) => user.MenuSize
 );

@@ -4,16 +4,27 @@ import { Sponzor } from '../models/Sponzor';
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SponzorService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  GetAll()
-  {
+  GetAll() {
     return this.http.get<Sponzor[]>(environment.api + `/sponzor/GetAll`);
   }
+
+  CreateSponzor(Sponzor: Sponzor) {
+    return this.http.post<Sponzor>(
+      environment.api + `/sponzor/CreateSponzor`,
+      Sponzor
+    );
+  }
+
+  EditSponzor() {
+    //  return this.http.pust<Sponzor>(environment.api )
+  }
+
+  DeleteSponzor() {
+    //  return this.http.delete<Sponzor>(environment.api )
+  }
 }
-
-

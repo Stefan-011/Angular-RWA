@@ -9,7 +9,7 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { ErrorMessage } from 'src/app/Enums/ErrorMessage';
 import { OperationResult } from 'src/app/Enums/OperationResult';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from '../dialog/dialog.component';
+import { DialogComponent, OpenDialog } from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-login',
@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
       .pipe(takeUntil(this.$Unsubscribe))
       .subscribe((Validity) => {
         if (Validity == OperationResult.Fail)
-          this.OpenDialog('Greska pri prijavljivanju !');
+          OpenDialog('Greska pri prijavljivanju !', this.matDialog);
         if (Validity != OperationResult.none)
           this.store.dispatch(LoginActions.RestartLogin());
       });
@@ -70,9 +70,9 @@ export class LoginComponent implements OnInit {
       .pipe(takeUntil(this.$Unsubscribe))
       .subscribe((Validity) => {
         if (Validity == OperationResult.Fail)
-          this.OpenDialog('Greska pri registraciji !');
+          OpenDialog('Greska pri registraciji !', this.matDialog);
         else if (Validity == OperationResult.Success) {
-          this.OpenDialog('Uspesna registracija !');
+          OpenDialog('Uspesna registracija !', this.matDialog);
           this.SwitchMode();
         }
         if (Validity != OperationResult.none)
@@ -102,14 +102,6 @@ export class LoginComponent implements OnInit {
 
   CheckErrorMessage(): ErrorMessage {
     return this.ErrorMsg;
-  }
-
-  OpenDialog(msg: string): void {
-    this.matDialog
-      .open(DialogComponent, {
-        data: msg,
-      })
-      .updatePosition({ top: '10%' });
   }
 
   login(email: string, password: string): void {

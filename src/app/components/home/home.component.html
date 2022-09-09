@@ -29,7 +29,7 @@
     />
     <!-- Core theme CSS (includes Bootstrap)-->
   </head>
-  <body id="page-top">
+  <body id="page-top" style="background-color: white">
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg hdr-ftr" id="mainNav">
       <div class="container">
@@ -52,14 +52,18 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="role == 'user'">
               <a class="nav-link" (click)="switchR('SIMULACIJA')">Simuliraj</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="role == 'user'">
               <a class="nav-link" (click)="switchR('MYTEAM')">MyTeam</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="role == 'user'">
               <a class="nav-link" (click)="switchR('SHOP')">shop</a>
+            </li>
+
+            <li class="nav-item" *ngIf="role == 'admin'">
+              <a class="nav-link" (click)="switchR('PANEL')">Panel</a>
             </li>
             <li *ngIf="LogState" class="nav-item">
               <a class="nav-link">korisnik: {{ $username | async }}</a>
@@ -70,17 +74,25 @@
           </ul>
         </div>
       </div>
-      <div *ngIf="MenuState == true" class="navbar-collapse" style="z-index: 6">
+      <div
+        *ngIf="MenuState == 'MOBILE'"
+        class="navbar-collapse"
+        style="z-index: 6"
+      >
         <!---->
         <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
-          <li class="nav-item">
+          <li class="nav-item" *ngIf="role == 'user'">
             <a class="nav-link" (click)="switchR('SIMULACIJA')">Simuliraj</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" *ngIf="role == 'user'">
             <a class="nav-link" (click)="switchR('MYTEAM')">MyTeam</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" *ngIf="role == 'user'">
             <a class="nav-link" (click)="switchR('SHOP')">shop</a>
+          </li>
+
+          <li class="nav-item" *ngIf="role == 'admin'">
+            <a class="nav-link" (click)="switchR('PANEL')">Panel</a>
           </li>
           <li *ngIf="LogState" class="nav-item">
             <a class="nav-link">korisnik: {{ $username | async }}</a>
@@ -107,17 +119,18 @@
         </div>
       </div>
     </header>
-    <div class="spacer"></div>
+    <div class="spacer" style="background-color: white"></div>
     <div class="content-region">
       <app-polje *ngIf="Ruta == 'SIMULACIJA'"></app-polje>
       <app-team-view
         *ngIf="Ruta == 'MYTEAM' || Ruta == 'SHOP'"
         [Username]="Username"
       ></app-team-view>
+      <app-admin-panel *ngIf="Ruta == 'PANEL'"></app-admin-panel>
     </div>
 
     <!-- Team-->
-    <section class="page-section bg-light" id="dev">
+    <section class="page-section dev" id="dev">
       <div class="container">
         <div class="text-center">
           <h2 class="section-heading text-uppercase">Developer</h2>
