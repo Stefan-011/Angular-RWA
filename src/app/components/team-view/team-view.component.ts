@@ -23,6 +23,7 @@ import { OpenDialog } from '../dialog/dialog.component';
 import { ShopErrorMsg } from 'src/app/Enums/ShopErrorMsg';
 import { ComponentType } from '@angular/cdk/portal';
 import { leadingComment } from '@angular/compiler';
+import { TeamSablon } from 'src/app/models/TeamSablon';
 
 @Component({
   selector: 'app-team-view',
@@ -39,6 +40,7 @@ export class TeamViewComponent implements OnInit {
   $ShopObs: Observable<ShopMode>;
   $ShopErrorMsgObs: Observable<ShopErrorMsg>;
   $PlayerCountObs: Observable<number>;
+  $TeamListObs: Observable<TeamSablon[]>;
 
   compType: ComponentEnum;
   Shop_mode: ShopMode;
@@ -48,6 +50,7 @@ export class TeamViewComponent implements OnInit {
   SponzorArray: Sponzor[];
   ShopErrorMsg: ShopErrorMsg;
   PlayerCount: number;
+  TeamArray: TeamSablon[];
 
   constructor(
     private store: Store<AppState>,
@@ -61,8 +64,10 @@ export class TeamViewComponent implements OnInit {
     this.MyTeamMoney = 0;
     this.SponzorArray = [];
     this.PlayerCount = -1;
+    this.TeamArray = [];
     this.Shop_mode = ShopMode.Igraci;
     this.ShopErrorMsg = ShopErrorMsg.default;
+    this.$TeamListObs = store.select(OtherTeamSelect.SelectTeamList);
     this.$ShopErrorMsgObs = store.select(ShopSelect.SelectErrorMsg);
     this.$ShopObs = store.select(ShopSelect.SelectShopState);
     this.$UsersMoney = store.select(UserSelectors.selectUsersMoney);
@@ -85,9 +90,13 @@ export class TeamViewComponent implements OnInit {
   ngOnInit(): void {
     this.GetSponzori();
     this.InitilizeTeamNames();
-    this.$ActiveTeam.subscribe();
     this.$ComponentType.subscribe((type) => {
       if (type) this.LayoutSetup(type);
+    });
+
+    this.$TeamListObs.subscribe((NewTeams) => {
+      this.TeamArray = NewTeams;
+      if (this.TeamArray != null) this.InitilizeTeamNames();
     });
 
     this.$UsersMoney.subscribe((money) => (this.MyTeamMoney = money));
@@ -106,6 +115,7 @@ export class TeamViewComponent implements OnInit {
   }
 
   LayoutSetup(type: ComponentEnum): void {
+    this.store.dispatch(UserActions.GetLoggedUser());
     if (this.compType != type) {
       this.compType = type;
       if (type == ComponentEnum.Shop) {
@@ -116,6 +126,7 @@ export class TeamViewComponent implements OnInit {
           OtherTeamAction.GetAllPlayers({ name: TeamNamesEnum.Astralis })
         );
       } else if (this.compType == ComponentEnum.MyTeam) {
+        this.store.dispatch(MyTeamActions.GetMyTeam());
         this.ModeChange(ShopMode.Igraci);
         this.$ActiveTeam = this.store.select(selectMyTeam);
         this.$SponzorObs.subscribe((sponzor) => {
@@ -134,15 +145,16 @@ export class TeamViewComponent implements OnInit {
 
   InitilizeTeamNames(): void {
     let i = 0;
-    const values = Object.values(TeamNamesEnum);
-    for (let obj in TeamNamesEnum) {
-      this.TeamNames[i] = values[i];
+    this.store.dispatch(OtherTeamAction.GetTeamList());
+    this.TeamArray.forEach((element) => {
+      this.TeamNames[i] = element.name;
       i++;
-    }
+    });
   }
 
   ChangeOtherTeam(): void {
     let name = document.getElementById('Team-cmbox') as HTMLSelectElement;
+    alert(name.value);
     this.store.dispatch(OtherTeamAction.GetAllPlayers({ name: name.value }));
     this.$ActiveTeam = this.store.select(
       OtherTeamSelect.selectCurrentOtherTeams

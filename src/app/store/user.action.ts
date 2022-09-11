@@ -13,13 +13,10 @@ export const loginSuccess = createAction(
   props<{ data: user }>()
 );
 
-export const GetLoggedUser = createAction(
-  'GetLoggedIn',
-  props<{ token: string }>()
-);
+export const GetLoggedUser = createAction('GetLoggedIn');
 export const GetLoggedUserSuccess = createAction(
   'GetLoggedInSuccess',
-  props<{ data: user }>()
+  props<{ user: user }>()
 );
 
 export const SetComponent = createAction(

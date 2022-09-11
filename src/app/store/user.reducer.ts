@@ -22,9 +22,9 @@ export const initialState: UserState = {
 
 export const userReducer = createReducer(
   initialState,
-  on(UserActions.GetLoggedUserSuccess, (state, { data }) => ({
+  on(UserActions.GetLoggedUserSuccess, (state, { user }) => ({
     ...state,
-    CurrentUser: data,
+    CurrentUser: user,
     loggedIn: true,
   })),
 

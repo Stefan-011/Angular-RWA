@@ -4,6 +4,7 @@ import { UserState } from './store/user.reducer';
 import { LoginState } from './store/login.reducer';
 import { RezultatState } from './store/rezultat.reducer';
 import { ShopState } from './store/shop.reducer';
+import { PanelState } from './store/panel.reducer';
 
 export interface AppState {
   user: UserState;
@@ -12,4 +13,5 @@ export interface AppState {
   Login: LoginState;
   Rezultat: RezultatState;
   Shop: ShopState;
+  Panel: PanelState;
 }

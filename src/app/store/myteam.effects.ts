@@ -45,7 +45,7 @@ export class MyTeamEffects {
       mergeMap(({ ID, token }) =>
         this.myteamservices.SellMyPlayer(ID).pipe(
           map(() => {
-            this.store.dispatch(UserActions.GetLoggedUser({ token: token }));
+            this.store.dispatch(UserActions.GetLoggedUser());
             return MyTeamActions.SellPlayerSuccess({ ID: ID });
           }),
           catchError(() => of({ type: 'load error' }))
@@ -60,9 +60,8 @@ export class MyTeamEffects {
       mergeMap(({ ID, token, NumOfPlayers }) =>
         this.myteamservices.BuyMyPlayer(ID).pipe(
           map((Response: RequestResponse<player, ShopErrorMsg>) => {
-            console.log(Response.Server_response);
             if (Response.Package != undefined) {
-              this.store.dispatch(UserActions.GetLoggedUser({ token: token }));
+              this.store.dispatch(UserActions.GetLoggedUser());
               this.store.dispatch(
                 MyTeamActions.SetNumberOfPlayers({
                   PlayerCount: NumOfPlayers++,
@@ -90,7 +89,7 @@ export class MyTeamEffects {
       mergeMap(({ id, token }) =>
         this.myteamservices.AddSponzor(id).pipe(
           map((Response: RequestResponse<Sponzor, ShopErrorMsg>) => {
-            this.store.dispatch(UserActions.GetLoggedUser({ token: token }));
+            this.store.dispatch(UserActions.GetLoggedUser());
             if (Response.Server_response == ShopErrorMsg.none) {
               return MyTeamActions.AddSponzorSuccess({
                 sponzor: Response.Package,
@@ -114,7 +113,7 @@ export class MyTeamEffects {
       mergeMap(({ token }) =>
         this.myteamservices.RemoveSponzor().pipe(
           map((Response: RequestResponse<Sponzor, ShopErrorMsg>) => {
-            this.store.dispatch(UserActions.GetLoggedUser({ token: token }));
+            this.store.dispatch(UserActions.GetLoggedUser());
             if (Response.Server_response == ShopErrorMsg.none) {
               var Sponzor: Sponzor = {
                 id: -1,

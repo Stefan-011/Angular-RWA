@@ -66,10 +66,10 @@ export class UserEffects {
   GetLoggedInUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.GetLoggedUser),
-      mergeMap(({ token }) =>
+      mergeMap(() =>
         this.userservice.GetUserByToken().pipe(
-          map((data: user) => {
-            return UserActions.GetLoggedUserSuccess({ data });
+          map((FoundUser: user) => {
+            return UserActions.GetLoggedUserSuccess({ user: FoundUser });
           }),
           catchError(() => {
             localStorage.clear();

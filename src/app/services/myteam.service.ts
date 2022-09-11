@@ -9,6 +9,7 @@ import { Store } from '@ngrx/store';
 import { RequestResponse } from '../models/RequestResponse';
 import { ShopErrorMsg } from '../Enums/ShopErrorMsg';
 import { TeamSablon } from '../models/TeamSablon';
+import { PanelErrorMessage } from '../Enums/PanelErrorMessage';
 
 @Injectable({
   providedIn: 'root',
@@ -53,15 +54,25 @@ export class MyteamService {
     );
   }
 
+  GetAllTeams() {
+    return this.http.get<RequestResponse<TeamSablon[], PanelErrorMessage>>(
+      environment.api + `/my-team/GetCreatedTeams`
+    );
+  }
+
   CreateTeam(Team: TeamSablon) {
-    return this.http.post<TeamSablon>(
+    return this.http.post<RequestResponse<any, PanelErrorMessage>>(
       environment.api + `/my-team/CreateTeam`,
       Team
     );
   }
 
-  EditTeam() {
-    //  return this.http.pust<MyTeam>(environment.api )
+  EditTeam(Team: TeamSablon) {
+    alert('TEST');
+    return this.http.put<RequestResponse<any, PanelErrorMessage>>(
+      environment.api + `/my-team/EditTeam`,
+      Team
+    );
   }
 
   DeleteTeam() {

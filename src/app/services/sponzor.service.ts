@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Sponzor } from '../models/Sponzor';
 import { Injectable } from '@angular/core';
+import { RequestResponse } from '../models/RequestResponse';
+import { PanelErrorMessage } from '../Enums/PanelErrorMessage';
 
 @Injectable({
   providedIn: 'root',
@@ -14,17 +16,22 @@ export class SponzorService {
   }
 
   CreateSponzor(Sponzor: Sponzor) {
-    return this.http.post<Sponzor>(
+    return this.http.post<RequestResponse<any, PanelErrorMessage>>(
       environment.api + `/sponzor/CreateSponzor`,
       Sponzor
     );
   }
 
-  EditSponzor() {
-    //  return this.http.pust<Sponzor>(environment.api )
+  EditSponzor(Sponzor: Sponzor) {
+    return this.http.put<RequestResponse<any, PanelErrorMessage>>(
+      environment.api + `/sponzor/EditSponzor`,
+      Sponzor
+    );
   }
 
-  DeleteSponzor() {
-    //  return this.http.delete<Sponzor>(environment.api )
+  DeleteSponzor(SponzorID: number) {
+    return this.http.delete<RequestResponse<any, PanelErrorMessage>>(
+      environment.api + `/sponzor/DeleteSponzor/:${SponzorID}`
+    );
   }
 }

@@ -32,9 +32,7 @@ export class AppComponent {
     ) {
       this.router.navigate(['home']);
       this.store.dispatch(GetMyTeam());
-      this.store.dispatch(
-        UserActions.GetLoggedUser({ token: this.cookieservice.get('token') })
-      );
+      this.store.dispatch(UserActions.GetLoggedUser());
     } else {
       localStorage.clear();
       this.cookieservice.deleteAll();

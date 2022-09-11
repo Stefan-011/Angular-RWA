@@ -2,145 +2,445 @@
   <div class="ctrl-pnl h4 text-center">
     <div class="mb-3 font text-white">
       Igrac based<br />
-      <button class="btn-success" (click)="ChangeMode(0)">Dodaj igraca</button
+      <button class="btn-success" (click)="ChangeMode('IGRAC', 'CREATE')">
+        Dodaj igraca</button
       ><br />
-      <button class="btn-warning">Izmeni igraca</button>
+      <button class="btn-warning" (click)="ChangeMode('IGRAC', 'EDIT')">
+        Izmeni igraca
+      </button>
     </div>
 
     <div class="mb-3 text-white">
       Team based<br />
-      <button class="btn-success" (click)="ChangeMode(1)">Dodaj tim</button
+      <button class="btn-success" (click)="ChangeMode('TIM', 'CREATE')">
+        Dodaj tim</button
       ><br />
-      <button class="btn-warning">Izmeni tim</button>
+      <button class="btn-warning" (click)="ChangeMode('TIM', 'EDIT')">
+        Izmeni tim
+      </button>
     </div>
     <div class="text-white">
       Sponzor based<br />
-      <button class="btn-success" (click)="ChangeMode(2)">Dodaj sponzora</button
+      <button class="btn-success" (click)="ChangeMode('SPONZOR', 'CREATE')">
+        Dodaj sponzora</button
       ><br />
-      <button class="btn-warning">Izmeni sponzora</button>
+      <button class="btn-warning" (click)="ChangeMode('SPONZOR', 'EDIT')">
+        Izmeni sponzora
+      </button>
     </div>
   </div>
 
-  <div class="wrk-pnl d-flex justify-content-center">
-    <div
-      *ngIf="PanelMode == 'IGRAC'"
-      class="mx-2 mt-2 player-profile-CRUD text-center"
+  <div class="wrk-pnl text-center">
+    <select
+      *ngIf="PanelMode == 'SPONZOR' && CRUDState == 'EDIT'"
+      class="text-center"
+      aria-label="Default"
+      id="SponzorSelect"
+      (onload)="SetSponzor()"
+      (change)="SetSponzor()"
     >
-      <label class="pt-1" style="color: white"
-        ><input type="text" placeholder="Nadimak" [(ngModel)]="Player.nick" />
-        <br /><br /><input
-          type="text"
-          placeholder="Ime"
-          [(ngModel)]="Player.name" />
+      <option value="" hidden>Izaberite sponzora</option>
+      <option *ngFor="let obj of SponzorList" value="{{ obj }}">
+        {{ obj.name }}
+      </option>
+    </select>
+
+    <select
+      *ngIf="
+        (PanelMode == 'TIM' || PanelMode == 'IGRAC') && CRUDState == 'EDIT'
+      "
+      class="text-center"
+      aria-label="Default"
+      id="TeamSelect"
+      (onload)="SetTeam()"
+      (change)="SetTeam()"
+    >
+      <option value="" hidden>Izaberite tim</option>
+      <option *ngFor="let obj of TeamList" value="{{ obj }}">
+        {{ obj.name }}
+      </option>
+    </select>
+
+    <select
+      #Team
+      class="text-center"
+      aria-label="Default"
+      id="PlayerSelect"
+      (onload)="SetPlayer()"
+      (change)="SetPlayer()"
+      *ngIf="PanelMode == 'IGRAC' && CRUDState == 'EDIT'"
+    >
+      <option value="" hidden>Izaberite igraca</option>
+      <option *ngFor="let obj of PlayerList" value="{{ obj }}">
+        {{ obj.name }}
+      </option>
+    </select>
+    <!-- CREATE DIV -->
+    <div
+      id="CREATE-DIV"
+      class="d-flex justify-content-center"
+      *ngIf="CRUDState == 'CREATE'"
+    >
+      <div
+        *ngIf="PanelMode == 'IGRAC'"
+        class="mx-2 mt-2 player-profile-CRUD text-center"
+      >
+        <label class="pt-1" style="color: white"
+          ><input type="text" placeholder="Nadimak" #Nick /> <br /><br /><input
+            type="text"
+            placeholder="Ime"
+            #Name />
+          <input type="text" placeholder="Prezime" #Lname /></label
+        ><br /><img
+          class="rounded-circle p-1"
+          src="{{ Player.img }}"
+          alt="..."
+        />
+        <br />
+        <input type="text" placeholder="Slika (URL)" #Img />
+        <div
+          class="mt-4 mb-4 ms-0 d-flex justify-content-center stats-div text-center"
+        >
+          <div style="float: right; width: 50%" class="flex-column">
+            <div class="text-center pt-3 stat-div">
+              K/D:
+              <input type="number" placeholder="K/D" max="2" min="0" #KD />
+            </div>
+            <div class="text-center pt-3 stat-div">
+              Uticaj:
+              <input
+                type="number"
+                placeholder="Impact"
+                max="2"
+                min="0"
+                #Impact
+              />
+            </div>
+          </div>
+
+          <div style="float: left; width: 50%">
+            <div class="text-center pt-3 stat-div">
+              Tim:
+              <select
+                #Team
+                class="text-center"
+                aria-label="Default"
+                id="TeamSelect"
+                (onload)="SetTeam()"
+                (change)="SetTeam()"
+              >
+                <option value="" hidden>Izaberite team</option>
+                <option *ngFor="let obj of TeamList" value="{{ obj }}">
+                  {{ obj.name }}
+                </option>
+              </select>
+            </div>
+            <div class="text-center pt-3 stat-div">
+              Rejting:
+              <input
+                type="number"
+                placeholder="Rejting"
+                max="2"
+                min="0"
+                #Rating
+              />
+            </div>
+          </div>
+        </div>
+        <input
+          type="number"
+          placeholder="Cena (€)"
+          max="10000"
+          min="0"
+          #Money
+        />
+        <br /><button
+          class="btn-success"
+          (click)="
+            TakePlayerInfo(
+              Nick.value,
+              Name.value,
+              Lname.value,
+              Img.value,
+              KD.value,
+              Impact.value,
+              Rating.value,
+              Money.value,
+              'CREATE'
+            )
+          "
+        >
+          dodaj
+        </button>
+      </div>
+
+      <!-- SPONZOR -->
+      <div
+        class="mx-2 mt-2 player-profile-CRUD text-center"
+        *ngIf="PanelMode == 'SPONZOR'"
+      >
+        <label class="pt-1" style="color: white"
+          ><input
+            type="text"
+            placeholder="Naziv"
+            value="{{ Sponzor.name }}"
+            type="text"
+            placeholder="Naziv"
+            #Name
+          />
+          <br /><br />
+        </label>
+        <br /><img
+          *ngIf="Sponzor.img != ''"
+          class="rounded-circle p-1"
+          src="{{ Sponzor.img }}"
+          alt="..."
+        />
+        <br />
         <input
           type="text"
-          placeholder="Prezime"
-          [(ngModel)]="Player.lname" /></label
-      ><br /><img
-        *ngIf="Player.img != ''"
-        class="rounded-circle p-1"
-        src="{{ Player.img }}"
-        alt="..."
-      />
-      <br />
-      <input type="text" placeholder="Slika (URL)" [(ngModel)]="Player.img" />
-      <div
-        class="mt-4 mb-4 ms-0 d-flex justify-content-center stats-div text-center"
-      >
-        <div style="float: right; width: 50%" class="flex-column">
-          <div class="text-center pt-3 stat-div">
-            K/D:
-            <input
-              type="number"
-              placeholder="K/D"
-              [(ngModel)]="Player.kd"
-              max="2"
-              min="0"
-            />
-          </div>
-          <div class="text-center pt-3 stat-div">
-            Uticaj:
-            <input
-              type="number"
-              placeholder="Impact"
-              [(ngModel)]="Player.impact"
-              max="2"
-              min="0"
-            />
-          </div>
-        </div>
-
-        <div style="float: left; width: 50%">
-          <div class="text-center pt-3 stat-div">
-            Tim:<input type="number" placeholder="TEST" />
-          </div>
-          <div class="text-center pt-3 stat-div">
-            Rejting:
-            <input
-              type="number"
-              placeholder="Rejting"
-              [(ngModel)]="Player.rating"
-              max="2"
-              min="0"
-            />
-          </div>
-        </div>
+          placeholder="Slika (URL)"
+          value="{{ Sponzor.img }}"
+          #Img
+        />
+        <br />
+        <br />
+        <input
+          type="number"
+          placeholder="Cena (€)"
+          value="{{ Sponzor.money }}"
+          max="10000"
+          min="0"
+          #Money
+        />
+        <br /><button
+          class="btn-success"
+          *ngIf="CRUDState == 'CREATE'"
+          (click)="
+            TakeSponzorInfo(Name.value, Img.value, Money.value, 'CREATE')
+          "
+        >
+          dodaj
+        </button>
       </div>
-      <input
-        type="number"
-        placeholder="Cena (€)"
-        [(ngModel)]="Player.price"
-        max="10000"
-        min="0"
-      />
-      <br /><button class="btn-success">dodaj</button>
-      <button class="btn-warning">Izmeni</button>
-      <button class="btn-danger">Izbrisi</button>
+
+      <!--Team-->
+      <div
+        *ngIf="PanelMode == 'TIM'"
+        class="mx-2 mt-2 player-profile-CRUD text-center"
+      >
+        <label class="pt-1" style="color: white"
+          ><input type="text" placeholder="Naziv" #TeamName /> <br /><br />
+        </label>
+        <br /><button
+          class="btn-success"
+          (click)="TakeTeamInfo(TeamName.value, 'CREATE')"
+        >
+          dodaj
+        </button>
+      </div>
     </div>
 
-    <!-- SPONZOR -->
+    <!-- EDIT DIV -->
     <div
-      class="mx-2 mt-2 player-profile-CRUD text-center"
-      *ngIf="PanelMode == 'SPONZOR'"
+      id="EDIT-DIV"
+      class="d-flex justify-content-center"
+      *ngIf="CRUDState == 'EDIT'"
     >
-      <label class="pt-1" style="color: white"
-        ><input type="text" placeholder="Naziv" [(ngModel)]="Sponzor.name" />
-        <br /><br />
-      </label>
-      <br /><img
-        *ngIf="Sponzor.img != ''"
-        class="rounded-circle p-1"
-        src="{{ Sponzor.img }}"
-        alt="..."
-      />
-      <br />
-      <input type="text" placeholder="Slika (URL)" [(ngModel)]="Sponzor.img" />
-      <br />
-      <br />
-      <input
-        type="number"
-        placeholder="Cena (€)"
-        [(ngModel)]="Sponzor.money"
-        max="10000"
-        min="0"
-      />
-      <br /><button class="btn-success" (click)="CreateNewObj()">dodaj</button>
-      <button class="btn-warning">Izmeni</button>
-      <button class="btn-danger">Izbrisi</button>
-    </div>
+      <div
+        *ngIf="PanelMode == 'IGRAC'"
+        class="mx-2 mt-2 player-profile-CRUD text-center"
+      >
+        <label class="pt-1" style="color: white"
+          ><input
+            type="text"
+            placeholder="Nadimak"
+            #Nick
+            value="{{ Player.nick }}" />
+          <br /><br /><input
+            type="text"
+            placeholder="Ime"
+            #Name
+            value="{{ Player.name }}" />
+          <input
+            type="text"
+            placeholder="Prezime"
+            #Lname
+            value="{{ Player.lname }}" /></label
+        ><br /><img
+          class="rounded-circle p-1"
+          src="{{ Player.img }}"
+          alt="..."
+        />
+        <br />
+        <input
+          type="text"
+          placeholder="Slika (URL)"
+          #Img
+          value="{{ Player.img }}"
+        />
+        <div
+          class="mt-4 mb-4 ms-0 d-flex justify-content-center stats-div text-center"
+        >
+          <div style="float: right; width: 50%" class="flex-column">
+            <div class="text-center pt-3 stat-div">
+              K/D:
+              <input
+                type="number"
+                placeholder="K/D"
+                max="2"
+                min="0"
+                #KD
+                value="{{ Player.kd }}"
+              />
+            </div>
+            <div class="text-center pt-3 stat-div">
+              Uticaj:
+              <input
+                type="number"
+                placeholder="Impact"
+                max="2"
+                min="0"
+                #Impact
+                value="{{ Player.impact }}"
+              />
+            </div>
+          </div>
 
-    <!--Team-->
-    <div
-      *ngIf="PanelMode == 'TIM'"
-      class="mx-2 mt-2 player-profile-CRUD text-center"
-    >
-      <label class="pt-1" style="color: white"
-        ><input type="text" placeholder="Naziv" [(ngModel)]="Team.name" />
-        <br /><br />
-      </label>
-      <br /><button class="btn-success" (click)="CreateNewObj()">dodaj</button>
-      <button class="btn-warning">Izmeni</button>
-      <button class="btn-danger">Izbrisi</button>
+          <div style="float: left; width: 50%">
+            <div class="text-center pt-3 stat-div">
+              Tim:
+              <select
+                class="text-center"
+                aria-label="Default"
+                id="TeamSelectEDIT"
+                (onload)="SetTeam()"
+                (change)="SetTeam()"
+              >
+                <option value="" hidden>Izaberite tim</option>
+                <option *ngFor="let obj of TeamList" value="{{ obj }}">
+                  {{ obj.name }}
+                </option>
+              </select>
+            </div>
+            <div class="text-center pt-3 stat-div">
+              Rejting:
+              <input
+                type="number"
+                placeholder="Rejting"
+                max="2"
+                min="0"
+                #Rating
+                value="{{ Player.rating }}"
+              />
+            </div>
+          </div>
+        </div>
+        <input
+          type="number"
+          placeholder="Cena (€)"
+          max="10000"
+          min="0"
+          #Money
+          value="{{ Player.price }}"
+        />
+        <br />
+        <button
+          class="btn-warning"
+          (click)="
+            TakePlayerInfo(
+              Nick.value,
+              Name.value,
+              Lname.value,
+              Img.value,
+              KD.value,
+              Impact.value,
+              Rating.value,
+              Money.value,
+              'EDIT'
+            )
+          "
+        >
+          Izmeni
+        </button>
+        <button class="btn-danger">Izbrisi</button>
+      </div>
+
+      <!-- SPONZOR -->
+      <div
+        class="mx-2 mt-2 player-profile-CRUD text-center"
+        *ngIf="PanelMode == 'SPONZOR'"
+      >
+        <label class="pt-1" style="color: white"
+          ><input
+            type="text"
+            placeholder="Naziv"
+            value="{{ Sponzor.name }}"
+            type="text"
+            placeholder="Naziv"
+            #Name
+          />
+
+          <br /><br />
+        </label>
+        <br /><img
+          *ngIf="Sponzor.img != ''"
+          class="rounded-circle p-1"
+          src="{{ Sponzor.img }}"
+          alt="..."
+        />
+        <br />
+        <input
+          type="text"
+          placeholder="Slika (URL)"
+          value="{{ Sponzor.img }}"
+          #Img
+        />
+        <br />
+        <br />
+        <input
+          type="number"
+          placeholder="Cena (€)"
+          value="{{ Sponzor.money }}"
+          max="10000"
+          min="0"
+          #Money
+        />
+        <br />
+        <button
+          class="btn-warning"
+          (click)="TakeSponzorInfo(Name.value, Img.value, Money.value, 'EDIT')"
+        >
+          Izmeni
+        </button>
+        <button class="btn-danger" (click)="DeleteOperation()">Izbrisi</button>
+      </div>
+
+      <!--Team-->
+      <div
+        *ngIf="PanelMode == 'TIM'"
+        class="mx-2 mt-2 player-profile-CRUD text-center"
+      >
+        <label class="pt-1" style="color: white"
+          ><input
+            type="text"
+            placeholder="Naziv"
+            #TeamName
+            value="{{ Team.name }}"
+          />
+          <br /><br />
+        </label>
+        <br />
+        <button
+          class="btn-warning"
+          (click)="TakeTeamInfo(TeamName.value, 'EDIT')"
+        >
+          Izmeni
+        </button>
+        <button class="btn-danger" (click)="TakeTeamInfo(TeamName.value, 'D')">
+          Izbrisi
+        </button>
+      </div>
     </div>
   </div>
 </div>

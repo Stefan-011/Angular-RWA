@@ -4,4 +4,5 @@ export enum PanelErrorMessage {
   TeamAlreadyExists = 'TAE',
   PlayerAlreadyExists = 'PAE',
   SponzorAlreadyExists = 'SAE',
+  PlayersNotFound = 'PNF',
 }

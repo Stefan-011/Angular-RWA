@@ -30,6 +30,8 @@ import { AdminPanelComponent } from './components/admin-panel/admin-panel.compon
 import { FormsModule } from '@angular/forms';
 import { AuthInterceptor } from './services/auth.interceptor';
 import { ShopReducer } from './store/shop.reducer';
+import { PanelReducer } from './store/panel.reducer';
+import { PanelEffects } from './store/panel.effect';
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,6 +55,7 @@ import { ShopReducer } from './store/shop.reducer';
       Login: LoginReducer,
       Rezultat: RezultatReducer,
       Shop: ShopReducer,
+      Panel: PanelReducer,
     }),
     EffectsModule.forRoot([
       OtherTeamEffects,
@@ -60,6 +63,7 @@ import { ShopReducer } from './store/shop.reducer';
       MyTeamEffects,
       LoginEffects,
       RezulatatEffects,
+      PanelEffects,
     ]),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
