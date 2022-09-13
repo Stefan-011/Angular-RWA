@@ -1,19 +1,18 @@
 import { createAction, props } from '@ngrx/store';
 import { ComponentEnum } from '../Enums/ComponentEnum';
 import { MenuSize } from '../Enums/MenuSize';
-import { ShopMode } from '../Enums/ShopMode';
 import { user } from '../models/user';
 
 export const loginUser = createAction(
   'loginUser',
   props<{ email: string; password: string }>()
 );
+
 export const loginSuccess = createAction(
   'loginSuccess',
-  props<{ data: user }>()
+  props<{ user: user }>()
 );
 
-export const GetLoggedUser = createAction('GetLoggedIn');
 export const GetLoggedUserSuccess = createAction(
   'GetLoggedInSuccess',
   props<{ user: user }>()
@@ -28,15 +27,18 @@ export const RegisterUser = createAction(
   'RegisterUser',
   props<{ username: string; password: string; email: string }>()
 );
-export const RegisterUserSuccess = createAction('RegisterUserSuccess');
 
 export const CreateUser = createAction(
   'CreateUser',
   props<{ username: string }>()
 );
-export const CreateUserSuccess = createAction('CreateUserSuccess');
 
 export const SetMenuSize = createAction(
   'SetMenuSize',
   props<{ Size: MenuSize }>()
 );
+
+export const GetLoggedUser = createAction('GetLoggedIn');
+export const CreateUserSuccess = createAction('CreateUserSuccess');
+export const RegisterUserSuccess = createAction('RegisterUserSuccess');
+export const RegisterUserFail = createAction('RegisterUserFail');

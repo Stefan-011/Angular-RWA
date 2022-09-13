@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as UserActions from '../../store/user.action';
 import * as LoginActions from '../../store/login.action';
 import * as LoginSelectors from '../../store/login.selector';
@@ -9,7 +9,7 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { ErrorMessage } from 'src/app/Enums/ErrorMessage';
 import { OperationResult } from 'src/app/Enums/OperationResult';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent, OpenDialog } from '../dialog/dialog.component';
+import { OpenDialog } from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-login',
@@ -21,19 +21,17 @@ export class LoginComponent implements OnInit {
   $ErrorMessageObs: Observable<ErrorMessage>;
   $LoginValidity: Observable<OperationResult>;
   $RegisterValidity: Observable<OperationResult>;
-  $Unsubscribe = new Subject<void>();
+  $Unsubscribe: Subject<void>;
 
   Mode: LoginMod;
   ErrorMsg: ErrorMessage;
-
   regexp = new RegExp(
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   );
   format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
 
-  /*---------------------------------------- | Zameni alertove sa dialog box-ovima | ----------------------------------*/
-  // ------------------------- | Dodaj subject unsubscribe metod  | ------------------------------------------- //
   constructor(public store: Store<AppState>, private matDialog: MatDialog) {
+    this.$Unsubscribe = new Subject<void>();
     this.Mode = LoginMod.Login;
     this.ErrorMsg = ErrorMessage.None;
     this.$LogModeObs = this.store.select(LoginSelectors.selectLoginMode);
@@ -85,6 +83,7 @@ export class LoginComponent implements OnInit {
     if (this.Mode == LoginMod.Login) {
       NewMode = LoginMod.Register;
     } else NewMode = LoginMod.Login;
+
     this.store.dispatch(LoginActions.changeMode({ Mod: NewMode }));
     this.store.dispatch(
       LoginActions.ChangeErrorMessage({ Error: ErrorMessage.None })
@@ -104,7 +103,7 @@ export class LoginComponent implements OnInit {
     return this.ErrorMsg;
   }
 
-  login(email: string, password: string): void {
+  Login(email: string, password: string): void {
     if (
       email.length == 0 ||
       password.length == 0 ||
@@ -117,7 +116,7 @@ export class LoginComponent implements OnInit {
       );
   }
 
-  register(
+  Register(
     username: string,
     email: string,
     password: string,

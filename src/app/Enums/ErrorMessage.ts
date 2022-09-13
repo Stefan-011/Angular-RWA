@@ -1,7 +1,7 @@
 export enum ErrorMessage {
-  None,
-  InvalidEmail,
-  InvalidData,
-  InvalidPassword,
-  LoginError,
+  None = 'NONE',
+  InvalidEmail = 'IE',
+  InvalidData = 'ID',
+  InvalidPassword = 'IP',
+  LoginError = 'LE',
 }

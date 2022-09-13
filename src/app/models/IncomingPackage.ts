@@ -1,7 +1,6 @@
-import { user } from "./user";
+import { user } from './user';
 
-export interface IncomingPackage
-{
-    data:user;
-    access_token:string;
+export interface IncomingPackage {
+  user_data: user;
+  access_token: string;
 }

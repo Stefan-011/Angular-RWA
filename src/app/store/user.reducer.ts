@@ -28,9 +28,9 @@ export const userReducer = createReducer(
     loggedIn: true,
   })),
 
-  on(UserActions.loginSuccess, (state, { data }) => ({
+  on(UserActions.loginSuccess, (state, { user }) => ({
     ...state,
-    CurrentUser: data,
+    CurrentUser: user,
     loggedIn: true,
   })),
 

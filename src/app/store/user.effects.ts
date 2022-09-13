@@ -28,29 +28,30 @@ export class UserEffects {
       ofType(UserActions.loginUser),
       mergeMap(({ email, password }) =>
         this.userservice.Login(email, password).pipe(
-          map((data1: IncomingPackage) => {
+          map((Package: IncomingPackage) => {
             this.store.dispatch(
               LoginActions.LoginIsValid({
                 Result: OperationResult.Success,
               })
             );
-            this.cookieService.delete('token');
-            this.cookieService.set('token', data1.access_token, {
+
+            this.cookieService.deleteAll();
+            this.cookieService.set('token', Package.access_token, {
               expires: new Date(new Date().getTime() + 3600 * 1000),
             });
+
             localStorage.clear();
             localStorage.setItem('loggedIn', 'true');
 
             this.router.navigate(['home']);
-            console.log(data1.data);
             let User: user = {
-              money: data1.data.money,
-              username: data1.data.username,
-              role: data1.data.role,
+              money: Package.user_data.money,
+              username: Package.user_data.username,
+              role: Package.user_data.role,
             };
             this.store.dispatch(GetMyTeam());
 
-            return UserActions.loginSuccess({ data: User });
+            return UserActions.loginSuccess({ user: User });
           }),
           catchError(() => {
             this.store.dispatch(
@@ -69,7 +70,6 @@ export class UserEffects {
       mergeMap(() =>
         this.userservice.GetUserByToken().pipe(
           map((FoundUser: user) => {
-            console.log(FoundUser);
             return UserActions.GetLoggedUserSuccess({ user: FoundUser });
           }),
           catchError(() => {
@@ -88,9 +88,11 @@ export class UserEffects {
       ofType(UserActions.RegisterUser),
       mergeMap(({ username, email, password }) =>
         this.userservice.Register(username, email, password).pipe(
-          map((data: boolean) => {
+          map(() => {
             this.store.dispatch(
-              LoginActions.RegisterIsValid({ Result: OperationResult.Success })
+              LoginActions.RegisterIsValid({
+                Result: OperationResult.Success,
+              })
             );
             return UserActions.RegisterUserSuccess();
           }),
