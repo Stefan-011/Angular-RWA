@@ -41,6 +41,7 @@ export class TeamViewComponent implements OnInit {
   $ShopErrorMsgObs: Observable<ShopErrorMsg>;
   $PlayerCountObs: Observable<number>;
   $TeamListObs: Observable<TeamSablon[]>;
+  $ActiveTeamName: Observable<string>;
 
   compType: ComponentEnum;
   Shop_mode: ShopMode;
@@ -51,6 +52,7 @@ export class TeamViewComponent implements OnInit {
   ShopErrorMsg: ShopErrorMsg;
   PlayerCount: number;
   TeamArray: TeamSablon[];
+  ActiveTeamName: string;
 
   constructor(
     private store: Store<AppState>,
@@ -65,6 +67,7 @@ export class TeamViewComponent implements OnInit {
     this.SponzorArray = [];
     this.PlayerCount = -1;
     this.TeamArray = [];
+    this.ActiveTeamName = '';
     this.Shop_mode = ShopMode.Igraci;
     this.ShopErrorMsg = ShopErrorMsg.default;
     this.$TeamListObs = store.select(OtherTeamSelect.SelectTeamList);
@@ -79,6 +82,7 @@ export class TeamViewComponent implements OnInit {
     this.$ActiveTeam = this.store.select(
       OtherTeamSelect.selectCurrentOtherTeams
     );
+    this.$ActiveTeamName = store.select(OtherTeamSelect.selectName);
     this.SponzorMyTeam = {
       id: -1,
       img: '',
@@ -89,6 +93,7 @@ export class TeamViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.GetSponzori();
+    this.store.dispatch(OtherTeamAction.GetTeamList());
     this.InitilizeTeamNames();
     this.$ComponentType.subscribe((type) => {
       if (type) this.LayoutSetup(type);
@@ -96,7 +101,7 @@ export class TeamViewComponent implements OnInit {
 
     this.$TeamListObs.subscribe((NewTeams) => {
       this.TeamArray = NewTeams;
-      if (this.TeamArray != null) this.InitilizeTeamNames();
+      this.InitilizeTeamNames();
     });
 
     this.$UsersMoney.subscribe((money) => (this.MyTeamMoney = money));
@@ -112,9 +117,11 @@ export class TeamViewComponent implements OnInit {
         OpenDialog('(' + this.PlayerCount + '/5)', this.matDialog);
       this.PlayerCount = NumOfPly;
     });
+    this.$ActiveTeamName.subscribe((name) => (this.ActiveTeamName = name));
   }
 
   LayoutSetup(type: ComponentEnum): void {
+    // Error prone !!!
     this.store.dispatch(UserActions.GetLoggedUser());
     if (this.compType != type) {
       this.compType = type;
@@ -145,19 +152,24 @@ export class TeamViewComponent implements OnInit {
 
   InitilizeTeamNames(): void {
     let i = 0;
-    this.store.dispatch(OtherTeamAction.GetTeamList());
     this.TeamArray.forEach((element) => {
       this.TeamNames[i] = element.name;
+      if (i == 0)
+        this.store.dispatch(
+          OtherTeamAction.SetName({ name: this.TeamNames[i] })
+        );
       i++;
     });
+    this.store.dispatch(
+      OtherTeamAction.GetAllPlayers({ name: this.ActiveTeamName })
+    );
   }
 
   ChangeOtherTeam(): void {
     let name = document.getElementById('Team-cmbox') as HTMLSelectElement;
-    alert(name.value);
-    this.store.dispatch(OtherTeamAction.GetAllPlayers({ name: name.value }));
-    this.$ActiveTeam = this.store.select(
-      OtherTeamSelect.selectCurrentOtherTeams
+    this.store.dispatch(OtherTeamAction.SetName({ name: name.value }));
+    this.store.dispatch(
+      OtherTeamAction.GetAllPlayers({ name: this.ActiveTeamName })
     );
   }
 
@@ -199,7 +211,6 @@ export class TeamViewComponent implements OnInit {
   }
 
   Apliciraj(Money: number, id: number) {
-    //REWORK
     let PureChance = 0,
       ExitResult = false;
 

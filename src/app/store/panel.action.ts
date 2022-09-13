@@ -12,7 +12,7 @@ export const SetPlayer = createAction('SetPlayer', props<{ Player: player }>());
 export const SetTeam = createAction('SetTeam', props<{ Team: TeamSablon }>());
 
 export const SetSponzor = createAction(
-  'SetTeam',
+  'SetSponzor',
   props<{ Sponzor: Sponzor }>()
 );
 

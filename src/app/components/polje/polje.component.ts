@@ -8,6 +8,7 @@ import { player } from '../../models/player';
 import { AppState } from '../../app.state';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { TeamSablon } from 'src/app/models/TeamSablon';
 
 @Component({
   selector: 'app-polje',
@@ -18,45 +19,58 @@ export class PoljeComponent implements OnInit {
   @Input() $ActiveTeam: Observable<player[]>;
   @Input() $MyTeam: Observable<player[]>;
 
+  $TeamListObs: Observable<TeamSablon[]>;
+  $ActiveTeamName: Observable<string>;
+
   TeamNames: string[];
   FinalResult: string[];
+  TeamList: TeamSablon[];
   ActiveTeamName: string;
 
   constructor(private store: Store<AppState>) {
     this.TeamNames = [];
     this.FinalResult = [];
     this.ActiveTeamName = '';
+    this.TeamList = [];
     this.$MyTeam = this.store.select(selectMyTeam);
     this.$ActiveTeam = this.store.select(
       OtherTeamSelect.selectCurrentOtherTeams
     );
+    this.$TeamListObs = store.select(OtherTeamSelect.SelectTeamList);
+    this.$ActiveTeamName = store.select(OtherTeamSelect.selectName);
   }
 
   ngOnInit(): void {
-    this.InitilizeTeamNames();
-    this.ActiveTeamName = TeamNamesEnum.Astralis;
-    this.store.dispatch(
-      OtherTeamAction.GetAllPlayers({ name: TeamNamesEnum.Astralis })
-    );
+    this.store.dispatch(OtherTeamAction.GetTeamList());
+    this.$ActiveTeamName.subscribe((name) => (this.ActiveTeamName = name));
+    this.$TeamListObs.subscribe((TeamList) => {
+      this.TeamList = TeamList;
+      this.InitilizeTeamNames();
+    });
   }
 
   InitilizeTeamNames(): void {
     let i = 0;
-    const values = Object.values(TeamNamesEnum);
-    for (let obj in TeamNamesEnum) {
-      this.TeamNames[i] = values[i];
+    this.TeamList.forEach((element) => {
+      this.TeamNames[i] = element.name;
+      if (i == 0)
+        this.store.dispatch(
+          OtherTeamAction.SetName({ name: this.TeamNames[i] })
+        );
       i++;
-    }
+    });
+    this.store.dispatch(
+      OtherTeamAction.GetAllPlayers({ name: this.ActiveTeamName })
+    );
   }
 
   ChangeOtherTeam(): void {
     let name = document.getElementById('Team-cmbox') as HTMLSelectElement;
-    this.ActiveTeamName = name.value;
-    this.store.dispatch(OtherTeamAction.GetAllPlayers({ name: name.value }));
-    this.$ActiveTeam = this.store.select(
-      OtherTeamSelect.selectCurrentOtherTeams
+    this.store.dispatch(OtherTeamAction.SetName({ name: name.value }));
+    this.store.dispatch(
+      OtherTeamAction.GetAllPlayers({ name: this.ActiveTeamName })
     );
-    this.$ActiveTeam.subscribe();
+    //this.$ActiveTeam.subscribe();
   }
 
   GetRezultat(data: string[]) {

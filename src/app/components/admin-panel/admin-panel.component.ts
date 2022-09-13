@@ -44,8 +44,6 @@ export class AdminPanelComponent implements OnInit {
   SponzorList: Sponzor[];
   PanelMode: PanelMode;
   CRUDState: CRUDState;
-  // Za PanelState (PanelMod,OperationMode??,Player,Team,Sponzor,TeamList,PlayerList)
-  // Za promenu podataka kada se predje u Editmode lokalne promenjive dobijaju vrednost onih sa observerima (UBACITI U PANEL STATE OPERATION MODE)
 
   constructor(
     private MyTeamService: MyteamService,
@@ -75,8 +73,8 @@ export class AdminPanelComponent implements OnInit {
     };
 
     this.Team = {
-      name: '',
       id: 0,
+      name: '',
     };
 
     this.PanelMode = PanelMode.DEFAULT;
@@ -102,7 +100,6 @@ export class AdminPanelComponent implements OnInit {
     this.store.dispatch(PanelAction.GetTeamList());
     this.$ErrorMessageObs.subscribe((ErrMsg) => {
       this.ErrorMessageShow(ErrMsg);
-      this.RefreshObjState();
     });
     this.$PanelModeObs.subscribe((NewMode) => {
       this.PanelMode = NewMode;
@@ -181,6 +178,9 @@ export class AdminPanelComponent implements OnInit {
   DeleteOperation(): void {
     switch (this.PanelMode) {
       case PanelMode.IGRAC:
+        this.store.dispatch(
+          PanelAction.DeletePlayer({ PlayerID: this.Player.id })
+        );
         break;
 
       case PanelMode.SPOZNOR:
@@ -193,6 +193,7 @@ export class AdminPanelComponent implements OnInit {
         break;
 
       case PanelMode.TIM:
+        this.store.dispatch(PanelAction.DeleteTeam({ TeamID: this.Team.id }));
         break;
     }
   }
@@ -200,15 +201,17 @@ export class AdminPanelComponent implements OnInit {
   EditOperation(): void {
     switch (this.PanelMode) {
       case PanelMode.IGRAC:
-        alert('T');
         let SelectElement = document.getElementById(
           'TeamSelectEDIT'
         ) as HTMLSelectElement;
         let Index = SelectElement.selectedIndex;
+        let TeamID = -1;
+        if (Index == 0) TeamID = this.Team.id;
+        else TeamID = this.TeamList[Index - 1].id;
         this.store.dispatch(
           PanelAction.EditPlayer({
             Player: this.Player,
-            TeamID: this.TeamList[Index - 1].id,
+            TeamID: TeamID,
           })
         ); // REWORK
 
@@ -243,6 +246,7 @@ export class AdminPanelComponent implements OnInit {
     this.store.dispatch(
       PanelAction.SetErrorMessage({ ErrorMsg: PanelErrorMessage.default })
     );
+    this.RefreshObjState();
   }
 
   SetSponzor() {
@@ -341,9 +345,10 @@ export class AdminPanelComponent implements OnInit {
     };
 
     let CleanTeam = {
-      name: '',
       id: 0,
+      name: '',
     };
+
     this.store.dispatch(PanelAction.SetTeam({ Team: CleanTeam }));
     this.store.dispatch(PanelAction.SetPlayer({ Player: CleanPlayer }));
     this.store.dispatch(PanelAction.SetSponzor({ Sponzor: CleanSponzor }));
@@ -357,6 +362,7 @@ export class AdminPanelComponent implements OnInit {
       id: this.Team.id,
       name: name,
     };
+
     this.store.dispatch(PanelAction.SetTeam({ Team: NewTeam }));
     this.SetCRUDState(OPERATION);
     console.log(NewTeam);
@@ -373,6 +379,7 @@ export class AdminPanelComponent implements OnInit {
     price: string,
     OPERATION: string
   ) {
+    console.log(this.Team);
     const NewPlayer: player = {
       id: this.Player.id,
       nick: nick,
@@ -391,7 +398,6 @@ export class AdminPanelComponent implements OnInit {
   }
 
   CallOperation(OPERATION: string) {
-    alert(OPERATION);
     switch (OPERATION) {
       case CRUDState.CREATE:
         this.CreateOperation();
@@ -403,5 +409,10 @@ export class AdminPanelComponent implements OnInit {
         this.DeleteOperation();
         break;
     }
+  }
+
+  ShowImg(ImgSrc: string) {
+    let Img = document.getElementById('ShowImage') as HTMLImageElement;
+    Img.src = ImgSrc;
   }
 }

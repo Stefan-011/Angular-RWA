@@ -8,7 +8,8 @@
 
 .wrk-pnl {
   height: fit-content;
-  width: 90%;
+  width: 100%;
+  font-size: 1vw;
 }
 
 .stat-div {
@@ -34,19 +35,14 @@
 }
 
 .player-profile-CRUD img {
-  width: 32vw;
+  width: auto;
   height: auto;
+  max-height: 15vw;
+  max-width: 15vw;
   padding-bottom: 3vh;
   padding-top: 3vh;
   background: #212529;
   border: white 3px solid;
-}
-
-.player-profile-CRUD img {
-  width: 45%;
-  height: 40%;
-  min-width: 100px;
-  border: white 2px solid;
 }
 
 .wrk-pnl input {
@@ -54,7 +50,7 @@
   background-color: transparent;
   color: white;
   width: 60%;
-  font-size: 1.3vw;
+
   padding: 5px;
 }
 
@@ -63,7 +59,7 @@
   margin-bottom: 1%;
   width: 100%;
   height: 6vh;
-  font-size: 1.3vw;
+
   color: white;
   border: white 1px solid;
 }
@@ -98,5 +94,16 @@
   }
   .wrk-pnl button {
     font-size: 2vh;
+  }
+
+  .player-profile-CRUD img {
+    width: auto;
+    height: auto;
+    max-height: 15vh;
+    max-width: 15vh;
+    padding-bottom: 3vh;
+    padding-top: 3vh;
+    background: #212529;
+    border: white 3px solid;
   }
 }

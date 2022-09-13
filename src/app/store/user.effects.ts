@@ -69,6 +69,7 @@ export class UserEffects {
       mergeMap(() =>
         this.userservice.GetUserByToken().pipe(
           map((FoundUser: user) => {
+            console.log(FoundUser);
             return UserActions.GetLoggedUserSuccess({ user: FoundUser });
           }),
           catchError(() => {

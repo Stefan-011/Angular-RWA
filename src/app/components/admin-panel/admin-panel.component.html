@@ -1,5 +1,5 @@
 <div class="main-pnl d-flex justify-content-start font-lexend">
-  <div class="ctrl-pnl h4 text-center">
+  <div class="ctrl-pnl h5 text-center">
     <div class="mb-3 font text-white">
       Igrac based<br />
       <button class="btn-success" (click)="ChangeMode('IGRAC', 'CREATE')">
@@ -93,11 +93,17 @@
           <input type="text" placeholder="Prezime" #Lname /></label
         ><br /><img
           class="rounded-circle p-1"
-          src="{{ Player.img }}"
+          src="..."
           alt="..."
+          id="ShowImage"
         />
         <br />
-        <input type="text" placeholder="Slika (URL)" #Img />
+        <input
+          type="text"
+          placeholder="Slika (URL)"
+          #Img
+          (change)="ShowImg(Img.value)"
+        />
         <div
           class="mt-4 mb-4 ms-0 d-flex justify-content-center stats-div text-center"
         >
@@ -191,10 +197,10 @@
           <br /><br />
         </label>
         <br /><img
-          *ngIf="Sponzor.img != ''"
           class="rounded-circle p-1"
           src="{{ Sponzor.img }}"
           alt="..."
+          id="ShowImage"
         />
         <br />
         <input
@@ -202,6 +208,7 @@
           placeholder="Slika (URL)"
           value="{{ Sponzor.img }}"
           #Img
+          (change)="ShowImg(Img.value)"
         />
         <br />
         <br />
@@ -271,6 +278,7 @@
           class="rounded-circle p-1"
           src="{{ Player.img }}"
           alt="..."
+          id="ShowImage"
         />
         <br />
         <input
@@ -278,6 +286,7 @@
           placeholder="Slika (URL)"
           #Img
           value="{{ Player.img }}"
+          (change)="ShowImg(Img.value)"
         />
         <div
           class="mt-4 mb-4 ms-0 d-flex justify-content-center stats-div text-center"
@@ -363,7 +372,7 @@
         >
           Izmeni
         </button>
-        <button class="btn-danger">Izbrisi</button>
+        <button class="btn-danger" (click)="DeleteOperation()">Izbrisi</button>
       </div>
 
       <!-- SPONZOR -->
@@ -388,6 +397,7 @@
           class="rounded-circle p-1"
           src="{{ Sponzor.img }}"
           alt="..."
+          id="ShowImage"
         />
         <br />
         <input
@@ -395,6 +405,7 @@
           placeholder="Slika (URL)"
           value="{{ Sponzor.img }}"
           #Img
+          (change)="ShowImg(Img.value)"
         />
         <br />
         <br />
@@ -437,9 +448,7 @@
         >
           Izmeni
         </button>
-        <button class="btn-danger" (click)="TakeTeamInfo(TeamName.value, 'D')">
-          Izbrisi
-        </button>
+        <button class="btn-danger" (click)="DeleteOperation()">Izbrisi</button>
       </div>
     </div>
   </div>

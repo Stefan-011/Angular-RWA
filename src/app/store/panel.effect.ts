@@ -187,4 +187,20 @@ export class PanelEffects {
       )
     )
   );
+
+  DeleteTeam = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PanelAction.DeleteTeam),
+      mergeMap(({ TeamID }) =>
+        this.MyteamService.DeleteTeam(TeamID).pipe(
+          map((Response: RequestResponse<any, PanelErrorMessage>) => {
+            console.log(Response);
+            return PanelAction.SetErrorMessage({
+              ErrorMsg: Response.Server_response,
+            });
+          })
+        )
+      )
+    )
+  );
 }

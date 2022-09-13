@@ -61,6 +61,7 @@ export class MyteamService {
   }
 
   CreateTeam(Team: TeamSablon) {
+    alert(Team.name);
     return this.http.post<RequestResponse<any, PanelErrorMessage>>(
       environment.api + `/my-team/CreateTeam`,
       Team
@@ -75,7 +76,9 @@ export class MyteamService {
     );
   }
 
-  DeleteTeam() {
-    //  return this.http.delete<MyTeam>(environment.api )
+  DeleteTeam(id: number) {
+    return this.http.delete<RequestResponse<any, PanelErrorMessage>>(
+      environment.api + `/my-team/DeleteTeam:${id}`
+    );
   }
 }

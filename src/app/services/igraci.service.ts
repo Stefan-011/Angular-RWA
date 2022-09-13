@@ -50,6 +50,7 @@ export class IgraciService {
   }
 
   DeletePlayer(id: number) {
+    alert(id);
     return this.http.delete<RequestResponse<any, PanelErrorMessage>>(
       environment.api + `/players/DeletePlayer:${id}`
     );
