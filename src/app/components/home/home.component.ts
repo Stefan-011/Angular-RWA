@@ -5,7 +5,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { AppState } from '../../app.state';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { ComponentEnum } from 'src/app/Enums/ComponentEnum';
 import { Role } from 'src/app/Enums/Role';
 import { MenuSize } from 'src/app/Enums/MenuSize';
@@ -19,15 +19,16 @@ import { _MatOptionBase } from '@angular/material/core';
 export class HomeComponent implements OnInit {
   @Input() Username: string;
 
-  $username: Observable<string | undefined>;
+  $Unsubscribe: Subject<void>;
   $LogState: Observable<boolean>;
-  $ROLEOBS: Observable<Role | undefined>;
-  $ComponentType: Observable<ComponentEnum>;
   $MenuSize: Observable<MenuSize>;
+  $RoleObs: Observable<Role | undefined>;
+  $ComponentType: Observable<ComponentEnum>;
+  $username: Observable<string | undefined>;
 
   Ruta: ComponentEnum;
-  LogState: boolean;
   MenuState: MenuSize;
+  LogState: boolean;
   role: Role;
 
   constructor(
@@ -35,39 +36,47 @@ export class HomeComponent implements OnInit {
     private store: Store<AppState>,
     private route: Router
   ) {
-    this.Ruta = ComponentEnum.none;
     this.Username = '';
     this.LogState = false;
+    this.role = Role.DEFAULT;
+    this.Ruta = ComponentEnum.Home;
     this.MenuState = MenuSize.default;
+    this.$Unsubscribe = new Subject<void>();
+    this.$MenuSize = store.select(UserSelectors.SelectMenuSize);
+    this.$RoleObs = this.store.select(UserSelectors.SelectUserRole);
     this.$LogState = this.store.select(UserSelectors.selectLoggedIn);
     this.$username = this.store.select(UserSelectors.selectUsersname);
-    this.$ROLEOBS = this.store.select(UserSelectors.SelectUserRole);
     this.$ComponentType = store.select(UserSelectors.SelectComponent);
-    this.$MenuSize = store.select(UserSelectors.SelectMenuSize);
-    this.role = Role.DEFAULT;
   }
 
   ngOnInit(): void {
-    this.$username.subscribe((data) => {
-      this.Username = data + '';
-    });
-    this.$LogState.subscribe((data) => (this.LogState = data));
+    this.SetupObservers();
+  }
 
-    this.$ROLEOBS.subscribe((role) => {
+  SetupObservers(): void {
+    this.$username.pipe(takeUntil(this.$Unsubscribe)).subscribe((username) => {
+      if (username != undefined) this.Username = username;
+    });
+
+    this.$LogState
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((logstate) => (this.LogState = logstate));
+
+    this.$RoleObs.pipe(takeUntil(this.$Unsubscribe)).subscribe((role) => {
       if (role != undefined) this.role = role;
     });
 
-    this.$ComponentType.subscribe((type) => {
-      this.Ruta = type;
+    this.$ComponentType.pipe(takeUntil(this.$Unsubscribe)).subscribe((comp) => {
+      this.Ruta = comp;
     });
 
-    this.$MenuSize.subscribe((Size) => (this.MenuState = Size));
-
-    this.Ruta = ComponentEnum.Panel;
+    this.$MenuSize
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((Size) => (this.MenuState = Size));
   }
 
-  switchR(text: string): void {
-    switch (text) {
+  SwitchRoute(RouteOption: string): void {
+    switch (RouteOption) {
       case 'SIMULACIJA':
         this.store.dispatch(
           UserActions.SetComponent({ comp: ComponentEnum.Simulacija })
@@ -94,7 +103,9 @@ export class HomeComponent implements OnInit {
         break;
 
       default:
-        this.Ruta = -1;
+        this.store.dispatch(
+          UserActions.SetComponent({ comp: ComponentEnum.Home })
+        );
         break;
     }
   }
@@ -108,17 +119,20 @@ export class HomeComponent implements OnInit {
 
   OpenCollapse(): void {
     let getScreenWidth = window.innerWidth;
-    getScreenWidth = window.innerWidth;
-
     if (getScreenWidth <= 991 && this.MenuState == MenuSize.moblie)
       this.store.dispatch(UserActions.SetMenuSize({ Size: MenuSize.default }));
     else
       this.store.dispatch(UserActions.SetMenuSize({ Size: MenuSize.moblie }));
   }
 
-  logout(): void {
+  Logout(): void {
     localStorage.clear();
     this.cookies.deleteAll();
     this.route.navigate(['login']);
+  }
+
+  ngOnDestroy(): void {
+    this.$Unsubscribe.next();
+    this.$Unsubscribe.complete();
   }
 }

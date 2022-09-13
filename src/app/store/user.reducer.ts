@@ -16,7 +16,7 @@ export interface UserState {
 export const initialState: UserState = {
   loggedIn: false,
   CurrentUser: null,
-  component: ComponentEnum.none,
+  component: ComponentEnum.Home,
   MenuSize: MenuSize.default,
 };
 

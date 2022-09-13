@@ -45,6 +45,10 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.SetupObservers();
+  }
+
+  SetupObservers(): void {
     this.$LogModeObs.pipe(takeUntil(this.$Unsubscribe)).subscribe((Mode) => {
       this.Mode = Mode;
     });
@@ -145,7 +149,7 @@ export class LoginComponent implements OnInit {
     } else this.SetErrorMessage(ErrorMessage.InvalidPassword);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.$Unsubscribe.next();
     this.$Unsubscribe.complete();
   }

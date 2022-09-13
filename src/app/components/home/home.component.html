@@ -53,23 +53,25 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
             <li class="nav-item" *ngIf="role == 'user'">
-              <a class="nav-link" (click)="switchR('SIMULACIJA')">Simuliraj</a>
+              <a class="nav-link" (click)="SwitchRoute('SIMULACIJA')"
+                >Simuliraj</a
+              >
             </li>
             <li class="nav-item" *ngIf="role == 'user'">
-              <a class="nav-link" (click)="switchR('MYTEAM')">MyTeam</a>
+              <a class="nav-link" (click)="SwitchRoute('MYTEAM')">MyTeam</a>
             </li>
             <li class="nav-item" *ngIf="role == 'user'">
-              <a class="nav-link" (click)="switchR('SHOP')">shop</a>
+              <a class="nav-link" (click)="SwitchRoute('SHOP')">shop</a>
             </li>
 
             <li class="nav-item" *ngIf="role == 'admin'">
-              <a class="nav-link" (click)="switchR('PANEL')">Panel</a>
+              <a class="nav-link" (click)="SwitchRoute('PANEL')">Panel</a>
             </li>
             <li *ngIf="LogState" class="nav-item">
               <a class="nav-link">korisnik: {{ $username | async }}</a>
             </li>
             <li *ngIf="LogState" class="nav-item">
-              <a class="nav-link" (click)="logout()">logout</a>
+              <a class="nav-link" (click)="Logout()">logout</a>
             </li>
           </ul>
         </div>
@@ -79,26 +81,27 @@
         class="navbar-collapse"
         style="z-index: 6"
       >
-        <!---->
         <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
           <li class="nav-item" *ngIf="role == 'user'">
-            <a class="nav-link" (click)="switchR('SIMULACIJA')">Simuliraj</a>
+            <a class="nav-link" (click)="SwitchRoute('SIMULACIJA')"
+              >Simuliraj</a
+            >
           </li>
           <li class="nav-item" *ngIf="role == 'user'">
-            <a class="nav-link" (click)="switchR('MYTEAM')">MyTeam</a>
+            <a class="nav-link" (click)="SwitchRoute('MYTEAM')">MyTeam</a>
           </li>
           <li class="nav-item" *ngIf="role == 'user'">
-            <a class="nav-link" (click)="switchR('SHOP')">shop</a>
+            <a class="nav-link" (click)="SwitchRoute('SHOP')">shop</a>
           </li>
 
           <li class="nav-item" *ngIf="role == 'admin'">
-            <a class="nav-link" (click)="switchR('PANEL')">Panel</a>
+            <a class="nav-link" (click)="SwitchRoute('PANEL')">Panel</a>
           </li>
           <li *ngIf="LogState" class="nav-item">
             <a class="nav-link">korisnik: {{ $username | async }}</a>
           </li>
           <li *ngIf="LogState" class="nav-item">
-            <a class="nav-link" (click)="logout()">logout</a>
+            <a class="nav-link" (click)="Logout()">logout</a>
           </li>
         </ul>
       </div>

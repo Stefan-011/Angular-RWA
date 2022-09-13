@@ -60,7 +60,7 @@ export class TeamViewComponent implements OnInit {
     private SponzorService: SponzorService,
     private matDialog: MatDialog
   ) {
-    this.compType = ComponentEnum.none;
+    this.compType = ComponentEnum.Home;
     this.Username = '';
     this.TeamNames = [];
     this.MyTeamMoney = 0;

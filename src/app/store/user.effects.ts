@@ -35,7 +35,7 @@ export class UserEffects {
               })
             );
 
-            this.cookieService.deleteAll();
+            this.cookieService.delete('token');
             this.cookieService.set('token', Package.access_token, {
               expires: new Date(new Date().getTime() + 3600 * 1000),
             });
@@ -44,16 +44,12 @@ export class UserEffects {
             localStorage.setItem('loggedIn', 'true');
 
             this.router.navigate(['home']);
-            let User: user = {
-              money: Package.user_data.money,
-              username: Package.user_data.username,
-              role: Package.user_data.role,
-            };
-            this.store.dispatch(GetMyTeam());
 
-            return UserActions.loginSuccess({ user: User });
+            this.store.dispatch(GetMyTeam());
+            return UserActions.loginSuccess({ user: Package.user_data });
           }),
           catchError(() => {
+            alert('Fail');
             this.store.dispatch(
               LoginActions.LoginIsNotValid({ Result: OperationResult.Fail })
             );

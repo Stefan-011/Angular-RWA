@@ -1,5 +1,5 @@
 export enum ComponentEnum {
-  none,
+  Home = 'HOME',
   Simulacija = 'SIMULACIJA',
   MyTeam = 'MYTEAM',
   Shop = 'SHOP',
