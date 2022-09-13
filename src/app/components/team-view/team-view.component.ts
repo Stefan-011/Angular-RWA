@@ -4,7 +4,6 @@ import { AppState } from '../../app.state';
 import { player } from '../../models/player';
 import { Sponzor } from '../../models/Sponzor';
 import { CookieService } from 'ngx-cookie-service';
-import { TeamNamesEnum } from '../../Enums/TeamNamesEnum';
 import { Component, Input, OnInit } from '@angular/core';
 import * as MyTeamActions from 'src/app/store/myteam.action';
 import { selectMyTeam } from 'src/app/store/myteam.selector';
@@ -129,9 +128,9 @@ export class TeamViewComponent implements OnInit {
         this.$ActiveTeam = this.store.select(
           OtherTeamSelect.selectCurrentOtherTeams
         );
-        this.store.dispatch(
-          OtherTeamAction.GetAllPlayers({ name: TeamNamesEnum.Astralis })
-        );
+        //this.store.dispatch(
+        //   OtherTeamAction.GetAllPlayers({ name: TeamNamesEnum.Astralis })
+        //   );
       } else if (this.compType == ComponentEnum.MyTeam) {
         this.store.dispatch(MyTeamActions.GetMyTeam());
         this.ModeChange(ShopMode.Igraci);

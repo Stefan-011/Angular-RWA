@@ -6,12 +6,13 @@ import { MapsEnum } from '../../Enums/MapsEnum';
 import { player } from '../../models/player';
 import { AppState } from '../../app.state';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import * as RezultatSelector from 'src/app/store/rezultat.selector';
 import * as RezultatActions from 'src/app/store/rezultat.action';
 import { IMap } from 'src/app/models/IMap';
-import { DialogComponent, OpenDialog } from '../dialog/dialog.component';
+import { OpenDialog } from '../dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Probability } from 'src/app/Enums/Probability';
 
 @Component({
   selector: 'app-rezultat',
@@ -19,13 +20,19 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./rezultat.component.css'],
 })
 export class RezultatComponent implements OnInit {
+  readonly MAX_NUMBER_OF_GAMES = 3;
+  readonly NUMBER_OF_MAPS = 7;
+
   @Output() ResultListener: EventEmitter<string[]>;
   @Input() $ActiveTeam: Observable<player[]>;
   @Input() $MyTeam: Observable<player[]>;
+  $Unsubscribe: Subject<void>;
 
   $LeftWinnsObs: Observable<number>;
   $RightWinnsObs: Observable<number>;
   $MapObs: Observable<IMap[]>;
+  $LeftTeamNameObs: Observable<string>;
+  $RightTeamNameObs: Observable<string>;
 
   RightTeamName: string;
   LeftTeamName: string;
@@ -38,6 +45,9 @@ export class RezultatComponent implements OnInit {
   MapsUsed: IMap[];
 
   constructor(private store: Store<AppState>, private matDialog: MatDialog) {
+    this.$LeftTeamNameObs = this.store.select(UserSelect.selectUsersname);
+    this.$RightTeamNameObs = this.store.select(OtherTeamSelect.selectName);
+    this.$Unsubscribe = new Subject<void>();
     this.ResultListener = new EventEmitter();
     this.$ActiveTeam = new Observable();
     this.$MyTeam = new Observable();
@@ -58,19 +68,36 @@ export class RezultatComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.$MyTeam.subscribe((data) => (this.LeftTeam = data));
-    this.$ActiveTeam.subscribe((data) => (this.RightTeam = data));
-    this.store
-      .select(UserSelect.selectUsersname)
+    this.SetupObservables();
+  }
+
+  SetupObservables(): void {
+    this.$MyTeam
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((data) => (this.LeftTeam = data));
+    this.$ActiveTeam
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((data) => (this.RightTeam = data));
+
+    this.$LeftTeamNameObs
+      .pipe(takeUntil(this.$Unsubscribe))
       .subscribe((Name) => (this.LeftTeamName = Name));
 
-    this.store
-      .select(OtherTeamSelect.selectName)
+    this.$RightTeamNameObs
+      .pipe(takeUntil(this.$Unsubscribe))
       .subscribe((Name) => (this.RightTeamName = Name));
 
-    this.$LeftWinnsObs.subscribe((Win) => (this.LeftWinns = Win));
-    this.$RightWinnsObs.subscribe((Win) => (this.RightWinns = Win));
-    this.$MapObs.subscribe((Map) => (this.MapsUsed = Map));
+    this.$LeftWinnsObs
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((Win) => (this.LeftWinns = Win));
+
+    this.$RightWinnsObs
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((Win) => (this.RightWinns = Win));
+
+    this.$MapObs
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((Map) => (this.MapsUsed = Map));
   }
 
   RacunajEfektivnostTima(Team: player[]): number {
@@ -125,74 +152,68 @@ export class RezultatComponent implements OnInit {
   }
 
   GetRandomMap(): MapsEnum {
-    let Index = Math.floor(Math.random() * (7 - 1 + 0)) + 0;
-
-    switch (Index) {
-      case 0:
-        break;
+    let MapIndex =
+      Math.floor(Math.random() * (this.NUMBER_OF_MAPS - 1 + 0)) + 0;
+    switch (MapIndex) {
       case 0:
         return MapsEnum.Inferno;
-        break;
       case 1:
         return MapsEnum.Cache;
-        break;
       case 2:
         return MapsEnum.Mirage;
-        break;
       case 3:
         return MapsEnum.Nuke;
-        break;
       case 4:
         return MapsEnum.Overpass;
-        break;
       case 5:
         return MapsEnum.Dust2;
-        break;
       case 6:
         return MapsEnum.Vertigo;
-        break;
       case 7:
         return MapsEnum.Train;
-        break;
       default:
         return MapsEnum.Dust2;
-        break;
     }
-    return MapsEnum.Dust2;
   }
 
   RoundsAlghoritm(LeftScore: number, rightScore: number, Game: number): string {
-    let HigherChance,
+    let HigherProbability,
       Razlika,
       HigherRound = 0,
       LowwerRound = 0;
 
-    if (LeftScore > rightScore) HigherChance = false;
-    else HigherChance = true;
+    if (LeftScore > rightScore) HigherProbability = Probability.Left;
+    else HigherProbability = Probability.Right;
 
     Razlika = Math.abs(LeftScore - rightScore);
     switch (Game) {
       case 1:
-        HigherRound = this.RoundsAlghoritmExtension(Razlika, true);
-        LowwerRound = this.RoundsAlghoritmExtension(Razlika, false);
+        HigherRound = this.RoundsAlghoritmExtension(Razlika, Probability.High);
+        LowwerRound = this.RoundsAlghoritmExtension(Razlika, Probability.Low);
 
         while (
           (HigherRound != 16 && LowwerRound != 16) ||
           (HigherRound == 16 && LowwerRound == 16)
         ) {
-          HigherRound = this.RoundsAlghoritmExtension(Razlika, true);
-          LowwerRound = this.RoundsAlghoritmExtension(Razlika, false);
+          HigherRound = this.RoundsAlghoritmExtension(
+            Razlika,
+            Probability.High
+          );
+          LowwerRound = this.RoundsAlghoritmExtension(Razlika, Probability.Low);
         }
         break;
       case 2:
-        HigherRound = this.RoundsAlghoritmExtension(Razlika, true);
-        LowwerRound = this.RoundsAlghoritmExtension(Razlika, false);
+        HigherRound = this.RoundsAlghoritmExtension(Razlika, Probability.High);
+        LowwerRound = this.RoundsAlghoritmExtension(Razlika, Probability.Low);
         while (
           (HigherRound != 16 && LowwerRound != 16) ||
           (HigherRound == 16 && LowwerRound == 16)
         ) {
-          HigherRound = this.RoundsAlghoritmExtension(Razlika, true);
-          LowwerRound = this.RoundsAlghoritmExtension(Razlika, false);
+          HigherRound = this.RoundsAlghoritmExtension(
+            Razlika,
+            Probability.High
+          );
+          LowwerRound = this.RoundsAlghoritmExtension(Razlika, Probability.Low);
         }
         break;
       case 3:
@@ -200,19 +221,32 @@ export class RezultatComponent implements OnInit {
           HigherRound = 16;
           LowwerRound = 404;
           while (LowwerRound > 16) {
-            LowwerRound = this.RoundsAlghoritmExtension(Razlika, false);
+            LowwerRound = this.RoundsAlghoritmExtension(
+              Razlika,
+              Probability.Low
+            );
           }
         } else {
-          HigherRound = this.RoundsAlghoritmExtension(Razlika, true);
-          LowwerRound = this.RoundsAlghoritmExtension(Razlika, false);
+          HigherRound = this.RoundsAlghoritmExtension(
+            Razlika,
+            Probability.High
+          );
+          LowwerRound = this.RoundsAlghoritmExtension(Razlika, Probability.Low);
+
           while (HigherRound != 16 && LowwerRound != 16) {
-            HigherRound = this.RoundsAlghoritmExtension(Razlika, true);
-            LowwerRound = this.RoundsAlghoritmExtension(Razlika, false);
+            HigherRound = this.RoundsAlghoritmExtension(
+              Razlika,
+              Probability.High
+            );
+            LowwerRound = this.RoundsAlghoritmExtension(
+              Razlika,
+              Probability.Low
+            );
           }
         }
         break;
     }
-    if (HigherChance == false) {
+    if (HigherProbability == Probability.Left) {
       if (HigherRound > LowwerRound)
         this.store.dispatch(
           RezultatActions.SetLeftTeamWinns({
@@ -245,8 +279,11 @@ export class RezultatComponent implements OnInit {
     }
   }
 
-  RoundsAlghoritmExtension(Difference: number, Type: boolean): number {
-    if (Type == true) {
+  RoundsAlghoritmExtension(
+    Difference: number,
+    probability: Probability
+  ): number {
+    if (probability == Probability.High) {
       if (Difference <= 30) return Math.floor(Math.random() * (16 - 6 + 1)) + 6;
       else if (Difference <= 60)
         return Math.floor(Math.random() * (16 - 15 + 1)) + 15;
@@ -260,11 +297,11 @@ export class RezultatComponent implements OnInit {
     }
   }
 
-  DrawResult(element: GameStats): void {
+  DrawResult(GameStat: GameStats): void {
     let Table = document.getElementById('GameTable') as HTMLTableElement;
     let Row = document.createElement('TR');
     Table.appendChild(Row);
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < this.MAX_NUMBER_OF_GAMES; i++) {
       let NewData = document.createElement('TD');
       NewData.style.width = '30%';
       switch (i) {
@@ -273,7 +310,7 @@ export class RezultatComponent implements OnInit {
           break;
 
         case 1:
-          NewData.innerHTML = element.Map + '<br>' + element.Rounds;
+          NewData.innerHTML = GameStat.Map + '<br>' + GameStat.Rounds;
           break;
 
         case 2:
@@ -285,14 +322,14 @@ export class RezultatComponent implements OnInit {
   }
 
   CheckMapAppearance(map: string): boolean {
-    let DuplicateCounter = 0;
-    console.log(this.MapsUsed);
+    let occurrence = false;
+
     this.MapsUsed.forEach((element) => {
       if (map == element.name) {
-        DuplicateCounter++;
+        occurrence = true;
       }
     });
-    if (DuplicateCounter != 0) return false;
+    if (occurrence) return false;
     else return true;
   }
 
@@ -320,5 +357,10 @@ export class RezultatComponent implements OnInit {
     this.store.dispatch(RezultatActions.UseMap({ Map: NewMap }));
     this.DrawResult(Stats);
     GameCounter++;
+  }
+
+  ngOnDestroy(): void {
+    this.$Unsubscribe.next();
+    this.$Unsubscribe.complete();
   }
 }
