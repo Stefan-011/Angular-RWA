@@ -20,7 +20,7 @@ export const SelectPlayer = createAction(
 
 export const SellPlayer = createAction(
   'SellPlayer',
-  props<{ ID: number; token: string }>()
+  props<{ ID: number; token: string; NumOfPlayers: number }>()
 );
 export const SellPlayerSuccess = createAction(
   'SellPlayerSuccess',

@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../app.state';
 import { player } from '../../models/player';
@@ -7,7 +7,6 @@ import { CookieService } from 'ngx-cookie-service';
 import { Component, Input, OnInit } from '@angular/core';
 import * as MyTeamActions from 'src/app/store/myteam.action';
 import { selectMyTeam } from 'src/app/store/myteam.selector';
-import { SponzorService } from '../../services/sponzor.service';
 import * as UserSelectors from 'src/app/store/user.selector';
 import * as MyTeamSelector from 'src/app/store/myteam.selector';
 import * as OtherTeamAction from 'src/app/store/Otherteam.action';
@@ -20,8 +19,6 @@ import * as ShopSelect from 'src/app/store/shop.selector';
 import { MatDialog } from '@angular/material/dialog';
 import { OpenDialog } from '../dialog/dialog.component';
 import { ShopErrorMsg } from 'src/app/Enums/ShopErrorMsg';
-import { ComponentType } from '@angular/cdk/portal';
-import { leadingComment } from '@angular/compiler';
 import { TeamSablon } from 'src/app/models/TeamSablon';
 
 @Component({
@@ -32,6 +29,7 @@ import { TeamSablon } from 'src/app/models/TeamSablon';
 export class TeamViewComponent implements OnInit {
   @Input() Username: string;
 
+  $Unsubscribe: Subject<void>;
   $ComponentType: Observable<ComponentEnum>;
   $ActiveTeam: Observable<player[]>;
   $UsersMoney: Observable<number>;
@@ -41,6 +39,8 @@ export class TeamViewComponent implements OnInit {
   $PlayerCountObs: Observable<number>;
   $TeamListObs: Observable<TeamSablon[]>;
   $ActiveTeamName: Observable<string>;
+  $SponzorListObs: Observable<Sponzor[]>;
+  $SelectedPlayer: Observable<number>;
 
   compType: ComponentEnum;
   Shop_mode: ShopMode;
@@ -52,13 +52,14 @@ export class TeamViewComponent implements OnInit {
   PlayerCount: number;
   TeamArray: TeamSablon[];
   ActiveTeamName: string;
+  SelectedPlayerID: number;
 
   constructor(
     private store: Store<AppState>,
     private cookieservice: CookieService,
-    private SponzorService: SponzorService,
     private matDialog: MatDialog
   ) {
+    this.SelectedPlayerID = 0;
     this.compType = ComponentEnum.Home;
     this.Username = '';
     this.TeamNames = [];
@@ -69,12 +70,15 @@ export class TeamViewComponent implements OnInit {
     this.ActiveTeamName = '';
     this.Shop_mode = ShopMode.Igraci;
     this.ShopErrorMsg = ShopErrorMsg.default;
+    this.$Unsubscribe = new Subject<void>();
     this.$TeamListObs = store.select(OtherTeamSelect.SelectTeamList);
     this.$ShopErrorMsgObs = store.select(ShopSelect.SelectErrorMsg);
     this.$ShopObs = store.select(ShopSelect.SelectShopState);
     this.$UsersMoney = store.select(UserSelectors.selectUsersMoney);
     this.$ComponentType = store.select(UserSelectors.SelectComponent);
     this.$SponzorObs = this.store.select(MyTeamSelector.selectSponzor);
+    this.$SelectedPlayer = this.store.select(MyTeamSelector.selectPlayerID);
+    this.$SponzorListObs = this.store.select(ShopSelect.SelectSponzorList);
     this.$PlayerCountObs = this.store.select(
       MyTeamSelector.selectNumberOfPlayers
     );
@@ -91,77 +95,107 @@ export class TeamViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.GetSponzori();
+    this.store.dispatch(ShopAction.GetSponzorList());
     this.store.dispatch(OtherTeamAction.GetTeamList());
     this.InitilizeTeamNames();
-    this.$ComponentType.subscribe((type) => {
-      if (type) this.LayoutSetup(type);
-    });
-
-    this.$TeamListObs.subscribe((NewTeams) => {
-      this.TeamArray = NewTeams;
-      this.InitilizeTeamNames();
-    });
-
-    this.$UsersMoney.subscribe((money) => (this.MyTeamMoney = money));
-    this.$ShopObs.subscribe((State) => (this.Shop_mode = State));
-    this.$ShopErrorMsgObs.subscribe((ErrMsg) => {
-      this.ShopErrorMsg = ErrMsg;
-      if (this.ShopErrorMsg != ShopErrorMsg.default)
-        this.ShowErrorMsg(this.ShopErrorMsg);
-    });
-
-    this.$PlayerCountObs.subscribe((NumOfPly) => {
-      if (this.PlayerCount != -1)
-        OpenDialog('(' + this.PlayerCount + '/5)', this.matDialog);
-      this.PlayerCount = NumOfPly;
-    });
-    this.$ActiveTeamName.subscribe((name) => (this.ActiveTeamName = name));
+    this.SetupObservables();
   }
 
   LayoutSetup(type: ComponentEnum): void {
-    // Error prone !!!
     this.store.dispatch(UserActions.GetLoggedUser());
-    if (this.compType != type) {
-      this.compType = type;
-      if (type == ComponentEnum.Shop) {
-        this.$ActiveTeam = this.store.select(
-          OtherTeamSelect.selectCurrentOtherTeams
-        );
-        //this.store.dispatch(
-        //   OtherTeamAction.GetAllPlayers({ name: TeamNamesEnum.Astralis })
-        //   );
-      } else if (this.compType == ComponentEnum.MyTeam) {
-        this.store.dispatch(MyTeamActions.GetMyTeam());
-        this.ModeChange(ShopMode.Igraci);
-        this.$ActiveTeam = this.store.select(selectMyTeam);
-        this.$SponzorObs.subscribe((sponzor) => {
+
+    if (type == ComponentEnum.Shop) {
+      this.$ActiveTeam = this.store.select(
+        OtherTeamSelect.selectCurrentOtherTeams
+      );
+    } else if (this.compType == ComponentEnum.MyTeam) {
+      this.ModeChange(ShopMode.Igraci);
+      this.store.dispatch(MyTeamActions.GetMyTeam());
+
+      this.$ActiveTeam = this.store.select(selectMyTeam);
+
+      this.$SponzorObs
+        .pipe(takeUntil(this.$Unsubscribe))
+        .subscribe((sponzor) => {
+          this.SponzorMyTeam = sponzor;
           if (
-            sponzor != null &&
             this.SponzorMyTeam != null &&
-            this.compType == 'SHOP'
+            this.compType == ComponentEnum.Shop
           ) {
             OpenDialog('Vas zahtev je prihvacen !', this.matDialog);
           }
-          this.SponzorMyTeam = sponzor;
         });
-      }
     }
   }
 
-  InitilizeTeamNames(): void {
-    let i = 0;
-    this.TeamArray.forEach((element) => {
-      this.TeamNames[i] = element.name;
-      if (i == 0)
-        this.store.dispatch(
-          OtherTeamAction.SetName({ name: this.TeamNames[i] })
-        );
-      i++;
+  SetupObservables(): void {
+    this.$SelectedPlayer
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((PlyID) => (this.SelectedPlayerID = PlyID));
+
+    this.$SponzorListObs
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((SponzorList) => (this.SponzorArray = SponzorList));
+
+    this.$ComponentType.pipe(takeUntil(this.$Unsubscribe)).subscribe((type) => {
+      if (type) {
+        this.compType = type;
+        this.LayoutSetup(this.compType);
+      }
     });
-    this.store.dispatch(
-      OtherTeamAction.GetAllPlayers({ name: this.ActiveTeamName })
-    );
+
+    this.$TeamListObs
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((NewTeams) => {
+        this.TeamArray = NewTeams;
+        this.InitilizeTeamNames();
+      });
+
+    this.$UsersMoney
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((money) => (this.MyTeamMoney = money));
+
+    this.$ShopObs
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((State) => (this.Shop_mode = State));
+
+    this.$ShopErrorMsgObs
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((ErrMsg) => {
+        this.ShopErrorMsg = ErrMsg;
+        if (this.ShopErrorMsg != ShopErrorMsg.default)
+          this.ShowErrorMsg(this.ShopErrorMsg);
+      });
+
+    this.$PlayerCountObs
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((NumOfPly) => {
+        if (this.PlayerCount != -1)
+          OpenDialog('(' + NumOfPly + '/5)', this.matDialog);
+        this.PlayerCount = NumOfPly;
+      });
+
+    this.$ActiveTeamName
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((name) => {
+        this.ActiveTeamName = name;
+        if (this.ActiveTeamName != '')
+          this.store.dispatch(
+            OtherTeamAction.GetAllPlayers({ name: this.ActiveTeamName })
+          );
+      });
+  }
+
+  InitilizeTeamNames(): void {
+    let iterator = 0;
+    this.TeamArray.forEach((element) => {
+      this.TeamNames[iterator] = element.name;
+      if (iterator == 0)
+        this.store.dispatch(
+          OtherTeamAction.SetName({ name: this.TeamNames[iterator] })
+        );
+      iterator++;
+    });
   }
 
   ChangeOtherTeam(): void {
@@ -172,16 +206,14 @@ export class TeamViewComponent implements OnInit {
     );
   }
 
-  SellPlayer(id: number, price: number): void {
-    var ID = 0;
+  SellPlayer(id: number): void {
     this.store.dispatch(MyTeamActions.SelectPlayer({ ID: id }));
-    this.store
-      .select(MyTeamSelector.selectPlayer)
-      .subscribe((data) => (ID = parseInt(data?.id + '')));
+
     this.store.dispatch(
       MyTeamActions.SellPlayer({
-        ID: ID,
+        ID: this.SelectedPlayerID,
         token: this.cookieservice.get('token'),
+        NumOfPlayers: this.PlayerCount,
       })
     );
   }
@@ -201,12 +233,6 @@ export class TeamViewComponent implements OnInit {
       this.store.dispatch(ShopAction.SetShopMode({ Mode: ShopMode.Igraci }));
     else if (mode == ShopMode.Sponzori)
       this.store.dispatch(ShopAction.SetShopMode({ Mode: ShopMode.Sponzori }));
-  }
-
-  async GetSponzori() {
-    this.SponzorService.GetAll().subscribe(
-      (data) => (this.SponzorArray = data)
-    );
   }
 
   Apliciraj(Money: number, id: number) {
@@ -233,7 +259,6 @@ export class TeamViewComponent implements OnInit {
     }
 
     if (ExitResult == true) {
-      this.MyTeamMoney = +this.MyTeamMoney + +Money;
       this.store.dispatch(
         MyTeamActions.AddSponzor({
           id: id,
@@ -244,7 +269,6 @@ export class TeamViewComponent implements OnInit {
   }
 
   PrekiniSaradanju(money: number): void {
-    //REWORK
     if (money <= this.MyTeamMoney) {
       this.store.dispatch(
         MyTeamActions.RemoveSponzor({ token: this.cookieservice.get('token') })
@@ -282,5 +306,10 @@ export class TeamViewComponent implements OnInit {
     this.store.dispatch(
       ShopAction.SetErrorMsg({ ErrorMSG: ShopErrorMsg.default })
     );
+  }
+
+  ngOnDestroy(): void {
+    this.$Unsubscribe.next();
+    this.$Unsubscribe.complete();
   }
 }

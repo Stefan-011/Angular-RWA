@@ -32,6 +32,7 @@ import { AuthInterceptor } from './services/auth.interceptor';
 import { ShopReducer } from './store/shop.reducer';
 import { PanelReducer } from './store/panel.reducer';
 import { PanelEffects } from './store/panel.effect';
+import { ShopEffects } from './store/shop.effects';
 @NgModule({
   declarations: [
     AppComponent,
@@ -64,6 +65,7 @@ import { PanelEffects } from './store/panel.effect';
       LoginEffects,
       RezulatatEffects,
       PanelEffects,
+      ShopEffects,
     ]),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states

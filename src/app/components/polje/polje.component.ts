@@ -45,30 +45,34 @@ export class PoljeComponent implements OnInit {
 
     this.$ActiveTeamName
       .pipe(takeUntil(this.$Unsubscribe))
-      .subscribe((name) => (this.ActiveTeamName = name));
+      .subscribe((name) => {
+        this.ActiveTeamName = name;
+        if (this.ActiveTeamName != '')
+          this.store.dispatch(
+            OtherTeamAction.GetAllPlayers({ name: this.ActiveTeamName })
+          );
+      });
 
     this.$TeamListObs
       .pipe(takeUntil(this.$Unsubscribe))
       .subscribe((TeamList) => {
         this.TeamList = TeamList;
-        this.InitilizeTeamNames();
+        if (this.TeamList.length > 0) this.InitilizeTeamNames();
       });
   }
 
   InitilizeTeamNames(): void {
+    console.log(this.TeamList);
     let iterator = 0;
     this.TeamList.forEach((team) => {
       this.TeamNames[iterator] = team.name;
-      if (iterator == 0)
+      if (iterator == 0) {
         this.store.dispatch(
           OtherTeamAction.SetName({ name: this.TeamNames[iterator] })
         );
+      }
       iterator++;
     });
-
-    this.store.dispatch(
-      OtherTeamAction.GetAllPlayers({ name: this.ActiveTeamName })
-    );
   }
 
   ChangeOtherTeam(): void {

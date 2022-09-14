@@ -27,11 +27,16 @@ export class MyTeamEffects {
       ofType(MyTeamActions.GetMyTeam),
       mergeMap(({}) =>
         this.myteamservices.GetMyTeam().pipe(
-          map((data: MyTeam) => {
+          map((Team: MyTeam) => {
             this.store.dispatch(
-              MyTeamActions.GetMyTeamSuccess_Sponzor({ sponzor: data.sponzor })
+              MyTeamActions.SetNumberOfPlayers({
+                PlayerCount: Team.players.length,
+              })
             );
-            return MyTeamActions.GetMyTeamSuccess({ MyTeam: data });
+            this.store.dispatch(
+              MyTeamActions.GetMyTeamSuccess_Sponzor({ sponzor: Team.sponzor })
+            );
+            return MyTeamActions.GetMyTeamSuccess({ MyTeam: Team });
           }),
           catchError(() => of({ type: 'load error' }))
         )
@@ -42,9 +47,14 @@ export class MyTeamEffects {
   SellPlayer$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MyTeamActions.SellPlayer),
-      mergeMap(({ ID, token }) =>
+      mergeMap(({ ID, token, NumOfPlayers }) =>
         this.myteamservices.SellMyPlayer(ID).pipe(
           map(() => {
+            this.store.dispatch(
+              MyTeamActions.SetNumberOfPlayers({
+                PlayerCount: NumOfPlayers - 1,
+              })
+            );
             this.store.dispatch(UserActions.GetLoggedUser());
             return MyTeamActions.SellPlayerSuccess({ ID: ID });
           }),
@@ -64,7 +74,7 @@ export class MyTeamEffects {
               this.store.dispatch(UserActions.GetLoggedUser());
               this.store.dispatch(
                 MyTeamActions.SetNumberOfPlayers({
-                  PlayerCount: NumOfPlayers++,
+                  PlayerCount: NumOfPlayers + 1,
                 })
               );
               return MyTeamActions.BuyPlayerSuccess({

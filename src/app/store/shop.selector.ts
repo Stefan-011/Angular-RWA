@@ -15,3 +15,7 @@ export const SelectErrorMsg = createSelector(
   SelectShop,
   (Shop) => Shop.error_message
 );
+export const SelectSponzorList = createSelector(
+  SelectShop,
+  (Shop) => Shop.sponzorlist
+);
