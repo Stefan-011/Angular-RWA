@@ -62,7 +62,6 @@ export class PoljeComponent implements OnInit {
   }
 
   InitilizeTeamNames(): void {
-    console.log(this.TeamList);
     let iterator = 0;
     this.TeamList.forEach((team) => {
       this.TeamNames[iterator] = team.name;
