@@ -19,8 +19,8 @@ export const initialState: OtherTeamState = adapter.getInitialState({
 
 export const OtherTeamState = createReducer(
   initialState,
-  on(OtherTeamAction.GetAllPlayersSuccess, (state, { data }) => {
-    return adapter.setAll(data, state);
+  on(OtherTeamAction.GetAllPlayersSuccess, (state, { PlayerList }) => {
+    return adapter.setAll(PlayerList, state);
   }),
 
   on(OtherTeamAction.SetName, (state, { name }) => ({ ...state, name: name })),

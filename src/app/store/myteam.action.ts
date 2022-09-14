@@ -20,7 +20,7 @@ export const SelectPlayer = createAction(
 
 export const SellPlayer = createAction(
   'SellPlayer',
-  props<{ ID: number; token: string; NumOfPlayers: number }>()
+  props<{ ID: number; NumOfPlayers: number }>()
 );
 export const SellPlayerSuccess = createAction(
   'SellPlayerSuccess',
@@ -29,7 +29,7 @@ export const SellPlayerSuccess = createAction(
 
 export const BuyPlayer = createAction(
   'BuyPlayer',
-  props<{ ID: number; token: string; NumOfPlayers: number }>()
+  props<{ ID: number; NumOfPlayers: number }>()
 );
 export const BuyPlayerSuccess = createAction(
   'BuyPlayerSuccess',
@@ -37,20 +37,14 @@ export const BuyPlayerSuccess = createAction(
 );
 export const BuyPlayerFail = createAction('BuyPlayerFail');
 
-export const AddSponzor = createAction(
-  'AddSponzor',
-  props<{ id: number; token: string }>()
-);
+export const AddSponzor = createAction('AddSponzor', props<{ id: number }>());
 export const AddSponzorSuccess = createAction(
   'AddSponzorSuccess',
   props<{ sponzor: Sponzor }>()
 );
 export const AddSponzorFail = createAction('AddSponzorFail');
 
-export const RemoveSponzor = createAction(
-  'RemoveSponzor',
-  props<{ token: string }>()
-);
+export const RemoveSponzor = createAction('RemoveSponzor');
 export const RemoveSponzorSuccess = createAction(
   'RemoveSponzor',
   props<{ sponzor: Sponzor }>()

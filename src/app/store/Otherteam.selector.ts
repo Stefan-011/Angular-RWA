@@ -14,18 +14,18 @@ export const selectCurrentOtherTeam = createSelector(
 
 export const selectCurrentOtherTeams = createSelector(
   SelectotherTeamFeature,
-  (data) =>
-    data.ids
-      .map((id) => data.entities[id])
-      .filter((data) => data != null)
-      .map((data) => <player>data)
+  (team) =>
+    team.ids
+      .map((id) => team.entities[id])
+      .filter((player) => player != null)
+      .map((player) => <player>player)
 );
 export const selectName = createSelector(
   SelectotherTeamFeature,
-  (data) => data.name
+  (team) => team.name
 );
 
 export const SelectTeamList = createSelector(
   SelectotherTeamFeature,
-  (data) => data.TeamList
+  (team) => team.TeamList
 );

@@ -12,7 +12,6 @@ import { AppState } from '../app.state';
 import { Store } from '@ngrx/store';
 import { RequestResponse } from '../models/RequestResponse';
 import { ShopErrorMsg } from '../Enums/ShopErrorMsg';
-import { ShopMode } from '../Enums/ShopMode';
 
 @Injectable()
 export class MyTeamEffects {
@@ -47,7 +46,7 @@ export class MyTeamEffects {
   SellPlayer$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MyTeamActions.SellPlayer),
-      mergeMap(({ ID, token, NumOfPlayers }) =>
+      mergeMap(({ ID, NumOfPlayers }) =>
         this.myteamservices.SellMyPlayer(ID).pipe(
           map(() => {
             this.store.dispatch(
@@ -67,7 +66,7 @@ export class MyTeamEffects {
   BuyPlayer$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MyTeamActions.BuyPlayer),
-      mergeMap(({ ID, token, NumOfPlayers }) =>
+      mergeMap(({ ID, NumOfPlayers }) =>
         this.myteamservices.BuyMyPlayer(ID).pipe(
           map((Response: RequestResponse<player, ShopErrorMsg>) => {
             if (Response.Package != undefined) {
@@ -96,7 +95,7 @@ export class MyTeamEffects {
   addSponzor$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MyTeamActions.AddSponzor),
-      mergeMap(({ id, token }) =>
+      mergeMap(({ id }) =>
         this.myteamservices.AddSponzor(id).pipe(
           map((Response: RequestResponse<Sponzor, ShopErrorMsg>) => {
             this.store.dispatch(UserActions.GetLoggedUser());
@@ -120,7 +119,7 @@ export class MyTeamEffects {
   RemoveSponzor$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MyTeamActions.RemoveSponzor),
-      mergeMap(({ token }) =>
+      mergeMap(() =>
         this.myteamservices.RemoveSponzor().pipe(
           map((Response: RequestResponse<Sponzor, ShopErrorMsg>) => {
             this.store.dispatch(UserActions.GetLoggedUser());

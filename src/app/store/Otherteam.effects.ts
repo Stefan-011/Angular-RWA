@@ -25,9 +25,9 @@ export class OtherTeamEffects {
       ofType(OtherTeamAction.GetAllPlayers),
       mergeMap(({ name }) =>
         this.igraciservice.GetTeamPlayers(name).pipe(
-          map((data: player[]) => {
+          map((PlayerList: player[]) => {
             this.store.dispatch(OtherTeamAction.SetName({ name: name }));
-            return OtherTeamAction.GetAllPlayersSuccess({ data, name });
+            return OtherTeamAction.GetAllPlayersSuccess({ PlayerList, name });
           })
         )
       )

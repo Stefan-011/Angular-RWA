@@ -54,11 +54,7 @@ export class TeamViewComponent implements OnInit {
   ActiveTeamName: string;
   SelectedPlayerID: number;
 
-  constructor(
-    private store: Store<AppState>,
-    private cookieservice: CookieService,
-    private matDialog: MatDialog
-  ) {
+  constructor(private store: Store<AppState>, private matDialog: MatDialog) {
     this.SelectedPlayerID = 0;
     this.compType = ComponentEnum.Home;
     this.Username = '';
@@ -212,7 +208,6 @@ export class TeamViewComponent implements OnInit {
     this.store.dispatch(
       MyTeamActions.SellPlayer({
         ID: this.SelectedPlayerID,
-        token: this.cookieservice.get('token'),
         NumOfPlayers: this.PlayerCount,
       })
     );
@@ -222,7 +217,6 @@ export class TeamViewComponent implements OnInit {
     this.store.dispatch(
       MyTeamActions.BuyPlayer({
         ID: id,
-        token: this.cookieservice.get('token'),
         NumOfPlayers: this.PlayerCount,
       })
     );
@@ -262,7 +256,6 @@ export class TeamViewComponent implements OnInit {
       this.store.dispatch(
         MyTeamActions.AddSponzor({
           id: id,
-          token: this.cookieservice.get('token'),
         })
       );
     } else OpenDialog('Vas zahtev je odbijen !', this.matDialog);
@@ -270,9 +263,7 @@ export class TeamViewComponent implements OnInit {
 
   PrekiniSaradanju(money: number): void {
     if (money <= this.MyTeamMoney) {
-      this.store.dispatch(
-        MyTeamActions.RemoveSponzor({ token: this.cookieservice.get('token') })
-      );
+      this.store.dispatch(MyTeamActions.RemoveSponzor());
     } else
       OpenDialog(
         'Pre prekida saradnje morate vratiti novac sponzoru !!',

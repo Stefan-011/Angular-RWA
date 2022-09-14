@@ -10,8 +10,8 @@ export const SelectMyTeamFeature = createSelector(
 export const selectMyTeam = createSelector(SelectMyTeamFeature, (MyTeam) =>
   MyTeam.ids
     .map((id) => MyTeam.entities[id])
-    .filter((MyTeam) => MyTeam != null)
-    .map((MyTeam) => <player>MyTeam)
+    .filter((MyPlayer) => MyPlayer != null)
+    .map((MyPlayer) => <player>MyPlayer)
 );
 
 export const selectPlayerID = createSelector(

@@ -8,7 +8,7 @@ export const GetAllPlayers = createAction(
 );
 export const GetAllPlayersSuccess = createAction(
   'GetAllPlayersSuccess',
-  props<{ data: player[]; name: string }>()
+  props<{ PlayerList: player[]; name: string }>()
 );
 
 export const GetTeamList = createAction('GetTeamList');

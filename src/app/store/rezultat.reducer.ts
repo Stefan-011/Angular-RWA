@@ -1,6 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
 import * as RezultatAction from './rezultat.action';
-import { MapsEnum } from '../Enums/MapsEnum';
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
 import { IMap } from '../models/IMap';
 

@@ -2,8 +2,6 @@ import { createReducer, on } from '@ngrx/store';
 import * as UserActions from './user.action';
 import { user } from '../models/user';
 import { ComponentEnum } from '../Enums/ComponentEnum';
-import { ShopMode } from '../Enums/ShopMode';
-import { Role } from '../Enums/Role';
 import { MenuSize } from '../Enums/MenuSize';
 
 export interface UserState {
