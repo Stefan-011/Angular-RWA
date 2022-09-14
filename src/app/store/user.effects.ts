@@ -49,7 +49,6 @@ export class UserEffects {
             return UserActions.loginSuccess({ user: Package.user_data });
           }),
           catchError(() => {
-            alert('Fail');
             this.store.dispatch(
               LoginActions.LoginIsNotValid({ Result: OperationResult.Fail })
             );

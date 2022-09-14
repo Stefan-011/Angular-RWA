@@ -12,6 +12,7 @@ import { Sponzor } from '../models/Sponzor';
 import { RequestResponse } from '../models/RequestResponse';
 import { PanelErrorMessage } from '../Enums/PanelErrorMessage';
 import { TeamSablon } from '../models/TeamSablon';
+import { ErrorMessage } from '../Enums/ErrorMessage';
 
 @Injectable()
 export class PanelEffects {
@@ -71,7 +72,6 @@ export class PanelEffects {
       mergeMap(({ Player, TeamID }) =>
         this.IgraciService.CreatePlayer(Player, TeamID).pipe(
           map((Response: RequestResponse<any, PanelErrorMessage>) => {
-            console.log(Response);
             return PanelAction.SetErrorMessage({
               ErrorMsg: Response.Server_response,
             });
@@ -87,7 +87,6 @@ export class PanelEffects {
       mergeMap(({ Player, TeamID }) =>
         this.IgraciService.EditPlayer(Player, TeamID).pipe(
           map((Response: RequestResponse<any, PanelErrorMessage>) => {
-            console.log(Response);
             return PanelAction.SetErrorMessage({
               ErrorMsg: Response.Server_response,
             });
@@ -178,7 +177,6 @@ export class PanelEffects {
       mergeMap(({ Team }) =>
         this.MyteamService.EditTeam(Team).pipe(
           map((Response: RequestResponse<any, PanelErrorMessage>) => {
-            console.log(Response);
             return PanelAction.SetErrorMessage({
               ErrorMsg: Response.Server_response,
             });
@@ -194,7 +192,6 @@ export class PanelEffects {
       mergeMap(({ TeamID }) =>
         this.MyteamService.DeleteTeam(TeamID).pipe(
           map((Response: RequestResponse<any, PanelErrorMessage>) => {
-            console.log(Response);
             return PanelAction.SetErrorMessage({
               ErrorMsg: Response.Server_response,
             });

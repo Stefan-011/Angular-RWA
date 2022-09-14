@@ -2,7 +2,7 @@ import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { AppState } from 'src/app/app.state';
 import { CRUDState } from 'src/app/Enums/CRUDState';
 import { PanelErrorMessage } from 'src/app/Enums/PanelErrorMessage';
@@ -25,6 +25,7 @@ import { OpenDialog } from '../dialog/dialog.component';
   styleUrls: ['./admin-panel.component.css'],
 })
 export class AdminPanelComponent implements OnInit {
+  $Unsubscribe: Subject<void>;
   $PlayerObs: Observable<player>;
   $TeamObs: Observable<TeamSablon>;
   $SponzorObs: Observable<Sponzor>;
@@ -45,13 +46,7 @@ export class AdminPanelComponent implements OnInit {
   PanelMode: PanelMode;
   CRUDState: CRUDState;
 
-  constructor(
-    private MyTeamService: MyteamService,
-    private SponzorService: SponzorService,
-    private PlayerService: IgraciService,
-    private store: Store<AppState>,
-    private matDialog: MatDialog
-  ) {
+  constructor(private store: Store<AppState>, private matDialog: MatDialog) {
     this.Player = {
       id: 0,
       kd: 0,
@@ -76,7 +71,7 @@ export class AdminPanelComponent implements OnInit {
       id: 0,
       name: '',
     };
-
+    this.$Unsubscribe = new Subject<void>();
     this.PanelMode = PanelMode.DEFAULT;
     this.CRUDState = CRUDState.DEFAULT;
     this.PlayerList = [];
@@ -98,25 +93,46 @@ export class AdminPanelComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(PanelAction.GetSponzorList());
     this.store.dispatch(PanelAction.GetTeamList());
-    this.$ErrorMessageObs.subscribe((ErrMsg) => {
-      this.ErrorMessageShow(ErrMsg);
-    });
-    this.$PanelModeObs.subscribe((NewMode) => {
-      this.PanelMode = NewMode;
-    });
-    this.$PlayerObs.subscribe((NewPlayer) => (this.Player = NewPlayer));
-    this.$TeamObs.subscribe((NewTeam) => (this.Team = NewTeam));
-    this.$SponzorObs.subscribe((NewSponzor) => (this.Sponzor = NewSponzor));
+    this.SetupObservables();
+  }
 
-    this.$PlayerListObs.subscribe(
-      (NewPlayerList) => (this.PlayerList = NewPlayerList)
-    );
-    this.$TeamListObs.subscribe((NewTeamList) => (this.TeamList = NewTeamList));
-    this.$SponzorListObs.subscribe(
-      (NewSponzorList) => (this.SponzorList = NewSponzorList)
-    );
+  SetupObservables(): void {
+    this.$ErrorMessageObs
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((ErrMsg) => {
+        this.ErrorMessageShow(ErrMsg);
+      });
 
-    this.$CRUDObs.subscribe((CRUDSTATE) => {
+    this.$PanelModeObs
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((NewMode) => {
+        this.PanelMode = NewMode;
+      });
+
+    this.$PlayerObs
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((NewPlayer) => (this.Player = NewPlayer));
+
+    this.$TeamObs
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((NewTeam) => (this.Team = NewTeam));
+
+    this.$SponzorObs
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((NewSponzor) => (this.Sponzor = NewSponzor));
+
+    this.$PlayerListObs
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((NewPlayerList) => (this.PlayerList = NewPlayerList));
+    this.$TeamListObs
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((NewTeamList) => (this.TeamList = NewTeamList));
+
+    this.$SponzorListObs
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((NewSponzorList) => (this.SponzorList = NewSponzorList));
+
+    this.$CRUDObs.pipe(takeUntil(this.$Unsubscribe)).subscribe((CRUDSTATE) => {
       this.CRUDState = CRUDSTATE;
       this.RefreshObjState();
     });
@@ -152,25 +168,19 @@ export class AdminPanelComponent implements OnInit {
             Player: this.Player,
           })
         );
-        this.store.dispatch(
-          PanelAction.SetPanelMode({ Mode: PanelMode.DEFAULT })
-        );
+
         break;
 
       case PanelMode.SPOZNOR:
         this.store.dispatch(
           PanelAction.CreateSponzor({ Sponzor: this.Sponzor })
         );
-        this.store.dispatch(
-          PanelAction.SetPanelMode({ Mode: PanelMode.DEFAULT })
-        );
+
         break;
 
       case PanelMode.TIM:
         this.store.dispatch(PanelAction.CreateTeam({ Team: this.Team }));
-        this.store.dispatch(
-          PanelAction.SetPanelMode({ Mode: PanelMode.DEFAULT })
-        );
+
         break;
     }
   }
@@ -186,9 +196,6 @@ export class AdminPanelComponent implements OnInit {
       case PanelMode.SPOZNOR:
         this.store.dispatch(
           PanelAction.DeleteSponzor({ SponzorID: this.Sponzor.id })
-        ); //REWORK
-        this.store.dispatch(
-          PanelAction.SetPanelMode({ Mode: PanelMode.DEFAULT })
         );
         break;
 
@@ -201,55 +208,67 @@ export class AdminPanelComponent implements OnInit {
   EditOperation(): void {
     switch (this.PanelMode) {
       case PanelMode.IGRAC:
-        let SelectElement = document.getElementById(
-          'TeamSelectEDIT'
-        ) as HTMLSelectElement;
-        let Index = SelectElement.selectedIndex;
-        let TeamID = -1;
-        if (Index == 0) TeamID = this.Team.id;
-        else TeamID = this.TeamList[Index - 1].id;
         this.store.dispatch(
           PanelAction.EditPlayer({
             Player: this.Player,
-            TeamID: TeamID,
+            TeamID: this.GetNewTeamForPlayer(),
           })
-        ); // REWORK
-
+        );
         break;
 
       case PanelMode.SPOZNOR:
-        console.log(this.Sponzor);
         this.store.dispatch(PanelAction.EditSponzor({ Sponzor: this.Sponzor })); // REWORK
-        this.store.dispatch(
-          PanelAction.SetPanelMode({ Mode: PanelMode.DEFAULT })
-        );
         break;
 
       case PanelMode.TIM:
         this.store.dispatch(PanelAction.EditTeam({ Team: this.Team })); // REWORK
-        this.store.dispatch(
-          PanelAction.SetPanelMode({ Mode: PanelMode.DEFAULT })
-        );
         break;
     }
   }
 
-  ErrorMessageShow(ErrMsg: PanelErrorMessage) {
+  ErrorMessageShow(ErrMsg: PanelErrorMessage): void {
     if (ErrMsg == PanelErrorMessage.default) return;
     let RetMsg = '';
     switch (ErrMsg) {
       case PanelErrorMessage.none:
         RetMsg = 'Uspesno izvrsena operacija!';
         break;
+      case PanelErrorMessage.PlayersNotFound:
+        RetMsg = 'Igrac nije pronadjen!';
+        break;
+      case PanelErrorMessage.SponzorAlreadyExists:
+        RetMsg = 'Sponzor vec postoji!';
+        break;
+      case PanelErrorMessage.SponzorNotFound:
+        RetMsg = 'Sponzor nije pronadjen!';
+        break;
+      case PanelErrorMessage.TeamAlreadyExists:
+        RetMsg = 'Tim vec postoji!';
+        break;
+      case PanelErrorMessage.TeamNotFound:
+        RetMsg = 'Tim nije pronadjen!';
+        break;
     }
     OpenDialog(RetMsg, this.matDialog);
+    this.store.dispatch(PanelAction.SetPanelMode({ Mode: PanelMode.DEFAULT }));
     this.store.dispatch(
       PanelAction.SetErrorMessage({ ErrorMsg: PanelErrorMessage.default })
     );
     this.RefreshObjState();
   }
 
-  SetSponzor() {
+  GetNewTeamForPlayer(): number {
+    let SelectElement = document.getElementById(
+      'TeamSelectEDIT'
+    ) as HTMLSelectElement;
+    let Index = SelectElement.selectedIndex;
+    let TeamID = -1;
+    if (Index == 0) TeamID = this.Team.id;
+    else TeamID = this.TeamList[Index - 1].id;
+    return TeamID;
+  }
+
+  SetSponzor(): void {
     let SelectElement = document.getElementById(
       'SponzorSelect'
     ) as HTMLSelectElement;
@@ -260,7 +279,7 @@ export class AdminPanelComponent implements OnInit {
     );
   }
 
-  SetTeam() {
+  SetTeam(): void {
     let SelectElement = document.getElementById(
       'TeamSelect'
     ) as HTMLSelectElement;
@@ -272,7 +291,7 @@ export class AdminPanelComponent implements OnInit {
     this.store.dispatch(PanelAction.GetPlayerList({ TeamId: this.Team.id }));
   }
 
-  SetPlayer() {
+  SetPlayer(): void {
     let SelectElement = document.getElementById(
       'PlayerSelect'
     ) as HTMLSelectElement;
@@ -281,24 +300,6 @@ export class AdminPanelComponent implements OnInit {
     this.store.dispatch(
       PanelAction.SetPlayer({ Player: this.PlayerList[Index - 1] })
     );
-  }
-
-  TakeSponzorInfo(
-    name: string,
-    img: string,
-    money: string,
-    OPERATION: string
-  ): void {
-    const NewSponzor: Sponzor = {
-      id: this.Sponzor.id,
-      name: name,
-      img: img,
-      money: parseInt(money),
-    };
-    this.store.dispatch(PanelAction.SetSponzor({ Sponzor: NewSponzor }));
-    this.SetCRUDState(OPERATION);
-    console.log(NewSponzor);
-    this.CallOperation(OPERATION);
   }
 
   SetCRUDState(State: string): void {
@@ -321,6 +322,138 @@ export class AdminPanelComponent implements OnInit {
         );
         break;
     }
+  }
+
+  TakeTeamInfo(name: string, OPERATION: string): void {
+    const NewTeam: TeamSablon = {
+      id: this.Team.id,
+      name: name,
+    };
+    if (name == '') {
+      OpenDialog('Uneto ime tima nije validno!', this.matDialog);
+      return;
+    }
+    this.SetCRUDState(OPERATION);
+    this.store.dispatch(PanelAction.SetTeam({ Team: NewTeam }));
+    this.CallOperation(OPERATION);
+  }
+
+  TakeSponzorInfo(
+    name: string,
+    img: string,
+    money: string,
+    OPERATION: string
+  ): void {
+    let ErrMsg: string = '';
+    if (name == '') {
+      ErrMsg = 'Uneto ime sponzora nije validno!';
+      OpenDialog(ErrMsg, this.matDialog);
+      return;
+    }
+    if (
+      parseInt(money) != 1000 &&
+      parseInt(money) != 2000 &&
+      parseInt(money) != 3000
+    ) {
+      ErrMsg = 'Isprvane opcije: 1000,2000,3000';
+      OpenDialog(ErrMsg, this.matDialog);
+      ErrMsg = 'Ne validna kolicina novca!';
+      OpenDialog(ErrMsg, this.matDialog);
+      return;
+    }
+
+    const NewSponzor: Sponzor = {
+      id: this.Sponzor.id,
+      name: name,
+      img: img,
+      money: parseInt(money),
+    };
+    this.store.dispatch(PanelAction.SetSponzor({ Sponzor: NewSponzor }));
+    this.SetCRUDState(OPERATION);
+    this.CallOperation(OPERATION);
+  }
+
+  TakePlayerInfo(
+    nick: string,
+    name: string,
+    lname: string,
+    img: string,
+    kd: string,
+    impact: string,
+    rating: string,
+    price: string,
+    OPERATION: string
+  ) {
+    let ErrMsg: string;
+    if (
+      parseFloat(rating) > 2 ||
+      parseFloat(kd) > 2 ||
+      parseFloat(impact) > 2 ||
+      parseFloat(rating) < 0 ||
+      parseFloat(kd) < 0 ||
+      parseFloat(impact) < 0
+    ) {
+      ErrMsg = 'Polja Rajting,K/D,Uticaj su u rasponu od 0-2 !';
+      OpenDialog(ErrMsg, this.matDialog);
+      return;
+    }
+
+    if (name == '' || nick == '' || lname == '') {
+      ErrMsg = 'Popunite licne informacije (Ime,Prezime,Nadimak)!';
+      OpenDialog(ErrMsg, this.matDialog);
+      return;
+    }
+
+    if ((parseInt(price) < 1000 && parseInt(price) > 4000) || price == '') {
+      ErrMsg = 'Cena je u rasponu od 1000 - 4000!';
+      OpenDialog(ErrMsg, this.matDialog);
+      return;
+    }
+    if (rating == '' && kd == '' && impact == '') {
+      ErrMsg = 'Popunite sve podatke statistike (K/D, Uticaj,Rejting)!';
+      OpenDialog(ErrMsg, this.matDialog);
+      return;
+    }
+    if (this.Team.id == 0) {
+      ErrMsg = 'Izaberite tim za igraca!';
+      OpenDialog(ErrMsg, this.matDialog);
+      return;
+    }
+
+    const NewPlayer: player = {
+      id: this.Player.id,
+      nick: nick,
+      name: name,
+      lname: lname,
+      img: img,
+      kd: parseFloat(kd),
+      impact: parseFloat(impact),
+      rating: parseFloat(rating),
+      price: parseInt(price),
+      team: '',
+    };
+    this.store.dispatch(PanelAction.SetPlayer({ Player: NewPlayer }));
+    this.SetCRUDState(OPERATION);
+    this.CallOperation(OPERATION);
+  }
+
+  CallOperation(OPERATION: string) {
+    switch (OPERATION) {
+      case CRUDState.CREATE:
+        this.CreateOperation();
+        break;
+      case CRUDState.EDIT:
+        this.EditOperation();
+        break;
+      case CRUDState.DELETE:
+        this.DeleteOperation();
+        break;
+    }
+  }
+
+  ShowImg(ImgSrc: string) {
+    let Img = document.getElementById('ShowImage') as HTMLImageElement;
+    Img.src = ImgSrc;
   }
 
   RefreshObjState() {
@@ -357,62 +490,8 @@ export class AdminPanelComponent implements OnInit {
     this.store.dispatch(PanelAction.GetTeamList());
   }
 
-  TakeTeamInfo(name: string, OPERATION: string): void {
-    const NewTeam: TeamSablon = {
-      id: this.Team.id,
-      name: name,
-    };
-
-    this.store.dispatch(PanelAction.SetTeam({ Team: NewTeam }));
-    this.SetCRUDState(OPERATION);
-    console.log(NewTeam);
-    this.CallOperation(OPERATION);
-  }
-  TakePlayerInfo(
-    nick: string,
-    name: string,
-    lname: string,
-    img: string,
-    kd: string,
-    impact: string,
-    rating: string,
-    price: string,
-    OPERATION: string
-  ) {
-    console.log(this.Team);
-    const NewPlayer: player = {
-      id: this.Player.id,
-      nick: nick,
-      name: name,
-      lname: lname,
-      img: img,
-      kd: parseInt(kd),
-      impact: parseInt(impact),
-      rating: parseInt(rating),
-      price: parseInt(price),
-      team: '',
-    };
-    this.store.dispatch(PanelAction.SetPlayer({ Player: NewPlayer }));
-    this.SetCRUDState(OPERATION);
-    this.CallOperation(OPERATION);
-  }
-
-  CallOperation(OPERATION: string) {
-    switch (OPERATION) {
-      case CRUDState.CREATE:
-        this.CreateOperation();
-        break;
-      case CRUDState.EDIT:
-        this.EditOperation();
-        break;
-      case CRUDState.DELETE:
-        this.DeleteOperation();
-        break;
-    }
-  }
-
-  ShowImg(ImgSrc: string) {
-    let Img = document.getElementById('ShowImage') as HTMLImageElement;
-    Img.src = ImgSrc;
+  ngOnDestroy(): void {
+    this.$Unsubscribe.next();
+    this.$Unsubscribe.complete();
   }
 }

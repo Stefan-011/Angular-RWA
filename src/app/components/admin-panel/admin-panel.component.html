@@ -91,12 +91,7 @@
             placeholder="Ime"
             #Name />
           <input type="text" placeholder="Prezime" #Lname /></label
-        ><br /><img
-          class="rounded-circle p-1"
-          src="..."
-          alt="..."
-          id="ShowImage"
-        />
+        ><br /><img class="rounded-circle p-1" alt="..." id="ShowImage" />
         <br />
         <input
           type="text"
@@ -110,13 +105,21 @@
           <div style="float: right; width: 50%" class="flex-column">
             <div class="text-center pt-3 stat-div">
               K/D:
-              <input type="number" placeholder="K/D" max="2" min="0" #KD />
+              <input
+                type="number"
+                placeholder="K/D"
+                max="2"
+                min="0"
+                step="0.01"
+                #KD
+              />
             </div>
             <div class="text-center pt-3 stat-div">
               Uticaj:
               <input
+                step="0.01"
                 type="number"
-                placeholder="Impact"
+                placeholder="Uticaj"
                 max="2"
                 min="0"
                 #Impact
@@ -144,6 +147,7 @@
             <div class="text-center pt-3 stat-div">
               Rejting:
               <input
+                step="0.01"
                 type="number"
                 placeholder="Rejting"
                 max="2"
@@ -295,6 +299,7 @@
             <div class="text-center pt-3 stat-div">
               K/D:
               <input
+                step="0.01"
                 type="number"
                 placeholder="K/D"
                 max="2"
@@ -306,8 +311,9 @@
             <div class="text-center pt-3 stat-div">
               Uticaj:
               <input
+                step="0.01"
                 type="number"
-                placeholder="Impact"
+                placeholder="Uticaj"
                 max="2"
                 min="0"
                 #Impact
@@ -335,6 +341,7 @@
             <div class="text-center pt-3 stat-div">
               Rejting:
               <input
+                step="0.01"
                 type="number"
                 placeholder="Rejting"
                 max="2"
@@ -355,6 +362,7 @@
         />
         <br />
         <button
+          *ngIf="Player.id != 0"
           class="btn-warning"
           (click)="
             TakePlayerInfo(
@@ -372,7 +380,13 @@
         >
           Izmeni
         </button>
-        <button class="btn-danger" (click)="DeleteOperation()">Izbrisi</button>
+        <button
+          class="btn-danger"
+          *ngIf="Player.id != 0"
+          (click)="DeleteOperation()"
+        >
+          Izbrisi
+        </button>
       </div>
 
       <!-- SPONZOR -->
@@ -419,12 +433,19 @@
         />
         <br />
         <button
+          *ngIf="Sponzor.id != 0"
           class="btn-warning"
           (click)="TakeSponzorInfo(Name.value, Img.value, Money.value, 'EDIT')"
         >
           Izmeni
         </button>
-        <button class="btn-danger" (click)="DeleteOperation()">Izbrisi</button>
+        <button
+          class="btn-danger"
+          *ngIf="Sponzor.id != 0"
+          (click)="DeleteOperation()"
+        >
+          Izbrisi
+        </button>
       </div>
 
       <!--Team-->
@@ -443,12 +464,19 @@
         </label>
         <br />
         <button
+          *ngIf="Team.id != 0"
           class="btn-warning"
           (click)="TakeTeamInfo(TeamName.value, 'EDIT')"
         >
           Izmeni
         </button>
-        <button class="btn-danger" (click)="DeleteOperation()">Izbrisi</button>
+        <button
+          class="btn-danger"
+          *ngIf="Team.id != 0"
+          (click)="DeleteOperation()"
+        >
+          Izbrisi
+        </button>
       </div>
     </div>
   </div>
