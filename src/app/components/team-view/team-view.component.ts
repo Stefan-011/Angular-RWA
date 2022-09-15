@@ -106,6 +106,7 @@ export class TeamViewComponent implements OnInit {
       );
     } else if (this.compType == ComponentEnum.MyTeam) {
       this.ModeChange(ShopMode.Igraci);
+
       this.store.dispatch(MyTeamActions.GetMyTeam());
 
       this.$ActiveTeam = this.store.select(selectMyTeam);

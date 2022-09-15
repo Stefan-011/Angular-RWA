@@ -29,5 +29,11 @@ export const ShopReducer = createReducer(
   on(ShopAction.SetSponzorList, (state, { SponzorList }) => ({
     ...state,
     sponzorlist: SponzorList,
+  })),
+  on(ShopAction.ClearState, (state, {}) => ({
+    ...state,
+    shop_state: ShopMode.Igraci,
+    error_message: ShopErrorMsg.default,
+    sponzorlist: [],
   }))
 );

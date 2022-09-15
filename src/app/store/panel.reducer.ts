@@ -95,5 +95,36 @@ export const PanelReducer = createReducer(
   on(PanelAction.SetCRUDState, (state, { Operation }) => ({
     ...state,
     CRUDState: Operation,
+  })),
+  on(PanelAction.ClearState, (state, {}) => ({
+    ...state,
+    ErrorMessage: PanelErrorMessage.default,
+    PanelMode: PanelMode.DEFAULT,
+    Player: {
+      id: -1,
+      kd: 0,
+      img: '',
+      nick: '',
+      team: '',
+      price: 0,
+      name: '',
+      lname: '',
+      impact: 0,
+      rating: 0,
+    },
+    Sponzor: {
+      id: -1,
+      img: '',
+      money: 0,
+      name: '',
+    },
+    Team: {
+      id: -1,
+      name: '',
+    },
+    TeamList: [],
+    PlayerList: [],
+    SponzorList: [],
+    CRUDState: CRUDState.DEFAULT,
   }))
 );

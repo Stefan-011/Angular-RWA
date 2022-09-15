@@ -7,6 +7,7 @@ import { AppState } from '../../app.state';
 import { Store } from '@ngrx/store';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { TeamSablon } from 'src/app/models/TeamSablon';
+import * as MyTeamActions from 'src/app/store/myteam.action';
 
 @Component({
   selector: 'app-polje',
@@ -42,6 +43,7 @@ export class PoljeComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(OtherTeamAction.GetTeamList());
+    this.store.dispatch(MyTeamActions.GetMyTeam());
 
     this.$ActiveTeamName
       .pipe(takeUntil(this.$Unsubscribe))
@@ -82,8 +84,8 @@ export class PoljeComponent implements OnInit {
     );
   }
 
-  GetRezultat(data: string[]): void {
-    this.FinalResult = data;
+  GetRezultat(Result: string[]): void {
+    this.FinalResult = Result;
   }
 
   ngOnDestroy(): void {

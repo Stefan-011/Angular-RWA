@@ -72,7 +72,7 @@
     >
       <option value="" hidden>Izaberite igraca</option>
       <option *ngFor="let obj of PlayerList" value="{{ obj }}">
-        {{ obj.name }}
+        {{ obj.nick }}
       </option>
     </select>
     <!-- CREATE DIV -->
@@ -180,7 +180,7 @@
             )
           "
         >
-          dodaj
+          Dodaj
         </button>
       </div>
 
@@ -231,7 +231,7 @@
             TakeSponzorInfo(Name.value, Img.value, Money.value, 'CREATE')
           "
         >
-          dodaj
+          Dodaj
         </button>
       </div>
 
@@ -247,7 +247,7 @@
           class="btn-success"
           (click)="TakeTeamInfo(TeamName.value, 'CREATE')"
         >
-          dodaj
+          Dodaj
         </button>
       </div>
     </div>

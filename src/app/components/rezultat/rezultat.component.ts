@@ -6,7 +6,7 @@ import { MapsEnum } from '../../Enums/MapsEnum';
 import { player } from '../../models/player';
 import { AppState } from '../../app.state';
 import { Store } from '@ngrx/store';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { interval, Observable, Subject, takeUntil } from 'rxjs';
 import * as RezultatSelector from 'src/app/store/rezultat.selector';
 import * as RezultatActions from 'src/app/store/rezultat.action';
 import { IMap } from 'src/app/models/IMap';
@@ -74,10 +74,11 @@ export class RezultatComponent implements OnInit {
   SetupObservables(): void {
     this.$MyTeam
       .pipe(takeUntil(this.$Unsubscribe))
-      .subscribe((data) => (this.LeftTeam = data));
+      .subscribe((Team) => (this.LeftTeam = Team));
+
     this.$ActiveTeam
       .pipe(takeUntil(this.$Unsubscribe))
-      .subscribe((data) => (this.RightTeam = data));
+      .subscribe((Team) => (this.RightTeam = Team));
 
     this.$LeftTeamNameObs
       .pipe(takeUntil(this.$Unsubscribe))
@@ -105,7 +106,6 @@ export class RezultatComponent implements OnInit {
     Team.forEach((player) => {
       RetVal += player.impact * 40 + player.kd * 60 + player.rating * 10;
     });
-
     return RetVal + Math.floor(Math.random() * (20 - 1 + 1)) + 1;
   }
 
@@ -132,11 +132,14 @@ export class RezultatComponent implements OnInit {
       Row.removeChild(Row.firstChild);
     }
 
-    let display = setInterval(() => {
+    const display = interval(2500);
+    const StopDisplay$ = new Subject<void>();
+
+    display.pipe(takeUntil(StopDisplay$)).subscribe(() => {
       this.StartGame(GameCounter);
       GameCounter++;
       if (this.RightWinns == 2 || this.LeftWinns == 2) {
-        clearInterval(display);
+        StopDisplay$.next();
 
         if (this.RightWinns == 2) winner = this.RightTeamName;
         else winner = this.LeftTeamName;
@@ -148,7 +151,7 @@ export class RezultatComponent implements OnInit {
         this.ResultListener.emit(Array);
         Btn.disabled = false;
       }
-    }, 2500);
+    });
   }
 
   GetRandomMap(): MapsEnum {
@@ -201,6 +204,7 @@ export class RezultatComponent implements OnInit {
           );
           LowwerRound = this.RoundsAlghoritmExtension(Razlika, Probability.Low);
         }
+
         break;
       case 2:
         HigherRound = this.RoundsAlghoritmExtension(Razlika, Probability.High);
@@ -215,6 +219,7 @@ export class RezultatComponent implements OnInit {
           );
           LowwerRound = this.RoundsAlghoritmExtension(Razlika, Probability.Low);
         }
+
         break;
       case 3:
         if (Razlika > 30) {
@@ -244,8 +249,40 @@ export class RezultatComponent implements OnInit {
             );
           }
         }
+
         break;
     }
+
+    return this.RoundsAlghoritmResult(
+      HigherProbability,
+      HigherRound,
+      LowwerRound
+    );
+  }
+
+  RoundsAlghoritmExtension(
+    Difference: number,
+    probability: Probability
+  ): number {
+    if (probability == Probability.High) {
+      if (Difference <= 30) return Math.floor(Math.random() * (16 - 6 + 1)) + 6;
+      else if (Difference <= 60)
+        return Math.floor(Math.random() * (16 - 15 + 1)) + 15;
+      else return 16;
+    } else {
+      if (Difference <= 30)
+        return Math.floor(Math.random() * (16 - 12 + 1)) + 12;
+      else if (Difference <= 60)
+        return Math.floor(Math.random() * (16 - 3 + 1)) + 3;
+      else return Math.floor(Math.random() * (10 - 1 + 1)) + 1;
+    }
+  }
+
+  RoundsAlghoritmResult(
+    HigherProbability: Probability,
+    HigherRound: number,
+    LowwerRound: number
+  ): string {
     if (HigherProbability == Probability.Left) {
       if (HigherRound > LowwerRound)
         this.store.dispatch(
@@ -276,24 +313,6 @@ export class RezultatComponent implements OnInit {
         );
 
       return LowwerRound + ' : ' + HigherRound;
-    }
-  }
-
-  RoundsAlghoritmExtension(
-    Difference: number,
-    probability: Probability
-  ): number {
-    if (probability == Probability.High) {
-      if (Difference <= 30) return Math.floor(Math.random() * (16 - 6 + 1)) + 6;
-      else if (Difference <= 60)
-        return Math.floor(Math.random() * (16 - 15 + 1)) + 15;
-      else return 16;
-    } else {
-      if (Difference <= 30)
-        return Math.floor(Math.random() * (16 - 12 + 1)) + 12;
-      else if (Difference <= 60)
-        return Math.floor(Math.random() * (16 - 3 + 1)) + 3;
-      else return Math.floor(Math.random() * (10 - 1 + 1)) + 1;
     }
   }
 

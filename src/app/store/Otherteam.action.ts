@@ -19,3 +19,4 @@ export const SetTeamList = createAction(
 );
 
 export const SetName = createAction('SetName', props<{ name: string }>());
+export const ClearState = createAction('ClearState');

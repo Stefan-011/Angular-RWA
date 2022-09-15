@@ -7,15 +7,10 @@ import { AppState } from 'src/app/app.state';
 import { CRUDState } from 'src/app/Enums/CRUDState';
 import { PanelErrorMessage } from 'src/app/Enums/PanelErrorMessage';
 import { PanelMode } from 'src/app/Enums/Panelmode';
-import { MyTeam } from 'src/app/models/MyTeam';
 import { player } from 'src/app/models/player';
 import { Sponzor } from 'src/app/models/Sponzor';
 import { TeamSablon } from 'src/app/models/TeamSablon';
-import { IgraciService } from 'src/app/services/igraci.service';
-import { MyteamService } from 'src/app/services/myteam.service';
-import { SponzorService } from 'src/app/services/sponzor.service';
 import * as PanelAction from 'src/app/store/panel.action';
-import { PanelReducer } from 'src/app/store/panel.reducer';
 import * as PanelSelector from 'src/app/store/panel.selector';
 import { OpenDialog } from '../dialog/dialog.component';
 
@@ -180,7 +175,6 @@ export class AdminPanelComponent implements OnInit {
 
       case PanelMode.TIM:
         this.store.dispatch(PanelAction.CreateTeam({ Team: this.Team }));
-
         break;
     }
   }
@@ -217,11 +211,11 @@ export class AdminPanelComponent implements OnInit {
         break;
 
       case PanelMode.SPOZNOR:
-        this.store.dispatch(PanelAction.EditSponzor({ Sponzor: this.Sponzor })); // REWORK
+        this.store.dispatch(PanelAction.EditSponzor({ Sponzor: this.Sponzor }));
         break;
 
       case PanelMode.TIM:
-        this.store.dispatch(PanelAction.EditTeam({ Team: this.Team })); // REWORK
+        this.store.dispatch(PanelAction.EditTeam({ Team: this.Team }));
         break;
     }
   }
@@ -383,42 +377,19 @@ export class AdminPanelComponent implements OnInit {
     rating: string,
     price: string,
     OPERATION: string
-  ) {
-    let ErrMsg: string;
+  ): void {
     if (
-      parseFloat(rating) > 2 ||
-      parseFloat(kd) > 2 ||
-      parseFloat(impact) > 2 ||
-      parseFloat(rating) < 0 ||
-      parseFloat(kd) < 0 ||
-      parseFloat(impact) < 0
-    ) {
-      ErrMsg = 'Polja Rajting,K/D,Uticaj su u rasponu od 0-2 !';
-      OpenDialog(ErrMsg, this.matDialog);
+      this.GetPlayerInfoValidity(
+        rating,
+        kd,
+        impact,
+        name,
+        nick,
+        lname,
+        price
+      ) == false
+    )
       return;
-    }
-
-    if (name == '' || nick == '' || lname == '') {
-      ErrMsg = 'Popunite licne informacije (Ime,Prezime,Nadimak)!';
-      OpenDialog(ErrMsg, this.matDialog);
-      return;
-    }
-
-    if ((parseInt(price) < 1000 && parseInt(price) > 4000) || price == '') {
-      ErrMsg = 'Cena je u rasponu od 1000 - 4000!';
-      OpenDialog(ErrMsg, this.matDialog);
-      return;
-    }
-    if (rating == '' && kd == '' && impact == '') {
-      ErrMsg = 'Popunite sve podatke statistike (K/D, Uticaj,Rejting)!';
-      OpenDialog(ErrMsg, this.matDialog);
-      return;
-    }
-    if (this.Team.id == 0) {
-      ErrMsg = 'Izaberite tim za igraca!';
-      OpenDialog(ErrMsg, this.matDialog);
-      return;
-    }
 
     const NewPlayer: player = {
       id: this.Player.id,
@@ -437,7 +408,55 @@ export class AdminPanelComponent implements OnInit {
     this.CallOperation(OPERATION);
   }
 
-  CallOperation(OPERATION: string) {
+  GetPlayerInfoValidity(
+    rating: string,
+    kd: string,
+    impact: string,
+    name: string,
+    nick: string,
+    lname: string,
+    price: string
+  ): boolean {
+    let ErrMsg: string;
+
+    if (
+      parseFloat(rating) > 2 ||
+      parseFloat(kd) > 2 ||
+      parseFloat(impact) > 2 ||
+      parseFloat(rating) < 0 ||
+      parseFloat(kd) < 0 ||
+      parseFloat(impact) < 0
+    ) {
+      ErrMsg = 'Polja Rajting,K/D,Uticaj su u rasponu od 0-2 !';
+      OpenDialog(ErrMsg, this.matDialog);
+      return false;
+    }
+
+    if (name == '' || nick == '' || lname == '') {
+      ErrMsg = 'Popunite licne informacije (Ime,Prezime,Nadimak)!';
+      OpenDialog(ErrMsg, this.matDialog);
+      return false;
+    }
+
+    if ((parseInt(price) < 1000 && parseInt(price) > 4000) || price == '') {
+      ErrMsg = 'Cena je u rasponu od 1000 - 4000!';
+      OpenDialog(ErrMsg, this.matDialog);
+      return false;
+    }
+    if (rating == '' && kd == '' && impact == '') {
+      ErrMsg = 'Popunite sve podatke statistike (K/D, Uticaj,Rejting)!';
+      OpenDialog(ErrMsg, this.matDialog);
+      return false;
+    }
+    if (this.Team.id == 0) {
+      ErrMsg = 'Izaberite tim za igraca!';
+      OpenDialog(ErrMsg, this.matDialog);
+      return false;
+    }
+    return true;
+  }
+
+  CallOperation(OPERATION: string): void {
     switch (OPERATION) {
       case CRUDState.CREATE:
         this.CreateOperation();
@@ -451,12 +470,12 @@ export class AdminPanelComponent implements OnInit {
     }
   }
 
-  ShowImg(ImgSrc: string) {
+  ShowImg(ImgSrc: string): void {
     let Img = document.getElementById('ShowImage') as HTMLImageElement;
     Img.src = ImgSrc;
   }
 
-  RefreshObjState() {
+  RefreshObjState(): void {
     let CleanPlayer = {
       id: 0,
       kd: 0,
@@ -485,7 +504,6 @@ export class AdminPanelComponent implements OnInit {
     this.store.dispatch(PanelAction.SetTeam({ Team: CleanTeam }));
     this.store.dispatch(PanelAction.SetPlayer({ Player: CleanPlayer }));
     this.store.dispatch(PanelAction.SetSponzor({ Sponzor: CleanSponzor }));
-
     this.store.dispatch(PanelAction.GetSponzorList());
     this.store.dispatch(PanelAction.GetTeamList());
   }

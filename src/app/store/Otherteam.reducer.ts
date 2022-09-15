@@ -28,5 +28,11 @@ export const OtherTeamState = createReducer(
   on(OtherTeamAction.SetTeamList, (state, { TeamList }) => ({
     ...state,
     TeamList: TeamList,
+  })),
+  on(OtherTeamAction.ClearState, (state, {}) => ({
+    ...state,
+    name: '',
+    SelectedPlayer: 0,
+    TeamList: [],
   }))
 );

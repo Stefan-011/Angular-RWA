@@ -96,3 +96,5 @@ export const SetCRUDState = createAction(
   'SetCRUDState',
   props<{ Operation: CRUDState }>()
 );
+
+export const ClearState = createAction('ClearState');

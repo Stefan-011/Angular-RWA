@@ -67,5 +67,12 @@ export const LoginReducer = createReducer(
       ...state,
       RegisterValidate: OperationResult.none,
     };
-  })
+  }),
+  on(LoginActions.ClearState, (state, {}) => ({
+    ...state,
+    Mode: LoginMod.Login,
+    ErrorMessage: ErrorMessage.None,
+    RegisterValidate: OperationResult.none,
+    LoginValidate: OperationResult.none,
+  }))
 );

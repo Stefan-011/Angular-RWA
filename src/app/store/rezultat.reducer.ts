@@ -29,5 +29,10 @@ export const RezultatReducer = createReducer(
   on(RezultatAction.SetRightTeamWinns, (state, { NumberOfWinns }) => ({
     ...state,
     RightTeamWinns: NumberOfWinns,
+  })),
+  on(RezultatAction.ClearState, (state, {}) => ({
+    ...state,
+    LeftTeamWinns: 0,
+    RightTeamWinns: 0,
   }))
 );

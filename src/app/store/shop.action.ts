@@ -18,3 +18,4 @@ export const SetSponzorList = createAction(
   props<{ SponzorList: Sponzor[] }>()
 );
 export const GetSponzorList = createAction('GetSponzorList');
+export const ClearState = createAction('ClearState');

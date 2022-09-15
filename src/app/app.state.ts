@@ -5,6 +5,7 @@ import { LoginState } from './store/login.reducer';
 import { RezultatState } from './store/rezultat.reducer';
 import { ShopState } from './store/shop.reducer';
 import { PanelState } from './store/panel.reducer';
+import { TestScheduler } from 'rxjs/testing';
 
 export interface AppState {
   user: UserState;

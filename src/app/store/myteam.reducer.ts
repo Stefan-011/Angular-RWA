@@ -53,5 +53,16 @@ export const MyTeamReducer = createReducer(
   }),
   on(MyTeamActions.SetNumberOfPlayers, (state, { PlayerCount }) => {
     return { ...state, NumberOfPlayers: PlayerCount };
-  })
+  }),
+  on(MyTeamActions.ClearState, (state, {}) => ({
+    ...state,
+    SelectedPlayer: 0,
+    NumberOfPlayers: 0,
+    Sponzor: {
+      id: -1,
+      img: '',
+      name: '',
+      money: 0,
+    },
+  }))
 );

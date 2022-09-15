@@ -39,5 +39,20 @@ export const userReducer = createReducer(
   on(UserActions.SetMenuSize, (state, { Size }) => ({
     ...state,
     MenuSize: Size,
+  })),
+  on(UserActions.LogoutUser, (state, {}) => ({
+    ...state,
+    loggedIn: false,
+  })),
+  on(UserActions.SetLoginState, (state, { LoginState }) => ({
+    ...state,
+    loggedIn: LoginState,
+  })),
+  on(UserActions.ClearState, (state, {}) => ({
+    ...state,
+    loggedIn: false,
+    CurrentUser: null,
+    component: ComponentEnum.Home,
+    MenuSize: MenuSize.default,
   }))
 );

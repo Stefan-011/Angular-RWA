@@ -12,3 +12,4 @@ export const SetRightTeamWinns = createAction(
 );
 export const UseMap = createAction('UseMap', props<{ Map: IMap }>());
 export const CleanMapPool = createAction('CleanMapPool');
+export const ClearState = createAction('ClearState');

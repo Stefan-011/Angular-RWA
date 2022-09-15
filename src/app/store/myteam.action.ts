@@ -55,3 +55,4 @@ export const SetNumberOfPlayers = createAction(
   'SetNumberOfPlayers',
   props<{ PlayerCount: number }>()
 );
+export const ClearState = createAction('ClearState');

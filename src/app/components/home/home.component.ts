@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private cookies: CookieService,
     private store: Store<AppState>,
-    private route: Router
+    private router: Router
   ) {
     this.Username = '';
     this.LogState = false;
@@ -77,25 +77,25 @@ export class HomeComponent implements OnInit {
 
   SwitchRoute(RouteOption: string): void {
     switch (RouteOption) {
-      case 'SIMULACIJA':
+      case ComponentEnum.Simulacija:
         this.store.dispatch(
           UserActions.SetComponent({ comp: ComponentEnum.Simulacija })
         );
         break;
 
-      case 'MYTEAM':
+      case ComponentEnum.MyTeam:
         this.store.dispatch(
           UserActions.SetComponent({ comp: ComponentEnum.MyTeam })
         );
         break;
 
-      case 'SHOP':
+      case ComponentEnum.Shop:
         this.store.dispatch(
           UserActions.SetComponent({ comp: ComponentEnum.Shop })
         );
         break;
 
-      case 'PANEL':
+      case ComponentEnum.Panel:
         if (this.role != Role.ADMIN) break;
         this.store.dispatch(
           UserActions.SetComponent({ comp: ComponentEnum.Panel })
@@ -128,7 +128,8 @@ export class HomeComponent implements OnInit {
   Logout(): void {
     localStorage.clear();
     this.cookies.deleteAll();
-    this.route.navigate(['login']);
+    this.router.navigate(['login']);
+    this.store.dispatch(UserActions.LogoutUser());
   }
 
   ngOnDestroy(): void {

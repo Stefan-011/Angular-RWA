@@ -40,11 +40,7 @@ export class UserEffects {
               expires: new Date(new Date().getTime() + 3600 * 1000),
             });
 
-            localStorage.clear();
-            localStorage.setItem('loggedIn', 'true');
-
             this.router.navigate(['home']);
-
             this.store.dispatch(GetMyTeam());
             return UserActions.loginSuccess({ user: Package.user_data });
           }),

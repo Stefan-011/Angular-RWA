@@ -33,3 +33,5 @@ export const LoginIsNotValid = createAction(
 
 export const RestartLogin = createAction('RestartLogin');
 export const RestartRegister = createAction('RestartLogin');
+
+export const ClearState = createAction('ClearState');

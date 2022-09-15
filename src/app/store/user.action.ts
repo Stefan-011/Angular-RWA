@@ -42,3 +42,9 @@ export const GetLoggedUser = createAction('GetLoggedIn');
 export const CreateUserSuccess = createAction('CreateUserSuccess');
 export const RegisterUserSuccess = createAction('RegisterUserSuccess');
 export const RegisterUserFail = createAction('RegisterUserFail');
+export const LogoutUser = createAction('LogoutUser');
+export const ClearState = createAction('ClearState');
+export const SetLoginState = createAction(
+  'SetLoginState',
+  props<{ LoginState: boolean }>()
+);
