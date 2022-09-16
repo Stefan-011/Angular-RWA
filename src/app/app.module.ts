@@ -33,6 +33,9 @@ import { ShopReducer } from './store/shop.reducer';
 import { PanelReducer } from './store/panel.reducer';
 import { PanelEffects } from './store/panel.effect';
 import { ShopEffects } from './store/shop.effects';
+import { AuthGuard } from './auth/auth.guard';
+import { AdminGuard } from './auth/admin.guard';
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 @NgModule({
   declarations: [
     AppComponent,
@@ -77,6 +80,10 @@ import { ShopEffects } from './store/shop.effects';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    JwtHelperService,
+    AuthGuard,
+    AdminGuard,
   ],
   bootstrap: [AppComponent],
 })

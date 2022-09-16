@@ -7,6 +7,7 @@ import { AppState } from 'src/app/app.state';
 import { CRUDState } from 'src/app/Enums/CRUDState';
 import { PanelErrorMessage } from 'src/app/Enums/PanelErrorMessage';
 import { PanelMode } from 'src/app/Enums/Panelmode';
+import { Role } from 'src/app/Enums/Role';
 import { player } from 'src/app/models/player';
 import { Sponzor } from 'src/app/models/Sponzor';
 import { TeamSablon } from 'src/app/models/TeamSablon';

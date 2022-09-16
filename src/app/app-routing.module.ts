@@ -6,14 +6,16 @@ import { RezultatComponent } from './components/rezultat/rezultat.component';
 import { PoljeComponent } from './components/polje/polje.component';
 import { TeamViewComponent } from './components/team-view/team-view.component';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
+import { AuthGuard } from './auth/auth.guard';
+import { AdminGuard } from './auth/admin.guard';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
-  { path: 'rezultat', component: RezultatComponent },
-  { path: 'teamview', component: TeamViewComponent },
-  { path: 'polje', component: PoljeComponent },
-  { path: 'panel', component: AdminPanelComponent },
+  { path: 'rezultat', component: RezultatComponent, canActivate: [AuthGuard] },
+  { path: 'teamview', component: TeamViewComponent, canActivate: [AuthGuard] },
+  { path: 'polje', component: PoljeComponent, canActivate: [AuthGuard] },
+  { path: 'panel', component: AdminPanelComponent, canActivate: [AdminGuard] },
 ];
 
 @NgModule({

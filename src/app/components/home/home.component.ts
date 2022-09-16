@@ -78,18 +78,21 @@ export class HomeComponent implements OnInit {
   SwitchRoute(RouteOption: string): void {
     switch (RouteOption) {
       case ComponentEnum.Simulacija:
+        if (this.role != Role.USER) break;
         this.store.dispatch(
           UserActions.SetComponent({ comp: ComponentEnum.Simulacija })
         );
         break;
 
       case ComponentEnum.MyTeam:
+        if (this.role != Role.USER) break;
         this.store.dispatch(
           UserActions.SetComponent({ comp: ComponentEnum.MyTeam })
         );
         break;
 
       case ComponentEnum.Shop:
+        if (this.role != Role.USER) break;
         this.store.dispatch(
           UserActions.SetComponent({ comp: ComponentEnum.Shop })
         );
