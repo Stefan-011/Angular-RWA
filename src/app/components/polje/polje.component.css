@@ -1,22 +1,35 @@
+.polje-div {
+  border: 1px solid black;
+}
+.vs-div {
+  background-color: black;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  padding-left: 2vh;
+  padding-right: 2vh;
+  border-radius: 100%;
+  border: 2px solid white;
+}
 .tim-levi-div {
   height: 100%;
-  width: 50%;
+  width: 48%;
   float: left;
   background-color: none;
 }
 .tim-desni-div {
   height: 100%;
-  width: 50%;
+  width: 48%;
   float: right;
-  padding-left: 27rem;
-  background-color: transparent;
+  background-color: none;
 }
 
 .mid-linija {
+  color: white;
   height: 100%;
-  width: 1%;
+  font-size: 3vw;
+  width: 4%;
   float: left;
-  background-color: black;
+  padding-top: 50%;
 }
 
 .stats-div {
@@ -40,7 +53,39 @@
   color: white;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 912px) {
+  .tim-desni-div {
+    padding-top: 3vh;
+    height: 100%;
+    width: 100%;
+  }
+
+  .tim-levi-div {
+    height: 100%;
+    width: 100%;
+  }
+
+  .mid-linija {
+    color: white;
+    font-size: 4vh;
+    height: 7.5vh;
+    width: 100%;
+    padding-top: 0px;
+    margin-top: 0;
+    background-color: black;
+  }
+  .vs-div {
+    background-color: black;
+    padding-top: 1vw;
+    padding-bottom: 1vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    border-radius: 100%;
+    border: 2px solid white;
+  }
+}
+
+/*@media screen and (max-width: 1024px) {
   .player-profile {
     width: 95% !important;
     margin: 0;
@@ -51,7 +96,7 @@
         width: 90% !important;
         margin: 0;
         padding: 0;
-    }*/
+    }
   .tim-levi-div {
     padding: 0;
   }
@@ -165,4 +210,4 @@
     height: 50vh !important;
     color: red !important;
   }
-}
+}*/

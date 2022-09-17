@@ -15,9 +15,16 @@
   background-color: #1d1d1d !important;
   color: white;
   box-shadow: 0 0 0 0.1rem white;
-  margin-left: 45%;
+  margin-right: 39%;
+  margin-left: 40%;
   border-radius: 30px;
   opacity: 0.91;
+  padding-left: 4vw;
+  padding-right: 4vw;
+  padding-top: 1vw;
+  padding-bottom: 1vw;
+  font-size: 1.5vw;
+  margin-bottom: 4vh;
 }
 
 .btn-sim:hover {
@@ -30,10 +37,9 @@ td {
   color: #000;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 912px) {
   .btn-sim {
-    width: 100%;
-    margin-left: 40%;
+    font-size: 3vh;
   }
 }
 

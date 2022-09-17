@@ -79,42 +79,9 @@
   font-weight: bold;
 }
 
-@media screen and (max-width: 335px) {
-  .player-profile {
-    height: 38.5vh !important;
-  }
-  .player-profile img {
-    width: 90px;
-    height: 90px;
-    min-width: 100px;
-    border: white 2px solid;
-    margin-left: 0% !important;
-  }
-}
 @media screen and (max-width: 820px) {
   .Team-cmbox {
     width: 100%;
     margin: 0 !important;
-  }
-}
-
-@media screen and (max-width: 820px) {
-  .Team-cmbox {
-    width: 100%;
-    margin: 0 !important;
-  }
-}
-
-@media screen and (max-width: 355px) {
-  .player-profile {
-    height: 45vh;
-    margin-bottom: 3.5vh;
-  }
-}
-
-@media screen and (max-width: 280px) {
-  .player-profile {
-    height: 50vh !important;
-    counter: red;
   }
 }

@@ -12229,10 +12229,11 @@ section#contact form#contactForm :-ms-input-placeholder {
 }
 
 .player-profile {
-  width: 30rem !important;
+  width: 30vw;
   height: 30%;
   background: #212529;
   border: white 3px solid;
+  margin-bottom: 3vh;
 }
 
 .player-profile img {
@@ -12250,11 +12251,22 @@ section#contact form#contactForm :-ms-input-placeholder {
   color: #03bdff;
 }
 
-@media screen and (max-width: 335px) {
+@media screen and (max-width: 912px) {
   .player-profile {
-    width: 16.5rem !important;
-    height: 6rem !important;
+    width: 40vh;
+    height: 30%;
+    border: white 3px solid;
+    margin-bottom: 3vh;
   }
+  .player-profile img {
+    width: 45%;
+    height: 40%;
+    min-width: 100px;
+    border: white 2px solid;
+  }
+}
+
+@media screen and (max-width: 335px) {
   .masthead-heading {
     font-size: 2.5rem !important;
   }

@@ -1,12 +1,67 @@
-<section class="font-lexend">
-  <div class="polje-div pb-5 mb-5">
-    <div class="tim-levi-div">
-      <div class="flex-column pt-5">
-        <label class="ms-5 pt-1 pb-4 h1" style="color: white">Vas tim</label
-        ><br />
+<section class="font-lexend polje-div">
+  <div class="tim-levi-div d-flex justify-content-center text-center">
+    <div class="flex-column pt-5">
+      <label class="h1" style="color: white">Vas tim</label><br />
 
-        <div *ngFor="let obj of $MyTeam | async">
-          <div class="mx-2 mt-2 player-profile text-center">
+      <div *ngFor="let obj of $MyTeam | async">
+        <div class="player-profile text-center">
+          <label class="pt-1" style="color: white"
+            ><p class="h4">{{ obj.nick }}</p>
+            <br />{{ obj.name }} {{ obj.lname }}</label
+          ><br /><img
+            class="rounded-circle p-1"
+            src="{{ obj.img }}"
+            alt="..."
+          />
+          <div class="ms-0 d-flex justify-content-center stats-div">
+            <div style="float: right; width: 50%" class="flex-column">
+              <div class="text-center p-2 stat-div">
+                K/D: <label>{{ obj.kd }}</label>
+              </div>
+              <div class="text-center p-2 stat-div">
+                Uticaj: <label>{{ obj.impact }}</label>
+              </div>
+            </div>
+
+            <div style="float: left; width: 50%">
+              <div class="text-center p-2 stat-div">
+                Tim: <label>{{ obj.team }}</label>
+              </div>
+              <div class="text-center p-2 stat-div">
+                Rejting: <label>{{ obj.rating }}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mid-linija text-center d-flex justify-content-center">
+    <div class="vs-div">VS</div>
+  </div>
+
+  <div class="tim-desni-div d-flex justify-content-center">
+    <div class="flex-column text-center me-2">
+      <div class="pb-2">
+        <select
+          id="Team-cmbox"
+          class="form-select text-center Team-cmbox"
+          aria-label="Default"
+          (change)="ChangeOtherTeam()"
+        >
+          <option *ngFor="let obj of TeamNames" value="{{ obj }}">
+            {{ obj }}
+          </option>
+        </select>
+      </div>
+      <label class="h1" style="color: white">{{ ActiveTeamName }}</label
+      ><br />
+
+      <div *ngFor="let obj of $ActiveTeam | async">
+        <div class="d-flex justify-content-center">
+          <div style="height: 300px"></div>
+          <div class="player-profile">
             <label class="pt-1" style="color: white"
               ><p class="h4">{{ obj.nick }}</p>
               <br />{{ obj.name }} {{ obj.lname }}</label
@@ -38,66 +93,7 @@
         </div>
       </div>
     </div>
-
-    <div class="mid-linija"></div>
-
-    <div class="tim-desni-div">
-      <div class="flex-column text-center me-2">
-        <div class="pb-1">
-          <select
-            id="Team-cmbox"
-            class="form-select text-center Team-cmbox"
-            aria-label="Default"
-            (change)="ChangeOtherTeam()"
-          >
-            <option *ngFor="let obj of TeamNames" value="{{ obj }}">
-              {{ obj }}
-            </option>
-          </select>
-        </div>
-        <label class="ms-5 pt-1 pb-2 h1" style="color: white">{{
-          ActiveTeamName
-        }}</label
-        ><br />
-        <div style="height: 25px"></div>
-        <div *ngFor="let obj of $ActiveTeam | async">
-          <div class="d-flex justify-content-center">
-            <div style="height: 300px"></div>
-            <div class="mx-2 mt-2 player-profile">
-              <label class="pt-1" style="color: white"
-                ><p class="h4">{{ obj.nick }}</p>
-                <br />{{ obj.name }} {{ obj.lname }}</label
-              ><br /><img
-                class="rounded-circle p-1"
-                src="{{ obj.img }}"
-                alt="..."
-              />
-              <div class="ms-0 d-flex justify-content-center stats-div">
-                <div style="float: right; width: 50%" class="flex-column">
-                  <div class="text-center p-2 stat-div">
-                    K/D: <label>{{ obj.kd }}</label>
-                  </div>
-                  <div class="text-center p-2 stat-div">
-                    Uticaj: <label>{{ obj.impact }}</label>
-                  </div>
-                </div>
-
-                <div style="float: left; width: 50%">
-                  <div class="text-center p-2 stat-div">
-                    Tim: <label>{{ obj.team }}</label>
-                  </div>
-                  <div class="text-center p-2 stat-div">
-                    Rejting: <label>{{ obj.rating }}</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
-
   <app-rezultat
     (ResultListener)="GetRezultat($event)"
     [$ActiveTeam]="$ActiveTeam"
