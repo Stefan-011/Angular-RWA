@@ -91,3 +91,15 @@
     margin: 0 !important;
   }
 }
+
+@media screen and (max-width: 912px) {
+  .opt-btn-div {
+    margin-top: 12vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .opt-btn {
+    width: 100%;
+  }
+}
