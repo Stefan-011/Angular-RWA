@@ -36,6 +36,9 @@ import { ShopEffects } from './store/shop.effects';
 import { AuthGuard } from './auth/auth.guard';
 import { AdminGuard } from './auth/admin.guard';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { RouterModule } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,10 +51,12 @@ import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
     AdminPanelComponent,
   ],
   imports: [
+    FontAwesomeModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     CommonModule,
+    RouterModule,
     StoreModule.forRoot<AppState>({
       user: userReducer,
       OtherTeam: OtherTeamState,

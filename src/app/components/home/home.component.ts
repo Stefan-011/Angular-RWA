@@ -76,6 +76,7 @@ export class HomeComponent implements OnInit {
   }
 
   SwitchRoute(RouteOption: string): void {
+    console.log(RouteOption);
     switch (RouteOption) {
       case ComponentEnum.Simulacija:
         if (this.role != Role.USER) break;

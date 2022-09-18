@@ -20,6 +20,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { OpenDialog } from '../dialog/dialog.component';
 import { ShopErrorMsg } from 'src/app/Enums/ShopErrorMsg';
 import { TeamSablon } from 'src/app/models/TeamSablon';
+import { faPersonRifle } from '@fortawesome/free-solid-svg-icons';
+import { faHandshake } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'app-team-view',
@@ -53,6 +55,9 @@ export class TeamViewComponent implements OnInit {
   TeamArray: TeamSablon[];
   ActiveTeamName: string;
   SelectedPlayerID: number;
+
+  faPersonRifle = faPersonRifle;
+  faHandshake = faHandshake;
 
   constructor(private store: Store<AppState>, private matDialog: MatDialog) {
     this.SelectedPlayerID = 0;

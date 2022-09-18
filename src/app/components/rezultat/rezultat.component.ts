@@ -319,6 +319,7 @@ export class RezultatComponent implements OnInit {
   DrawResult(GameStat: GameStats): void {
     let Table = document.getElementById('GameTable') as HTMLTableElement;
     let Row = document.createElement('TR');
+    Row.style.border = '2px white solid';
     Table.appendChild(Row);
     for (let i = 0; i < this.MAX_NUMBER_OF_GAMES; i++) {
       let NewData = document.createElement('TD');

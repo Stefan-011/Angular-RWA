@@ -2,7 +2,7 @@
   border: 1px solid black;
 }
 .vs-div {
-  background-color: black;
+  background-color: none;
   padding-top: 1vh;
   padding-bottom: 1vh;
   padding-left: 2vh;
@@ -10,6 +10,13 @@
   border-radius: 100%;
   border: 2px solid white;
 }
+
+.vs-div:hover {
+  background-color: black;
+  transition: all 1s;
+  cursor: pointer;
+}
+
 .tim-levi-div {
   height: 100%;
   width: 48%;
@@ -53,6 +60,10 @@
   color: white;
 }
 
+.result-label {
+  font-size: 4vh;
+}
+
 @media screen and (max-width: 912px) {
   .tim-desni-div {
     padding-top: 3vh;
@@ -84,130 +95,3 @@
     border: 2px solid white;
   }
 }
-
-/*@media screen and (max-width: 1024px) {
-  .player-profile {
-    width: 95% !important;
-    margin: 0;
-  }
-  /* .Right-profile
-    {
-        background-color: blue;
-        width: 90% !important;
-        margin: 0;
-        padding: 0;
-    }
-  .tim-levi-div {
-    padding: 0;
-  }
-
-  .tim-desni-div {
-    padding: 0;
-  }
-}
-
-@media screen and (max-width: 495px) {
-  .stat-div {
-    width: 100% !important;
-    margin: 0;
-    font-size: small;
-    padding-bottom: 15px !important;
-    padding-top: 5px !important;
-  }
-}
-
-@media screen and (max-width: 335px) {
-  .player-profile {
-    margin-top: 100px;
-    padding-bottom: 13rem !important;
-    height: 30vh !important;
-    margin-bottom: 2vh;
-  }
-  .stat-div {
-    font-size: 12px;
-    padding-left: 5px !important;
-    padding-right: 5px !important;
-    margin-top: 2%;
-  }
-  .player-profile img {
-    height: 100px;
-    width: 50px;
-    min-width: 100px;
-    border: white 2px solid;
-    margin-left: 18% !important;
-  }
-}
-
-@media screen and (max-width: 335px) {
-  .stat-div {
-    font-size: 10px;
-    padding-left: 5px !important;
-    padding-right: 5px !important;
-    margin-top: 6%;
-  }
-  .player-profile img {
-    margin-left: 11% !important;
-  }
-}
-
-@media screen and (max-width: 1488px) {
-  .tim-desni-div {
-    padding-left: 13rem;
-  }
-}
-@media screen and (max-width: 1421px) {
-  .tim-desni-div {
-    padding-left: 9rem;
-  }
-}
-@media screen and (max-width: 1296px) {
-  .tim-desni-div {
-    padding-left: 6rem;
-  }
-}
-@media screen and (max-width: 1200px) {
-  .tim-desni-div {
-    padding-left: 4rem;
-  }
-  .btn-sim {
-    margin-left: 45%;
-  }
-}
-@media screen and (max-width: 1118px) {
-  .tim-desni-div {
-    padding-left: 2rem;
-  }
-}
-@media screen and (max-width: 1054px) {
-  .tim-desni-div {
-    padding-left: 0rem;
-  }
-  .btn-sim {
-    margin-left: 0%;
-    width: 100%;
-  }
-}
-
-@media screen and (max-width: 280px) {
-  .stat-div {
-    font-size: 9px;
-    height: 2.22rem;
-    padding-top: 0;
-  }
-  .player-profile {
-    height: 48vh !important;
-    color: red !important;
-  }
-  .stat-div {
-    font-size: 9px;
-    height: 40%;
-    padding-top: 0;
-  }
-}
-
-@media screen and (max-width: 318) {
-  .player-profile {
-    height: 50vh !important;
-    color: red !important;
-  }
-}*/

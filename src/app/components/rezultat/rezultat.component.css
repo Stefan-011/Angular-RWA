@@ -1,45 +1,36 @@
 .Result-Table {
-  width: 70%;
+  width: 80%;
   font-size: 3vh;
-  background-color: #212529;
   color: white;
   padding: 10px;
 }
 
-.Result-Table tr {
-  border: 2px white solid;
-  height: 6vh;
-}
-
 .btn-sim {
-  background-color: #1d1d1d !important;
+  background-color: transparent;
   color: white;
-  box-shadow: 0 0 0 0.1rem white;
-  margin-right: 39%;
-  margin-left: 40%;
-  border-radius: 30px;
-  opacity: 0.91;
-  padding-left: 4vw;
-  padding-right: 4vw;
-  padding-top: 1vw;
-  padding-bottom: 1vw;
-  font-size: 1.5vw;
-  margin-bottom: 4vh;
+  border: 2px white solid;
+  border-radius: 50px;
+  font-size: 3vh;
+  padding: 1vh 13vh;
+  margin: 1vh;
+  display: inline-block;
+  margin-right: 32%;
+  margin-left: 38%;
+  margin-bottom: 3vh;
 }
 
 .btn-sim:hover {
   background-color: white !important;
   color: #212529;
-  box-shadow: 0 0 0 0.15rem white;
-}
-
-td {
-  color: #000;
+  transition: all 0.3s, opacity 0.1s 0.4s;
 }
 
 @media screen and (max-width: 912px) {
   .btn-sim {
-    font-size: 3vh;
+    padding: 1vh 5vh;
+  }
+  .Result-Table {
+    font-size: 2.2vh;
   }
 }
 

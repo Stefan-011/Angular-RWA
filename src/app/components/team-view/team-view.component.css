@@ -61,15 +61,21 @@
 }
 
 .opt-btn {
-  background-color: #212529;
+  background-color: transparent;
   color: #dfdfdf;
-  height: 6vh;
-  width: 15vh;
+  height: fit-content;
+  width: fit-content;
+  padding: 0vh 10vh;
+  font-size: 4vh;
+  border: 2px white solid;
 }
 
-.opt-btn:hover {
-  background-color: #dfdfdf;
+.opt-btn:hover,
+.opt-btn:focus {
+  background-color: white;
+
   color: #212529;
+  transition: all 0.4s;
 }
 
 .team-btns {

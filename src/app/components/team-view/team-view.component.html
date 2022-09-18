@@ -5,9 +5,10 @@
         *ngIf="compType == 'SHOP'"
         class="opt-btn-div d-flex justify-content-center"
       >
-        <button class="opt-btn" (click)="ModeChange('IGRACI')">Igraci</button
+        <button class="opt-btn" (click)="ModeChange('IGRACI')">
+          <fa-icon [icon]="faPersonRifle"></fa-icon>Igraci</button
         ><button class="opt-btn" (click)="ModeChange('SPONZORI')">
-          Sponzori</button
+          <fa-icon [icon]="faHandshake"></fa-icon> Sponzori</button
         ><br /><br />
       </div>
       <label *ngIf="compType == 'SHOP'" class="h1" style="color: white"
@@ -30,7 +31,7 @@
         </select>
       </div>
       <label class="h1" style="color: white">Budzet:</label
-      ><label class="ms-5 pt-1 pb-3 h1" style="color: white"
+      ><label class="ms-3 pt-1 pb-3 h1" style="color: white"
         >{{ $UsersMoney | async }}€</label
       ><br />
       <div *ngIf="Shop_mode == 'IGRACI'">
