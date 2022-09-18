@@ -6,4 +6,5 @@ export enum PanelErrorMessage {
   PlayersNotFound = 'PNF',
   SponzorNotFound = 'SNF',
   TeamNotFound = 'SNF',
+  TeamIsFull = 'TIF',
 }

@@ -243,6 +243,9 @@ export class AdminPanelComponent implements OnInit {
       case PanelErrorMessage.TeamNotFound:
         RetMsg = 'Tim nije pronadjen!';
         break;
+      case PanelErrorMessage.TeamIsFull:
+        RetMsg = 'Tim je pun!';
+        break;
     }
     OpenDialog(RetMsg, this.matDialog);
     this.store.dispatch(PanelAction.SetPanelMode({ Mode: PanelMode.DEFAULT }));
