@@ -2,7 +2,6 @@ import { createAction, props } from '@ngrx/store';
 import { CRUDState } from '../Enums/CRUDState';
 import { PanelErrorMessage } from '../Enums/PanelErrorMessage';
 import { PanelMode } from '../Enums/Panelmode';
-import { MyTeam } from '../models/MyTeam';
 import { player } from '../models/player';
 import { Sponzor } from '../models/Sponzor';
 import { TeamSablon } from '../models/TeamSablon';

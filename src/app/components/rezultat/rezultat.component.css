@@ -6,8 +6,8 @@
 }
 
 .btn-sim {
-  background-color: transparent;
-  color: white;
+  background-color: white;
+  color: #0c67ab;
   border: 2px white solid;
   border-radius: 50px;
   font-size: 3vh;
@@ -19,9 +19,10 @@
   margin-bottom: 3vh;
 }
 
-.btn-sim:hover {
-  background-color: white !important;
-  color: #212529;
+.btn-sim:hover,
+.btn-sim:disabled {
+  background-color: transparent !important;
+  color: white;
   transition: all 0.3s, opacity 0.1s 0.4s;
 }
 

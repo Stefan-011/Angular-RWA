@@ -13,8 +13,8 @@ export const selectMapUsedMaps = createSelector(
   (Rezultat) => {
     return Rezultat.ids
       .map((id) => Rezultat.entities[id])
-      .filter((Rezultat) => Rezultat != null)
-      .map((Rezultat) => <IMap>Rezultat);
+      .filter((Map) => Map != null)
+      .map((Map) => <IMap>Map);
   }
 );
 

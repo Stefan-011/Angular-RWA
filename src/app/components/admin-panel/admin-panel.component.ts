@@ -256,10 +256,12 @@ export class AdminPanelComponent implements OnInit {
     let SelectElement = document.getElementById(
       'TeamSelectEDIT'
     ) as HTMLSelectElement;
-    let Index = SelectElement.selectedIndex;
-    let TeamID = -1;
+    let Index = SelectElement.selectedIndex,
+      TeamID = -1,
+      EmptyIndex = 1;
+
     if (Index == 0) TeamID = this.Team.id;
-    else TeamID = this.TeamList[Index - 1].id;
+    else TeamID = this.TeamList[Index - EmptyIndex].id;
     return TeamID;
   }
 
@@ -279,9 +281,10 @@ export class AdminPanelComponent implements OnInit {
       'TeamSelect'
     ) as HTMLSelectElement;
 
-    let Index = SelectElement.selectedIndex;
+    let Index = SelectElement.selectedIndex,
+      EmptyIndex = 1;
     this.store.dispatch(
-      PanelAction.SetTeam({ Team: this.TeamList[Index - 1] })
+      PanelAction.SetTeam({ Team: this.TeamList[Index - EmptyIndex] })
     );
     this.store.dispatch(PanelAction.GetPlayerList({ TeamId: this.Team.id }));
   }
@@ -290,10 +293,11 @@ export class AdminPanelComponent implements OnInit {
     let SelectElement = document.getElementById(
       'PlayerSelect'
     ) as HTMLSelectElement;
-    let Index = SelectElement.selectedIndex;
+    let Index = SelectElement.selectedIndex,
+      EmptyIndex = 1;
 
     this.store.dispatch(
-      PanelAction.SetPlayer({ Player: this.PlayerList[Index - 1] })
+      PanelAction.SetPlayer({ Player: this.PlayerList[Index - EmptyIndex] })
     );
   }
 

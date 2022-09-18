@@ -12216,7 +12216,7 @@ section#contact form#contactForm :-ms-input-placeholder {
 }
 
 .content-region {
-  background-color: RGBA(12, 103, 171, 1); /* 0c67ab */
+  background-color: RGBA(12, 103, 171, 1); /* #0c67ab */
   min-width: 25ch;
   flex-direction: column !important;
   border-radius: 5px;

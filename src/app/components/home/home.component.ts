@@ -1,7 +1,6 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import * as UserSelectors from 'src/app/store/user.selector';
 import * as UserActions from '../../store/user.action';
-import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { AppState } from '../../app.state';
 import { Store } from '@ngrx/store';
@@ -10,6 +9,7 @@ import { ComponentEnum } from 'src/app/Enums/ComponentEnum';
 import { Role } from 'src/app/Enums/Role';
 import { MenuSize } from 'src/app/Enums/MenuSize';
 import { _MatOptionBase } from '@angular/material/core';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -32,9 +32,9 @@ export class HomeComponent implements OnInit {
   role: Role;
 
   constructor(
-    private cookies: CookieService,
     private store: Store<AppState>,
-    private router: Router
+    private router: Router,
+    private UserService: UserService
   ) {
     this.Username = '';
     this.LogState = false;
@@ -130,10 +130,8 @@ export class HomeComponent implements OnInit {
   }
 
   Logout(): void {
-    localStorage.clear();
-    this.cookies.deleteAll();
     this.router.navigate(['login']);
-    this.store.dispatch(UserActions.LogoutUser());
+    this.UserService.Loggout();
   }
 
   ngOnDestroy(): void {
