@@ -94,4 +94,8 @@
     border-radius: 100%;
     border: 2px solid white;
   }
+  .Team-cmbox {
+    font-size: 2vh;
+    width: 100% !important;
+  }
 }
