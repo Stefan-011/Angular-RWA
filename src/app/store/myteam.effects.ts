@@ -32,9 +32,12 @@ export class MyTeamEffects {
                 PlayerCount: Team.players.length,
               })
             );
-            this.store.dispatch(
-              MyTeamActions.GetMyTeamSuccess_Sponzor({ sponzor: Team.sponzor })
-            );
+            if (Team.sponzor != null)
+              this.store.dispatch(
+                MyTeamActions.GetMyTeamSuccess_Sponzor({
+                  sponzor: Team.sponzor,
+                })
+              );
             return MyTeamActions.GetMyTeamSuccess({ MyTeam: Team });
           }),
           catchError(() => of({ type: 'load error' }))

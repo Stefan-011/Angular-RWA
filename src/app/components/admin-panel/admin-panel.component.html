@@ -330,7 +330,7 @@
                 (change)="SetTeam()"
               >
                 <option value="" hidden>Izaberite tim</option>
-                <option *ngFor="let obj of TeamList" value="{{ obj }}">
+                <option *ngFor="let obj of TeamList" value="{{ obj.id }}">
                   {{ obj.name }}
                 </option>
               </select>

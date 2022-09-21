@@ -45,6 +45,9 @@ export class PoljeComponent implements OnInit {
     this.store.dispatch(OtherTeamAction.GetTeamList());
     this.store.dispatch(MyTeamActions.GetMyTeam());
 
+    this.$MyTeam.pipe(takeUntil(this.$Unsubscribe)).subscribe();
+    this.$ActiveTeam.pipe(takeUntil(this.$Unsubscribe)).subscribe();
+
     this.$ActiveTeamName
       .pipe(takeUntil(this.$Unsubscribe))
       .subscribe((name) => {
@@ -59,7 +62,7 @@ export class PoljeComponent implements OnInit {
       .pipe(takeUntil(this.$Unsubscribe))
       .subscribe((TeamList) => {
         this.TeamList = TeamList;
-        if (this.TeamList.length > 0) this.InitilizeTeamNames();
+        this.InitilizeTeamNames();
       });
   }
 
@@ -79,9 +82,6 @@ export class PoljeComponent implements OnInit {
   ChangeOtherTeam(): void {
     let name = document.getElementById('Team-cmbox') as HTMLSelectElement;
     this.store.dispatch(OtherTeamAction.SetName({ name: name.value }));
-    this.store.dispatch(
-      OtherTeamAction.GetAllPlayers({ name: this.ActiveTeamName })
-    );
   }
 
   GetRezultat(Result: string[]): void {
@@ -91,5 +91,6 @@ export class PoljeComponent implements OnInit {
   ngOnDestroy(): void {
     this.$Unsubscribe.next();
     this.$Unsubscribe.complete();
+    this.$Unsubscribe.unsubscribe();
   }
 }

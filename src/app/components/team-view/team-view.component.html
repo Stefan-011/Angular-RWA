@@ -19,7 +19,7 @@
       ><br />
       <div *ngIf="compType == 'SHOP'" class="pb-2 text-center">
         <select
-          *ngIf="Shop_mode == 'IGRACI'"
+          *ngIf="compType == 'SHOP' && Shop_mode == 'IGRACI'"
           id="Team-cmbox"
           class="form-select text-center Team-cmbox"
           aria-label="Default"
@@ -32,10 +32,10 @@
       </div>
       <label class="h1" style="color: white">Budzet:</label
       ><label class="ms-3 pt-1 pb-3 h1" style="color: white"
-        >{{ $UsersMoney | async }}€</label
+        >{{ $UsersMoneyObs | async }}€</label
       ><br />
-      <div *ngIf="Shop_mode == 'IGRACI'">
-        <div *ngFor="let obj of $ActiveTeam | async">
+      <div *ngIf="Shop_mode == 'IGRACI' && compType == 'SHOP'">
+        <div *ngFor="let obj of $ActiveTeamObs | async">
           <div class="d-flex justify-content-center">
             <div style="height: 300px"></div>
             <div class="mx-2 mt-2 player-profile">
@@ -78,6 +78,47 @@
               >
                 Kupi {{ obj.price }}€
               </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="compType == 'MYTEAM'">
+        <div *ngFor="let obj of $MyTeamObs | async">
+          <div class="d-flex justify-content-center">
+            <div style="height: 300px"></div>
+            <div class="mx-2 mt-2 player-profile">
+              <label class="pt-1" style="color: white"
+                ><p class="h4">{{ obj.nick }}</p>
+                <br />{{ obj.name }} {{ obj.lname }}</label
+              ><br /><img
+                class="rounded-circle p-1"
+                src="{{ obj.img }}"
+                alt="..."
+              />
+              <div class="ms-0 d-flex justify-content-center stats-div">
+                <div style="float: right; width: 50%" class="flex-column">
+                  <div class="text-center pt-3 stat-div">
+                    K/D: <label>{{ obj.kd }}</label>
+                  </div>
+                  <div class="text-center pt-3 stat-div">
+                    Uticaj: <label>{{ obj.impact }}</label>
+                  </div>
+                </div>
+
+                <div style="float: left; width: 50%">
+                  <div class="text-center pt-3 stat-div">
+                    Tim:
+                    <label *ngIf="obj.team != 'Natus Vincere'">{{
+                      obj.team
+                    }}</label
+                    ><label *ngIf="obj.team == 'Natus Vincere'">NaVi</label>
+                  </div>
+                  <div class="text-center pt-3 stat-div">
+                    Rejting: <label>{{ obj.rating }}</label>
+                  </div>
+                </div>
+              </div>
               <button
                 *ngIf="compType == 'MYTEAM'"
                 style="width: 100%"
@@ -124,6 +165,7 @@
           </div>
         </div>
       </div>
+
       <div *ngIf="Shop_mode == 'SPONZORI'">
         <div *ngFor="let obj of SponzorArray">
           <div class="d-flex justify-content-center mb-4">

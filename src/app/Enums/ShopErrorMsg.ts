@@ -6,4 +6,5 @@ export enum ShopErrorMsg {
   ActiveSponzorDealError = 'ASDE',
   BreakingSponzorDealError = 'BSDE',
   PlayerAlreadyInTeamError = 'PAINE',
+  SponzorAccepted = 'SA',
 }

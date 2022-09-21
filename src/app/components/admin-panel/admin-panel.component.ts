@@ -1,4 +1,3 @@
-import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
@@ -7,7 +6,6 @@ import { AppState } from 'src/app/app.state';
 import { CRUDState } from 'src/app/Enums/CRUDState';
 import { PanelErrorMessage } from 'src/app/Enums/PanelErrorMessage';
 import { PanelMode } from 'src/app/Enums/Panelmode';
-import { Role } from 'src/app/Enums/Role';
 import { player } from 'src/app/models/player';
 import { Sponzor } from 'src/app/models/Sponzor';
 import { TeamSablon } from 'src/app/models/TeamSablon';
@@ -70,6 +68,7 @@ export class AdminPanelComponent implements OnInit {
     this.$Unsubscribe = new Subject<void>();
     this.PanelMode = PanelMode.DEFAULT;
     this.CRUDState = CRUDState.DEFAULT;
+
     this.PlayerList = [];
     this.SponzorList = [];
     this.TeamList = [];
@@ -79,7 +78,6 @@ export class AdminPanelComponent implements OnInit {
     this.$PlayerObs = this.store.select(PanelSelector.SelectPlayer);
     this.$TeamObs = this.store.select(PanelSelector.SelectTeam);
     this.$SponzorObs = this.store.select(PanelSelector.SelectSponzor);
-
     this.$PlayerListObs = this.store.select(PanelSelector.SelectPlayerList);
     this.$TeamListObs = this.store.select(PanelSelector.SelectTeamList);
     this.$SponzorListObs = this.store.select(PanelSelector.SelectSponzorList);
@@ -120,6 +118,7 @@ export class AdminPanelComponent implements OnInit {
     this.$PlayerListObs
       .pipe(takeUntil(this.$Unsubscribe))
       .subscribe((NewPlayerList) => (this.PlayerList = NewPlayerList));
+
     this.$TeamListObs
       .pipe(takeUntil(this.$Unsubscribe))
       .subscribe((NewTeamList) => (this.TeamList = NewTeamList));
@@ -259,12 +258,9 @@ export class AdminPanelComponent implements OnInit {
     let SelectElement = document.getElementById(
       'TeamSelectEDIT'
     ) as HTMLSelectElement;
-    let Index = SelectElement.selectedIndex,
-      TeamID = -1,
-      EmptyIndex = 1;
-
-    if (Index == 0) TeamID = this.Team.id;
-    else TeamID = this.TeamList[Index - EmptyIndex].id;
+    let TeamID: number = 0;
+    if (SelectElement.value == '') TeamID = this.Team.id;
+    else TeamID = parseInt(SelectElement.value);
     return TeamID;
   }
 
@@ -283,9 +279,9 @@ export class AdminPanelComponent implements OnInit {
     let SelectElement = document.getElementById(
       'TeamSelect'
     ) as HTMLSelectElement;
-
     let Index = SelectElement.selectedIndex,
       EmptyIndex = 1;
+
     this.store.dispatch(
       PanelAction.SetTeam({ Team: this.TeamList[Index - EmptyIndex] })
     );
@@ -446,7 +442,7 @@ export class AdminPanelComponent implements OnInit {
       return false;
     }
 
-    if ((parseInt(price) < 1000 && parseInt(price) > 4000) || price == '') {
+    if (parseInt(price) < 1000 || parseInt(price) > 4000 || price == '') {
       ErrMsg = 'Cena je u rasponu od 1000 - 4000!';
       OpenDialog(ErrMsg, this.matDialog);
       return false;
@@ -519,5 +515,6 @@ export class AdminPanelComponent implements OnInit {
   ngOnDestroy(): void {
     this.$Unsubscribe.next();
     this.$Unsubscribe.complete();
+    this.$Unsubscribe.unsubscribe();
   }
 }

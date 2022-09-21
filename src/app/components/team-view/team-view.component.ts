@@ -3,10 +3,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../app.state';
 import { player } from '../../models/player';
 import { Sponzor } from '../../models/Sponzor';
-import { CookieService } from 'ngx-cookie-service';
 import { Component, Input, OnInit } from '@angular/core';
 import * as MyTeamActions from 'src/app/store/myteam.action';
-import { selectMyTeam } from 'src/app/store/myteam.selector';
 import * as UserSelectors from 'src/app/store/user.selector';
 import * as MyTeamSelector from 'src/app/store/myteam.selector';
 import * as OtherTeamAction from 'src/app/store/Otherteam.action';
@@ -32,17 +30,18 @@ export class TeamViewComponent implements OnInit {
   @Input() Username: string;
 
   $Unsubscribe: Subject<void>;
-  $ComponentType: Observable<ComponentEnum>;
-  $ActiveTeam: Observable<player[]>;
-  $UsersMoney: Observable<number>;
+  $ComponentTypeObs: Observable<ComponentEnum>;
+  $ActiveTeamObs: Observable<player[]>;
+  $UsersMoneyObs: Observable<number>;
   $SponzorObs: Observable<Sponzor>;
   $ShopObs: Observable<ShopMode>;
   $ShopErrorMsgObs: Observable<ShopErrorMsg>;
   $PlayerCountObs: Observable<number>;
   $TeamListObs: Observable<TeamSablon[]>;
-  $ActiveTeamName: Observable<string>;
+  $ActiveTeamNameObs: Observable<string>;
   $SponzorListObs: Observable<Sponzor[]>;
-  $SelectedPlayer: Observable<number>;
+  $SelectedPlayerObs: Observable<number>;
+  $MyTeamObs: Observable<player[]>;
 
   compType: ComponentEnum;
   Shop_mode: ShopMode;
@@ -72,21 +71,22 @@ export class TeamViewComponent implements OnInit {
     this.Shop_mode = ShopMode.Igraci;
     this.ShopErrorMsg = ShopErrorMsg.default;
     this.$Unsubscribe = new Subject<void>();
+    this.$MyTeamObs = store.select(MyTeamSelector.selectMyTeam);
     this.$TeamListObs = store.select(OtherTeamSelect.SelectTeamList);
     this.$ShopErrorMsgObs = store.select(ShopSelect.SelectErrorMsg);
     this.$ShopObs = store.select(ShopSelect.SelectShopState);
-    this.$UsersMoney = store.select(UserSelectors.selectUsersMoney);
-    this.$ComponentType = store.select(UserSelectors.SelectComponent);
+    this.$UsersMoneyObs = store.select(UserSelectors.selectUsersMoney);
+    this.$ComponentTypeObs = store.select(UserSelectors.SelectComponent);
     this.$SponzorObs = this.store.select(MyTeamSelector.selectSponzor);
-    this.$SelectedPlayer = this.store.select(MyTeamSelector.selectPlayerID);
+    this.$SelectedPlayerObs = this.store.select(MyTeamSelector.selectPlayerID);
     this.$SponzorListObs = this.store.select(ShopSelect.SelectSponzorList);
     this.$PlayerCountObs = this.store.select(
       MyTeamSelector.selectNumberOfPlayers
     );
-    this.$ActiveTeam = this.store.select(
+    this.$ActiveTeamObs = this.store.select(
       OtherTeamSelect.selectCurrentOtherTeams
     );
-    this.$ActiveTeamName = store.select(OtherTeamSelect.selectName);
+    this.$ActiveTeamNameObs = store.select(OtherTeamSelect.selectName);
     this.SponzorMyTeam = {
       id: -1,
       img: '',
@@ -98,40 +98,17 @@ export class TeamViewComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(ShopAction.GetSponzorList());
     this.store.dispatch(OtherTeamAction.GetTeamList());
-    this.InitilizeTeamNames();
     this.SetupObservables();
   }
 
   LayoutSetup(type: ComponentEnum): void {
     this.store.dispatch(UserActions.GetLoggedUser());
-
-    if (type == ComponentEnum.Shop) {
-      this.$ActiveTeam = this.store.select(
-        OtherTeamSelect.selectCurrentOtherTeams
-      );
-    } else if (this.compType == ComponentEnum.MyTeam) {
-      this.ModeChange(ShopMode.Igraci);
-
-      this.store.dispatch(MyTeamActions.GetMyTeam());
-
-      this.$ActiveTeam = this.store.select(selectMyTeam);
-
-      this.$SponzorObs
-        .pipe(takeUntil(this.$Unsubscribe))
-        .subscribe((sponzor) => {
-          this.SponzorMyTeam = sponzor;
-          if (
-            this.SponzorMyTeam != null &&
-            this.compType == ComponentEnum.Shop
-          ) {
-            OpenDialog('Vas zahtev je prihvacen !', this.matDialog);
-          }
-        });
-    }
+    this.ModeChange(ShopMode.Igraci);
+    this.store.dispatch(MyTeamActions.GetMyTeam());
   }
 
   SetupObservables(): void {
-    this.$SelectedPlayer
+    this.$SelectedPlayerObs
       .pipe(takeUntil(this.$Unsubscribe))
       .subscribe((PlyID) => (this.SelectedPlayerID = PlyID));
 
@@ -139,12 +116,12 @@ export class TeamViewComponent implements OnInit {
       .pipe(takeUntil(this.$Unsubscribe))
       .subscribe((SponzorList) => (this.SponzorArray = SponzorList));
 
-    this.$ComponentType.pipe(takeUntil(this.$Unsubscribe)).subscribe((type) => {
-      if (type) {
+    this.$ComponentTypeObs
+      .pipe(takeUntil(this.$Unsubscribe))
+      .subscribe((type) => {
         this.compType = type;
         this.LayoutSetup(this.compType);
-      }
-    });
+      });
 
     this.$TeamListObs
       .pipe(takeUntil(this.$Unsubscribe))
@@ -153,7 +130,7 @@ export class TeamViewComponent implements OnInit {
         this.InitilizeTeamNames();
       });
 
-    this.$UsersMoney
+    this.$UsersMoneyObs
       .pipe(takeUntil(this.$Unsubscribe))
       .subscribe((money) => (this.MyTeamMoney = money));
 
@@ -172,12 +149,16 @@ export class TeamViewComponent implements OnInit {
     this.$PlayerCountObs
       .pipe(takeUntil(this.$Unsubscribe))
       .subscribe((NumOfPly) => {
-        if (this.PlayerCount != -1)
+        if (
+          this.PlayerCount != -1 &&
+          (this.compType == ComponentEnum.MyTeam ||
+            this.compType == ComponentEnum.Shop)
+        )
           OpenDialog('(' + NumOfPly + '/5)', this.matDialog);
         this.PlayerCount = NumOfPly;
       });
 
-    this.$ActiveTeamName
+    this.$ActiveTeamNameObs
       .pipe(takeUntil(this.$Unsubscribe))
       .subscribe((name) => {
         this.ActiveTeamName = name;
@@ -186,16 +167,24 @@ export class TeamViewComponent implements OnInit {
             OtherTeamAction.GetAllPlayers({ name: this.ActiveTeamName })
           );
       });
+
+    this.$MyTeamObs.pipe(takeUntil(this.$Unsubscribe)).subscribe();
+
+    this.$SponzorObs.pipe(takeUntil(this.$Unsubscribe)).subscribe((sponzor) => {
+      this.SponzorMyTeam = sponzor;
+    });
   }
 
   InitilizeTeamNames(): void {
     let iterator = 0;
     this.TeamArray.forEach((element) => {
       this.TeamNames[iterator] = element.name;
-      if (iterator == 0)
+      if (iterator == 0) {
         this.store.dispatch(
           OtherTeamAction.SetName({ name: this.TeamNames[iterator] })
         );
+      }
+
       iterator++;
     });
   }
@@ -203,14 +192,10 @@ export class TeamViewComponent implements OnInit {
   ChangeOtherTeam(): void {
     let name = document.getElementById('Team-cmbox') as HTMLSelectElement;
     this.store.dispatch(OtherTeamAction.SetName({ name: name.value }));
-    this.store.dispatch(
-      OtherTeamAction.GetAllPlayers({ name: this.ActiveTeamName })
-    );
   }
 
   SellPlayer(id: number): void {
     this.store.dispatch(MyTeamActions.SelectPlayer({ ID: id }));
-
     this.store.dispatch(
       MyTeamActions.SellPlayer({
         ID: this.SelectedPlayerID,
@@ -240,7 +225,6 @@ export class TeamViewComponent implements OnInit {
       ExitResult = false;
 
     PureChance = Math.floor(Math.random() * (100 - 1 + 1)) + 1;
-
     switch (parseInt(Money + '')) {
       case 3000:
         if (PureChance >= 95) ExitResult = true;
@@ -298,6 +282,9 @@ export class TeamViewComponent implements OnInit {
       case ShopErrorMsg.none:
         Message = 'Uspesna transakcija !';
         break;
+      case ShopErrorMsg.SponzorAccepted:
+        Message = 'Vas zahtev je prihvacen !';
+        break;
     }
     OpenDialog(Message, this.matDialog);
     this.store.dispatch(
@@ -308,5 +295,7 @@ export class TeamViewComponent implements OnInit {
   ngOnDestroy(): void {
     this.$Unsubscribe.next();
     this.$Unsubscribe.complete();
+    this.$Unsubscribe.unsubscribe();
+    this.store.dispatch(OtherTeamAction.SetName({ name: '' }));
   }
 }

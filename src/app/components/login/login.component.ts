@@ -34,6 +34,7 @@ export class LoginComponent implements OnInit {
     this.$Unsubscribe = new Subject<void>();
     this.Mode = LoginMod.Login;
     this.ErrorMsg = ErrorMessage.None;
+
     this.$LogModeObs = this.store.select(LoginSelectors.selectLoginMode);
     this.$ErrorMessageObs = this.store.select(
       LoginSelectors.selectErrorMessage
@@ -152,5 +153,6 @@ export class LoginComponent implements OnInit {
   ngOnDestroy(): void {
     this.$Unsubscribe.next();
     this.$Unsubscribe.complete();
+    this.$Unsubscribe.unsubscribe();
   }
 }

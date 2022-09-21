@@ -49,6 +49,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
     "ngrx-tslint-rules": "^2.1.4",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "~4.7.2"
   }
 }

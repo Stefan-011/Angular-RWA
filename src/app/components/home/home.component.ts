@@ -42,6 +42,7 @@ export class HomeComponent implements OnInit {
     this.Ruta = ComponentEnum.Home;
     this.MenuState = MenuSize.default;
     this.$Unsubscribe = new Subject<void>();
+
     this.$MenuSize = store.select(UserSelectors.SelectMenuSize);
     this.$RoleObs = this.store.select(UserSelectors.SelectUserRole);
     this.$LogState = this.store.select(UserSelectors.selectLoggedIn);
@@ -76,7 +77,6 @@ export class HomeComponent implements OnInit {
   }
 
   SwitchRoute(RouteOption: string): void {
-    console.log(RouteOption);
     switch (RouteOption) {
       case ComponentEnum.Simulacija:
         if (this.role != Role.USER) break;
@@ -117,16 +117,16 @@ export class HomeComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onWindowResize(): void {
     let getScreenWidth = window.innerWidth;
-    if (getScreenWidth >= 991 && this.MenuState == MenuSize.moblie)
+    if (getScreenWidth >= 991 && this.MenuState == MenuSize.mobile)
       this.store.dispatch(UserActions.SetMenuSize({ Size: MenuSize.default }));
   }
 
   OpenCollapse(): void {
     let getScreenWidth = window.innerWidth;
-    if (getScreenWidth <= 991 && this.MenuState == MenuSize.moblie)
+    if (getScreenWidth <= 991 && this.MenuState == MenuSize.mobile)
       this.store.dispatch(UserActions.SetMenuSize({ Size: MenuSize.default }));
     else
-      this.store.dispatch(UserActions.SetMenuSize({ Size: MenuSize.moblie }));
+      this.store.dispatch(UserActions.SetMenuSize({ Size: MenuSize.mobile }));
   }
 
   Logout(): void {
@@ -137,5 +137,6 @@ export class HomeComponent implements OnInit {
   ngOnDestroy(): void {
     this.$Unsubscribe.next();
     this.$Unsubscribe.complete();
+    this.$Unsubscribe.unsubscribe();
   }
 }

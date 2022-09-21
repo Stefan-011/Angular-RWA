@@ -20,8 +20,8 @@ import { Probability } from 'src/app/Enums/Probability';
   styleUrls: ['./rezultat.component.css'],
 })
 export class RezultatComponent implements OnInit {
-  readonly MAX_NUMBER_OF_GAMES = 3;
-  readonly NUMBER_OF_MAPS = 7;
+  private readonly MAX_NUMBER_OF_GAMES = 3;
+  private readonly NUMBER_OF_MAPS = 7;
 
   @Output() ResultListener: EventEmitter<string[]>;
   @Input() $ActiveTeam: Observable<player[]>;
@@ -45,12 +45,11 @@ export class RezultatComponent implements OnInit {
   MapsUsed: IMap[];
 
   constructor(private store: Store<AppState>, private matDialog: MatDialog) {
-    this.$LeftTeamNameObs = this.store.select(UserSelect.selectUsersname);
-    this.$RightTeamNameObs = this.store.select(OtherTeamSelect.selectName);
     this.$Unsubscribe = new Subject<void>();
     this.ResultListener = new EventEmitter();
     this.$ActiveTeam = new Observable();
     this.$MyTeam = new Observable();
+
     this.LeftTeamName = '';
     this.RightTeamName = '';
     this.RightTeam = [];
@@ -58,6 +57,9 @@ export class RezultatComponent implements OnInit {
     this.LeftTeam = [];
     this.LeftWinns = 0;
     this.MapsUsed = [];
+
+    this.$LeftTeamNameObs = this.store.select(UserSelect.selectUsersname);
+    this.$RightTeamNameObs = this.store.select(OtherTeamSelect.selectName);
     this.$LeftWinnsObs = this.store.select(
       RezultatSelector.selectLeftTeamWinns
     );
@@ -109,31 +111,32 @@ export class RezultatComponent implements OnInit {
     return RetVal + Math.floor(Math.random() * (20 - 1 + 1)) + 1;
   }
 
-  Simuliraj(): void {
-    if (this.LeftTeam.length < 5)
-      return OpenDialog('Vas tim ima manje od 5 igraca !!!', this.matDialog);
-
+  ClearStateForNewSimulation(): void {
     this.store.dispatch(RezultatActions.CleanMapPool());
     this.store.dispatch(
       RezultatActions.SetRightTeamWinns({ NumberOfWinns: 0 })
     );
     this.store.dispatch(RezultatActions.SetLeftTeamWinns({ NumberOfWinns: 0 }));
-
-    let Btn = document.getElementById('btn-sim') as HTMLButtonElement;
     let Row = document.getElementById('GameTable') as HTMLTableRowElement;
-
     this.ResultListener.emit(['', '']);
-    Btn.disabled = true;
-
-    let GameCounter = 1;
-    let winner = '';
-
     while (Row.firstChild) {
       Row.removeChild(Row.firstChild);
     }
+  }
 
+  Simuliraj(): void {
+    if (this.LeftTeam.length < 5)
+      return OpenDialog('Vas tim ima manje od 5 igraca !!!', this.matDialog);
+
+    this.ClearStateForNewSimulation();
+
+    let GameCounter = 1;
+    let winner = '';
     const display = interval(2500);
     const StopDisplay$ = new Subject<void>();
+    let Btn = document.getElementById('btn-sim') as HTMLButtonElement;
+
+    Btn.disabled = true;
 
     display.pipe(takeUntil(StopDisplay$)).subscribe(() => {
       this.StartGame(GameCounter);
@@ -180,8 +183,8 @@ export class RezultatComponent implements OnInit {
   }
 
   RoundsAlghoritm(LeftScore: number, rightScore: number, Game: number): string {
-    let HigherProbability,
-      Razlika,
+    let HigherProbability: Probability,
+      Razlika: number,
       HigherRound = 0,
       LowwerRound = 0;
 
@@ -238,7 +241,10 @@ export class RezultatComponent implements OnInit {
           );
           LowwerRound = this.RoundsAlghoritmExtension(Razlika, Probability.Low);
 
-          while (HigherRound != 16 && LowwerRound != 16) {
+          while (
+            (HigherRound != 16 && LowwerRound != 16) ||
+            (HigherRound == 16 && LowwerRound == 16)
+          ) {
             HigherRound = this.RoundsAlghoritmExtension(
               Razlika,
               Probability.High
@@ -382,5 +388,6 @@ export class RezultatComponent implements OnInit {
   ngOnDestroy(): void {
     this.$Unsubscribe.next();
     this.$Unsubscribe.complete();
+    this.$Unsubscribe.unsubscribe();
   }
 }
