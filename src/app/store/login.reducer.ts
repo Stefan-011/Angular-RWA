@@ -1,6 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
 import * as LoginActions from './login.action';
-import { user } from '../models/user';
 import { LoginMod } from '../Enums/LoginMod';
 import { ErrorMessage } from '../Enums/ErrorMessage';
 import { OperationResult } from '../Enums/OperationResult';

@@ -1,12 +1,14 @@
 .ctrl-pnl {
-  height: 100%;
+  padding-top: 5vh;
   width: 20%;
-  background-color: rgba(1, 16, 22, 0.582);
+  min-height: 100vh;
+  height: auto;
+  background-color: rgba(5, 8, 184, 0.1);
   margin-bottom: 0px !important;
-  border: 2px solid white;
 }
 .main-pnl {
   width: auto;
+  min-height: 100vh;
   height: fit-content;
   background-color: transparent !important;
   display: flex;
@@ -27,6 +29,7 @@ button:focus {
 }
 
 .wrk-pnl {
+  padding: 5vh 0;
   height: 100%;
   width: 100%;
   font-size: 1vw;
@@ -50,7 +53,7 @@ button:focus {
   height: auto;
   padding-bottom: 3vh;
   padding-top: 3vh;
-  background: #212529;
+  background: rgba(33, 37, 41, 0.6);
   border: white 3px solid;
 }
 
@@ -97,7 +100,29 @@ button:focus {
   margin-bottom: 7vh;
 }
 
-.page-section {
+select {
+  background: rgba(33, 37, 41, 0.6);
+  color: white;
+}
+
+.btn-success {
+  background-color: rgba(25, 135, 84, 0.6) !important;
+}
+.btn-warning {
+  background-color: rgba(255, 200, 0, 0.5) !important;
+}
+.btn-danger {
+  background-color: rgba(220, 53, 69, 0.5) !important;
+}
+
+.btn-success:hover {
+  background-color: rgba(25, 135, 84, 1) !important;
+}
+.btn-warning:hover {
+  background-color: rgba(255, 200, 0, 0.8) !important;
+}
+.btn-danger:hover {
+  background-color: rgba(220, 53, 69, 0.8) !important;
 }
 
 @media screen and (max-width: 912px) {

@@ -12206,7 +12206,11 @@ section#contact form#contactForm :-ms-input-placeholder {
 }
 
 .hdr-ftr {
-  background: #212529 !important;
+  background-image: url("../src/assets/img/content-wallpaper.png");
+  /* background-position: center; */
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* background: #212529 !important; */
   color: white;
   font-family: "Lexend", sans-serif !important;
 }
@@ -12217,6 +12221,10 @@ section#contact form#contactForm :-ms-input-placeholder {
 
 .content-region {
   background-color: RGBA(12, 103, 171, 1); /* #0c67ab */
+  background-image: url("../src/assets/img/content-wallpaper.png");
+  /* background-position: center; */
+  background-repeat: no-repeat;
+  background-size: cover;
   min-width: 25ch;
   flex-direction: column !important;
   border-radius: 5px;

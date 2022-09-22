@@ -1,7 +1,7 @@
 <div class="main-pnl flex text-center font-lexend">
   <div class="ctrl-pnl h5 text-center">
     <div class="text-white op-div">
-      Igrac operacije<br />
+      <fa-icon [icon]="faPersonRifle"></fa-icon> Igrac operacije<br />
       <button class="" (click)="ChangeMode('IGRAC', 'CREATE')">
         Dodaj igraca</button
       ><br />
@@ -11,13 +11,13 @@
     </div>
 
     <div class="text-white op-div">
-      Team operacije<br />
+      <fa-icon [icon]="faPeopleGroup"></fa-icon> Team operacije<br />
       <button class="" (click)="ChangeMode('TIM', 'CREATE')">Dodaj tim</button
       ><br />
       <button class="" (click)="ChangeMode('TIM', 'EDIT')">Izmeni tim</button>
     </div>
     <div class="text-white op-div">
-      Sponzor operacije<br />
+      <fa-icon [icon]="faBriefcase"></fa-icon> Sponzor operacije<br />
       <button class="" (click)="ChangeMode('SPONZOR', 'CREATE')">
         Dodaj sponzora</button
       ><br />

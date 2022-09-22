@@ -7,6 +7,7 @@ import { CookieService } from 'ngx-cookie-service';
 import * as UserActions from 'src/app/store/user.action';
 import { AppState } from '../app.state';
 import { Store } from '@ngrx/store';
+import { Route, Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
@@ -14,7 +15,8 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private cookies: CookieService,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private router: Router
   ) {}
 
   Login(email: string, password: string) {
@@ -37,6 +39,7 @@ export class UserService {
   }
 
   Loggout() {
+    this.router.navigate(['login']);
     localStorage.clear();
     this.cookies.deleteAll();
     this.store.dispatch(UserActions.LogoutUser());

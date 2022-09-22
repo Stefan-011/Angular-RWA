@@ -10,6 +10,11 @@ import { Role } from 'src/app/Enums/Role';
 import { MenuSize } from 'src/app/Enums/MenuSize';
 import { _MatOptionBase } from '@angular/material/core';
 import { UserService } from 'src/app/services/user.service';
+import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
+import { faGamepad } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-home',
@@ -31,9 +36,14 @@ export class HomeComponent implements OnInit {
   LogState: boolean;
   role: Role;
 
+  faRightFromBracket = faRightFromBracket;
+  faUser = faUser;
+  faShoppingCart = faShoppingCart;
+  faPeopleGroup = faPeopleGroup;
+  faGamepad = faGamepad;
+
   constructor(
     private store: Store<AppState>,
-    private router: Router,
     private UserService: UserService
   ) {
     this.Username = '';
@@ -99,13 +109,6 @@ export class HomeComponent implements OnInit {
         );
         break;
 
-      case ComponentEnum.Panel:
-        if (this.role != Role.ADMIN) break;
-        this.store.dispatch(
-          UserActions.SetComponent({ comp: ComponentEnum.Panel })
-        );
-        break;
-
       default:
         this.store.dispatch(
           UserActions.SetComponent({ comp: ComponentEnum.Home })
@@ -130,7 +133,6 @@ export class HomeComponent implements OnInit {
   }
 
   Logout(): void {
-    this.router.navigate(['login']);
     this.UserService.Loggout();
   }
 

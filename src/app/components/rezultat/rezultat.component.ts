@@ -127,6 +127,11 @@ export class RezultatComponent implements OnInit {
   Simuliraj(): void {
     if (this.LeftTeam.length < 5)
       return OpenDialog('Vas tim ima manje od 5 igraca !!!', this.matDialog);
+    if (this.RightTeam.length < 5)
+      return OpenDialog(
+        'Protivnicki tim ima manje od 5 igraca !!!',
+        this.matDialog
+      );
 
     this.ClearStateForNewSimulation();
 
@@ -185,8 +190,8 @@ export class RezultatComponent implements OnInit {
   RoundsAlghoritm(LeftScore: number, rightScore: number, Game: number): string {
     let HigherProbability: Probability,
       Razlika: number,
-      HigherRound = 0,
-      LowwerRound = 0;
+      HigherProbabilityTeamRounds = 0,
+      LowwerProbabilityTeamRounds = 0;
 
     if (LeftScore > rightScore) HigherProbability = Probability.Left;
     else HigherProbability = Probability.Right;
@@ -194,62 +199,89 @@ export class RezultatComponent implements OnInit {
     Razlika = Math.abs(LeftScore - rightScore);
     switch (Game) {
       case 1:
-        HigherRound = this.RoundsAlghoritmExtension(Razlika, Probability.High);
-        LowwerRound = this.RoundsAlghoritmExtension(Razlika, Probability.Low);
+        HigherProbabilityTeamRounds = this.RoundsAlghoritmExtension(
+          Razlika,
+          Probability.High
+        );
+        LowwerProbabilityTeamRounds = this.RoundsAlghoritmExtension(
+          Razlika,
+          Probability.Low
+        );
 
         while (
-          (HigherRound != 16 && LowwerRound != 16) ||
-          (HigherRound == 16 && LowwerRound == 16)
+          (HigherProbabilityTeamRounds != 16 &&
+            LowwerProbabilityTeamRounds != 16) ||
+          (HigherProbabilityTeamRounds == 16 &&
+            LowwerProbabilityTeamRounds == 16)
         ) {
-          HigherRound = this.RoundsAlghoritmExtension(
+          HigherProbabilityTeamRounds = this.RoundsAlghoritmExtension(
             Razlika,
             Probability.High
           );
-          LowwerRound = this.RoundsAlghoritmExtension(Razlika, Probability.Low);
+          LowwerProbabilityTeamRounds = this.RoundsAlghoritmExtension(
+            Razlika,
+            Probability.Low
+          );
         }
 
         break;
       case 2:
-        HigherRound = this.RoundsAlghoritmExtension(Razlika, Probability.High);
-        LowwerRound = this.RoundsAlghoritmExtension(Razlika, Probability.Low);
+        HigherProbabilityTeamRounds = this.RoundsAlghoritmExtension(
+          Razlika,
+          Probability.High
+        );
+        LowwerProbabilityTeamRounds = this.RoundsAlghoritmExtension(
+          Razlika,
+          Probability.Low
+        );
         while (
-          (HigherRound != 16 && LowwerRound != 16) ||
-          (HigherRound == 16 && LowwerRound == 16)
+          (HigherProbabilityTeamRounds != 16 &&
+            LowwerProbabilityTeamRounds != 16) ||
+          (HigherProbabilityTeamRounds == 16 &&
+            LowwerProbabilityTeamRounds == 16)
         ) {
-          HigherRound = this.RoundsAlghoritmExtension(
+          HigherProbabilityTeamRounds = this.RoundsAlghoritmExtension(
             Razlika,
             Probability.High
           );
-          LowwerRound = this.RoundsAlghoritmExtension(Razlika, Probability.Low);
+          LowwerProbabilityTeamRounds = this.RoundsAlghoritmExtension(
+            Razlika,
+            Probability.Low
+          );
         }
 
         break;
       case 3:
         if (Razlika > 30) {
-          HigherRound = 16;
-          LowwerRound = 404;
-          while (LowwerRound > 16) {
-            LowwerRound = this.RoundsAlghoritmExtension(
+          HigherProbabilityTeamRounds = 16;
+          LowwerProbabilityTeamRounds = 404;
+          while (LowwerProbabilityTeamRounds > 16) {
+            LowwerProbabilityTeamRounds = this.RoundsAlghoritmExtension(
               Razlika,
               Probability.Low
             );
           }
         } else {
-          HigherRound = this.RoundsAlghoritmExtension(
+          HigherProbabilityTeamRounds = this.RoundsAlghoritmExtension(
             Razlika,
             Probability.High
           );
-          LowwerRound = this.RoundsAlghoritmExtension(Razlika, Probability.Low);
+          LowwerProbabilityTeamRounds = this.RoundsAlghoritmExtension(
+            Razlika,
+            Probability.Low
+          );
 
           while (
-            (HigherRound != 16 && LowwerRound != 16) ||
-            (HigherRound == 16 && LowwerRound == 16)
+            (HigherProbabilityTeamRounds != 16 &&
+              LowwerProbabilityTeamRounds != 16) ||
+            (HigherProbabilityTeamRounds == 16 &&
+              LowwerProbabilityTeamRounds == 16)
           ) {
-            HigherRound = this.RoundsAlghoritmExtension(
+            HigherProbabilityTeamRounds = this.RoundsAlghoritmExtension(
               Razlika,
               Probability.High
             );
-            LowwerRound = this.RoundsAlghoritmExtension(
+            LowwerProbabilityTeamRounds = this.RoundsAlghoritmExtension(
               Razlika,
               Probability.Low
             );
@@ -261,8 +293,8 @@ export class RezultatComponent implements OnInit {
 
     return this.RoundsAlghoritmResult(
       HigherProbability,
-      HigherRound,
-      LowwerRound
+      HigherProbabilityTeamRounds,
+      LowwerProbabilityTeamRounds
     );
   }
 
@@ -286,11 +318,11 @@ export class RezultatComponent implements OnInit {
 
   RoundsAlghoritmResult(
     HigherProbability: Probability,
-    HigherRound: number,
-    LowwerRound: number
+    HigherProbabilityTeamRounds: number,
+    LowwerProbabilityTeamRounds: number
   ): string {
     if (HigherProbability == Probability.Left) {
-      if (HigherRound > LowwerRound)
+      if (HigherProbabilityTeamRounds > LowwerProbabilityTeamRounds)
         this.store.dispatch(
           RezultatActions.SetLeftTeamWinns({
             NumberOfWinns: this.LeftWinns + 1,
@@ -303,9 +335,9 @@ export class RezultatComponent implements OnInit {
           })
         );
 
-      return HigherRound + ' : ' + LowwerRound;
+      return HigherProbabilityTeamRounds + ' : ' + LowwerProbabilityTeamRounds;
     } else {
-      if (HigherRound > LowwerRound)
+      if (HigherProbabilityTeamRounds > LowwerProbabilityTeamRounds)
         this.store.dispatch(
           RezultatActions.SetRightTeamWinns({
             NumberOfWinns: this.RightWinns + 1,
@@ -318,7 +350,7 @@ export class RezultatComponent implements OnInit {
           })
         );
 
-      return LowwerRound + ' : ' + HigherRound;
+      return LowwerProbabilityTeamRounds + ' : ' + HigherProbabilityTeamRounds;
     }
   }
 
@@ -382,7 +414,6 @@ export class RezultatComponent implements OnInit {
 
     this.store.dispatch(RezultatActions.UseMap({ Map: NewMap }));
     this.DrawResult(Stats);
-    GameCounter++;
   }
 
   ngOnDestroy(): void {

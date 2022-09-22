@@ -169,6 +169,7 @@ export class TeamViewComponent implements OnInit {
       });
 
     this.$MyTeamObs.pipe(takeUntil(this.$Unsubscribe)).subscribe();
+    this.$ActiveTeamObs.pipe(takeUntil(this.$Unsubscribe)).subscribe();
 
     this.$SponzorObs.pipe(takeUntil(this.$Unsubscribe)).subscribe((sponzor) => {
       this.SponzorMyTeam = sponzor;

@@ -38,6 +38,7 @@ import { AdminGuard } from './auth/admin.guard';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { AdminPageComponent } from './components/admin-page/admin-page.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     TeamViewComponent,
     DialogComponent,
     AdminPanelComponent,
+    AdminPageComponent,
   ],
   imports: [
     FontAwesomeModule,

@@ -1,0 +1,21 @@
+<body>
+  <header class="header">
+    <div class="Nav d-flex justify-content-between align-items-center">
+      <a class="Page_logo"
+        ><fa-icon [icon]="faComputer"></fa-icon> MajorSim/Admin page
+      </a>
+      <a class="menu-bars" (click)="OpenMenu()"
+        ><fa-icon [icon]="faBars"></fa-icon
+      ></a>
+      <div id="nav-links" class="nav-links">
+        <a><fa-icon [icon]="faUser"></fa-icon>: {{ UsernameObs$ | async }}</a>
+        <a (click)="Logout()"
+          ><fa-icon [icon]="faRightFromBracket"></fa-icon>: Odjava</a
+        >
+      </div>
+    </div>
+  </header>
+  <div class="panel-route">
+    <app-admin-panel></app-admin-panel>
+  </div>
+</body>

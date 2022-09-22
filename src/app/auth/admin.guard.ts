@@ -9,6 +9,7 @@ import {
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+import { Role } from '../Enums/Role';
 
 @Injectable({
   providedIn: 'root',
@@ -22,9 +23,12 @@ export class AdminGuard implements CanActivate {
 
   canActivate(): boolean {
     const token = this.CookieService.get('token');
-    if (token == '') return false;
+    if (token == '') {
+      this.Router.navigate(['login']);
+      return false;
+    }
     const RoleCheck = this.jwtHelper.decodeToken(token).role;
-    if (RoleCheck == 'admin') return true;
+    if (RoleCheck == Role.ADMIN) return true;
     else {
       this.Router.navigate(['home']);
       return false;

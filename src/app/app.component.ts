@@ -44,19 +44,20 @@ export class AppComponent {
     this.$RoleObs.subscribe((role) => {
       if (role != undefined) this.role = role;
     });
+    this.router.navigate(['home']);
+
     if (this.cookieservice.get('token') != '') {
       this.store.dispatch(UserActions.SetLoginState({ LoginState: true }));
-      this.router.navigate(['home']);
       if (this.role == Role.USER) this.store.dispatch(GetMyTeam());
       this.store.dispatch(UserActions.GetLoggedUser());
     } else {
       this.cookieservice.deleteAll();
-      this.router.navigate(['login']);
     }
 
     this.$LoggedInStateObs.subscribe((LoggedInState) => {
+      if (this.LoggedIn == true && LoggedInState == false)
+        this.ClearAllStates();
       this.LoggedIn = LoggedInState;
-      if (!this.LoggedIn) this.ClearAllStates();
     });
   }
 

@@ -12,6 +12,9 @@ import { TeamSablon } from 'src/app/models/TeamSablon';
 import * as PanelAction from 'src/app/store/panel.action';
 import * as PanelSelector from 'src/app/store/panel.selector';
 import { OpenDialog } from '../dialog/dialog.component';
+import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
+import { faPersonRifle } from '@fortawesome/free-solid-svg-icons';
+import { faBriefcase } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-admin-panel',
@@ -39,6 +42,10 @@ export class AdminPanelComponent implements OnInit {
   SponzorList: Sponzor[];
   PanelMode: PanelMode;
   CRUDState: CRUDState;
+
+  faPeopleGroup = faPeopleGroup;
+  faPersonRifle = faPersonRifle;
+  faBriefcase = faBriefcase;
 
   constructor(private store: Store<AppState>, private matDialog: MatDialog) {
     this.Player = {
@@ -85,8 +92,6 @@ export class AdminPanelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(PanelAction.GetSponzorList());
-    this.store.dispatch(PanelAction.GetTeamList());
     this.SetupObservables();
   }
 
