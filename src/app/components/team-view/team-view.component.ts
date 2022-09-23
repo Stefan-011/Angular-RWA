@@ -269,7 +269,7 @@ export class TeamViewComponent implements OnInit {
         Message = 'Vi vec imate aktivno sponzorstvo !';
         break;
       case ShopErrorMsg.BreakingSponzorDealError:
-        Message = 'Pre prekida saradnje <br /> morate vratiti novac sponzoru !';
+        Message = 'Pre prekida saradnje morate vratiti novac sponzoru !';
         break;
       case ShopErrorMsg.FullTeamError:
         Message = 'Kapaciteti vaseg tima su popunjeni!';
